@@ -1,0 +1,22 @@
+﻿@model ElvenCurse.Core.Model.Character
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        @using (Html.BeginForm("Create", "Character", FormMethod.Post))
+        {
+            <div class="form-control">
+                @Html.EditorFor(a => a.Name)
+            </div>
+
+            <input type="submit" value="Save" class="btn btn-primary"/>
+        }
+
+    </div>
+</div>
