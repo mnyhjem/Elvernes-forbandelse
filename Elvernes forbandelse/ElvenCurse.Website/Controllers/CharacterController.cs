@@ -1,8 +1,8 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using ElvenCurse.Core.Interfaces;
+using ElvenCurse.Core.Model;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace ElvenCurse.Website.Controllers
 {
@@ -17,10 +17,15 @@ namespace ElvenCurse.Website.Controllers
         }
 
         // GET: Character
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            var characters = _characterService.GetCharactersForUser(User.Identity.GetUserId());
-            return View(characters);
+            var model = new CharacterlistViewmodel
+            {
+                Characters = _characterService.GetCharactersForUser(User.Identity.GetUserId()),
+                SelectedCharacterId = id ?? 0
+            };
+
+            return View(model);
         }
 
         [HttpGet]
@@ -30,7 +35,7 @@ namespace ElvenCurse.Website.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ElvenCurse.Core.Model.Character model)
+        public ActionResult Create(Character model)
         {
             if (!ModelState.IsValid)
             {
@@ -44,5 +49,11 @@ namespace ElvenCurse.Website.Controllers
 
             return RedirectToAction("Index");
         }
+    }
+
+    public class CharacterlistViewmodel
+    {
+        public List<Character> Characters { get; set; }
+        public int SelectedCharacterId { get; set; }
     }
 }

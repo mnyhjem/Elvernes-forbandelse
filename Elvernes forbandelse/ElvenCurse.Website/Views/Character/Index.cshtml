@@ -1,4 +1,4 @@
-﻿@model List<ElvenCurse.Core.Model.Character>
+﻿@model ElvenCurse.Website.Controllers.CharacterlistViewmodel
 @{
     ViewBag.Title = "Index";
 }
@@ -6,16 +6,63 @@
 <h2>Index</h2>
 
 <div class="row">
-    <div class="col-md-4">
-        @Html.ActionLink("New character", "Create", "Character", new {@class="btn btn-default"})
-        <ul>
-            @foreach (var character in Model)
+    <div class="col-md-2">
+        
+        <p>@Html.ActionLink("New character", "Create", "Character", new { @class = "btn btn-default" })</p>
+
+        <ul id="characterlist">
+            @foreach (var character in Model.Characters)
             {
-                <li>@character.Name</li>
+                <li>@Html.ActionLink(character.Name, "Index", new {id = character.Id})</li>
             }
         </ul>
     </div>
     <div class="col-md-8">
         billede af figuren
+        <br/>
+        @{
+            var selChar = Model.Characters.FirstOrDefault(a => a.Id == Model.SelectedCharacterId);
+        }
+        @if (selChar != null)
+        {
+            <span>@selChar.Name</span>
+
+            using (Html.BeginForm("", "", FormMethod.Post))
+            {
+                @Html.HiddenFor(a=>a.SelectedCharacterId)
+                <input type="submit" value="Enter world" class="btn btn-primary" />
+            }
+
+        }
+        else
+        {
+            <p>Please select or create a character</p>
+        }
     </div>
 </div>
+
+@section header{
+    <style>
+        #characterlist li {
+            line-height: 30px;
+            font-size: 16px;
+            border: 1px solid black;
+            -ms-border-radius: 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        #characterlist li:hover {
+            background-color: lightblue;
+        }
+        #characterlist
+        {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+}
