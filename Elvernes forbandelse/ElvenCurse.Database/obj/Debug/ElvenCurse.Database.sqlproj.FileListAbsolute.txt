@@ -1,0 +1,9 @@
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\bin\Debug\ElvenCurse.Database.dacpac
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\bin\Debug\ElvenCurse.Database.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\bin\Debug\ElvenCurse.Database.pdb
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\obj\Debug\ElvenCurse.Database.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\obj\Debug\ElvenCurse.Database.pdb
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\obj\Debug\Model.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\obj\Debug\refactor.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\obj\Debug\postdeploy.sql
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Database\obj\Debug\predeploy.sql
