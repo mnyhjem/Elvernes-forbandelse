@@ -139,6 +139,88 @@
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="4" />
 		</Element>
+		<Element Type="SqlProcedure" Name="[dbo].[AddNewCharacter]">
+			<Property Name="BodyScript">
+				<Value><![CDATA[
+	
+begin
+	if not exists (select * from Characters where Name = @name)
+		begin
+			insert into Characters (UserId, Name) values(@userId, @name);
+			select SCOPE_IDENTITY();
+		end
+end]]></Value>
+			</Property>
+			<Property Name="IsAnsiNullsOn" Value="True" />
+			<Relationship Name="BodyDependencies">
+				<Entry>
+					<References Name="[dbo].[Characters]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters].[Name]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[AddNewCharacter].[@name]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters].[UserId]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters].[Name]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[AddNewCharacter].[@userId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="Parameters">
+				<Entry>
+					<Element Type="SqlSubroutineParameter" Name="[dbo].[AddNewCharacter].[@userId]">
+						<Relationship Name="Type">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="Length" Value="50" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSubroutineParameter" Name="[dbo].[AddNewCharacter].[@name]">
+						<Relationship Name="Type">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="Length" Value="20" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="Schema">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[dbo]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SysCommentsObjectAnnotation">
+				<Property Name="Length" Value="277" />
+				<Property Name="StartLine" Value="1" />
+				<Property Name="StartColumn" Value="1" />
+				<Property Name="HeaderContents" Value="CREATE PROCEDURE [dbo].[AddNewCharacter]&#xD;&#xA;&#x9;@userId nvarchar(50),&#xD;&#xA;&#x9;@name nvarchar(20)&#xD;&#xA;AS" />
+			</Annotation>
+		</Element>
 		<Element Type="SqlTable" Name="[dbo].[AspNetRoles]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
 			<Relationship Name="Columns">
@@ -867,6 +949,62 @@
 				</Entry>
 			</Relationship>
 			<AttachedAnnotation Disambiguator="12" />
+		</Element>
+		<Element Type="SqlProcedure" Name="[dbo].[GetCharactersForUser]">
+			<Property Name="BodyScript">
+				<Value><![CDATA[
+	select Id,Name from characters where userid = @userId;]]></Value>
+			</Property>
+			<Property Name="IsAnsiNullsOn" Value="True" />
+			<Relationship Name="BodyDependencies">
+				<Entry>
+					<References Name="[dbo].[Characters]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters].[Id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters].[Name]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[Characters].[UserId]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[GetCharactersForUser].[@userId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="Parameters">
+				<Entry>
+					<Element Type="SqlSubroutineParameter" Name="[dbo].[GetCharactersForUser].[@userId]">
+						<Property Name="DefaultExpressionScript">
+							<Value><![CDATA['']]></Value>
+						</Property>
+						<Relationship Name="Type">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="Length" Value="50" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="Schema">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[dbo]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SysCommentsObjectAnnotation">
+				<Property Name="Length" Value="134" />
+				<Property Name="StartLine" Value="1" />
+				<Property Name="StartColumn" Value="1" />
+				<Property Name="HeaderContents" Value="CREATE PROCEDURE [dbo].[GetCharactersForUser]&#xD;&#xA;&#x9;@userId nvarchar(50) = ''&#xD;&#xA;AS" />
+			</Annotation>
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_dbo.__MigrationHistory]">
 			<Relationship Name="ColumnSpecifications">

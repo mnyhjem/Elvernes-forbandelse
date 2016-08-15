@@ -87,3 +87,16 @@ C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurs
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\obj\Debug\ElvenCurse.Website.dll
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\obj\Debug\ElvenCurse.Website.pdb
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\obj\Debug\ElvenCurse.Website.csprojResolveAssemblyReference.cache
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\ElvenCurse.Core.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\ElvenCurse.Core.pdb
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.Common.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.Mvc.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\WebActivatorEx.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.Common.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.Mvc.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.xml
