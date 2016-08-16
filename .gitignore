@@ -8,3 +8,6 @@ _ReSharper.*
 bin
 obj
 packages
+App_Data
+*.dbmdl
+*.jfm
