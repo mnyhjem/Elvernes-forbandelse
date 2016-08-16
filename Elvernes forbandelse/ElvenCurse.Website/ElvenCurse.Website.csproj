@@ -241,6 +241,8 @@
     <Content Include="Content\Assets\01.json" />
     <Content Include="Content\Assets\02.json" />
     <Content Include="Content\Assets\03.json" />
+    <Content Include="Content\Assets\04.json" />
+    <None Include="Properties\PublishProfiles\Filepublish.pubxml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

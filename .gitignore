@@ -2,11 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Elvernes forbandelse/ElvenCurse.Website/App_Data
-/Elvernes forbandelse/ElvenCurse.Core/obj/Debug
-/Elvernes forbandelse/ElvenCurse.Database/bin/Debug
-/Elvernes forbandelse/ElvenCurse.Database/ElvenCurse.Database.dbmdl
-/Elvernes forbandelse/ElvenCurse.Database/ElvenCurse.Database.jfm
-/Elvernes forbandelse/ElvenCurse.Website/bin
-/Elvernes forbandelse/packages
-/Elvernes forbandelse/ElvenCurse.Core/bin/Debug
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
