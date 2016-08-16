@@ -1,0 +1,21 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "title";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="game" data-characterid="@Model"></div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script src="~/Sitescriptes/phaser.js"></script>
+    <script src="~/Sitescriptes/ElvenCurse/Game.js"></script>
+    <script src="~/Sitescriptes/ElvenCurse/StatePreloader.js"></script>
+    <script src="~/Sitescriptes/ElvenCurse/StateGameplay.js"></script>
+<script src="~/Sitescriptes/ElvenCurse/Player.js"></script>
+}

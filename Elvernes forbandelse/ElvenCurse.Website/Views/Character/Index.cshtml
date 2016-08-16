@@ -27,7 +27,7 @@
         {
             <span>@selChar.Name</span>
 
-            using (Html.BeginForm("", "", FormMethod.Post))
+            using (Html.BeginForm("Index", "World", FormMethod.Post))
             {
                 @Html.HiddenFor(a=>a.SelectedCharacterId)
                 <input type="submit" value="Enter world" class="btn btn-primary" />

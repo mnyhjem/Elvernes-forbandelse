@@ -100,3 +100,5 @@ C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurs
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.Common.xml
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.Mvc.xml
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.WebHost.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.WebHost.xml

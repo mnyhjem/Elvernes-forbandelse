@@ -1,5 +1,7 @@
-﻿--exec GetCharactersForUser '2f40b9b8-3abe-4979-8ad6-7c954c2bddd6'
-
+﻿CREATE PROCEDURE [dbo].[GetCharacter]
+	@characterId int,
+	@userId nvarchar(50)
+AS
 select 
 c.Id, 
 c.Name, 
@@ -12,6 +14,6 @@ Characters c
 left outer join Characterlocations loc on c.Id = loc.characterId 
 left outer join Worldsections ws on ws.Id = loc.WorldsectionId
 where 
-c.id = 3
+c.userid = @userId and 
+c.id = @characterId;
 
---select * from Characters

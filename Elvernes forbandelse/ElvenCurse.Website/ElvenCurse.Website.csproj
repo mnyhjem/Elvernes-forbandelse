@@ -68,7 +68,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -77,6 +77,10 @@
     </Reference>
     <Reference Include="Ninject.Web.WebApi, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.WebHost.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -198,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="api\CharacterController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -210,6 +215,7 @@
     <Compile Include="Controllers\CharacterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\WorldController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -304,6 +310,7 @@
     <Content Include="Sitescriptes\Legends\03.json" />
     <Content Include="Views\Character\Index.cshtml" />
     <Content Include="Views\Character\Edit.cshtml" />
+    <Content Include="Views\World\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -324,6 +331,8 @@
     <TypeScriptCompile Include="Scripts\typings\phaser.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Game.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IPlayer.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Player.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StateGameplay.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StatePreloader.ts" />
   </ItemGroup>

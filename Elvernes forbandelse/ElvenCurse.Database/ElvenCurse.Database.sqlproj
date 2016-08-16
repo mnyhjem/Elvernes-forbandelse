@@ -75,8 +75,14 @@
     <Build Include="dbo\Tables\Characters.sql" />
     <Build Include="dbo\StoredProcedures\GetCharactersForUser.sql" />
     <Build Include="dbo\StoredProcedures\AddNewCharacter.sql" />
+    <Build Include="dbo\Tables\Worldsections.sql" />
+    <Build Include="dbo\Tables\Characterlocations.sql" />
+    <Build Include="dbo\StoredProcedures\GetCharacter.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ElvenCurse.Database.refactorlog" />
   </ItemGroup>
 </Project>

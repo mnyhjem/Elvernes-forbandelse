@@ -1,4 +1,5 @@
 using ElvenCurse.Core.Interfaces;
+using ElvenCurse.Core.Services;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(ElvenCurse.Website.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(ElvenCurse.Website.App_Start.NinjectWebCommon), "Stop")]
@@ -63,7 +64,7 @@ namespace ElvenCurse.Website.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ICharacterService>().To<ElvenCurse.Core.Services.CharacterService>();
+            kernel.Bind<ICharacterService>().To<CharacterService>();
         }        
     }
 }
