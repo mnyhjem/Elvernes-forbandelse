@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ICharacterService.cs" />
+    <Compile Include="Interfaces\IWorldService.cs" />
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

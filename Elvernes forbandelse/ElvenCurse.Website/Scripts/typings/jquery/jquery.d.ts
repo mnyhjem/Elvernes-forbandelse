@@ -622,6 +622,7 @@ interface JQueryEasingFunctions {
  * Static members of jQuery (those on $ and jQuery themselves)
  */
 interface JQueryStatic {
+    connection :any;
 
     /**
      * Perform an asynchronous HTTP (Ajax) request.
@@ -3238,3 +3239,4 @@ declare module "jquery" {
 }
 declare var jQuery: JQueryStatic;
 declare var $: JQueryStatic;
+

@@ -16,11 +16,10 @@ namespace ElvenCurse.Website.api
         }
 
         [HttpGet]
-        public Character Get(int id)
+        public Character Getactive()
         {
-            var character = _characterService.GetCharacter(User.Identity.GetUserId(), id);
-
-
+            var character = _characterService.GetOnlineCharacter(User.Identity.GetUserId());
+            
             return character;
         }
     }

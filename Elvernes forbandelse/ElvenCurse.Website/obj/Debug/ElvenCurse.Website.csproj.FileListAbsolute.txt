@@ -102,3 +102,7 @@ C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurs
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.xml
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.WebHost.dll
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Ninject.Web.WebApi.WebHost.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.SystemWeb.xml

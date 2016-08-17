@@ -1,5 +1,7 @@
 ﻿module ElvenCurse {
     export class StateGameplay extends Phaser.State {
+        characterHub: ICharacterHub;
+
         game: Phaser.Game;
         map: Phaser.Tilemap;
         background: Phaser.TilemapLayer;
@@ -11,25 +13,23 @@
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
         changingMap: boolean = false;
-
-        characterId: number;
-
+        
         mapPath: string = "/content/assets/";
         initializing: boolean = true;
 
         constructor() {
             super();
-
-            this.characterId = parseInt($("#game").attr("data-characterid"));
         }
 
         create() {
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-            this.player = new Player(this.characterId, this.game.add.sprite(450, 80, "car"), this.game);
+            this.player = new Player(this.game.add.sprite(450, 80, "car"), this.game);
 
             //this.createMap();
             this.changeMap("playerposition");
+
+            this.wireupSignalR();
 
             //this.player = this.game.add.sprite(450, 80, 'car');
             //this.player.anchor.setTo(0.5, 0.5);
@@ -164,6 +164,24 @@
             }
             this.changingMap = false;
             this.initializing = false;
+        }
+
+        private wireupSignalR() {
+            this.characterHub = $.connection.characterHub;
+            //this.characterHub.client.methodehalløj = function ()
+            this.characterHub.client.hello = function(text) {
+                var t = 0;
+            }
+
+
+
+            var self = this;
+            $.connection.hub.start()
+                .done(function() {
+                    // map sende events up
+                    //self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
+                    self.characterHub.server.test();
+                });
         }
     }
 }

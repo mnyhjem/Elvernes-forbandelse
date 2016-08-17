@@ -1,8 +1,7 @@
 var ElvenCurse;
 (function (ElvenCurse) {
     var Player = (function () {
-        function Player(characterId, playersprite, game) {
-            this.id = characterId;
+        function Player(playersprite, game) {
             this.game = game;
             this.loadPlayer();
             this.playerSprite = playersprite;
@@ -31,7 +30,7 @@ var ElvenCurse;
         Player.prototype.loadPlayer = function () {
             var self = this;
             $.ajax({
-                url: "/api/character/get/" + this.id,
+                url: "/api/character/getactive",
                 success: function (result) {
                     //var hej = "vi skal sætte vores data her";
                     self.name = result.name;
@@ -44,3 +43,4 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Player.js.map

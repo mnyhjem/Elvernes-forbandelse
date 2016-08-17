@@ -1,18 +1,18 @@
-﻿@model int
-
-@{
+﻿@{
     ViewBag.Title = "title";
 }
 
 <div class="row">
     <div class="col-md-12">
-        <div id="game" data-characterid="@Model"></div>
+        <div id="game"></div>
     </div>
 </div>
 
 
 @section scripts
 {
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+<script src="~/signalr/hubs"></script>
     <script src="~/Sitescriptes/phaser.js"></script>
     <script src="~/Sitescriptes/ElvenCurse/Game.js"></script>
     <script src="~/Sitescriptes/ElvenCurse/StatePreloader.js"></script>

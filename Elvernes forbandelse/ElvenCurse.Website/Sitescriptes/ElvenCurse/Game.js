@@ -1,7 +1,7 @@
 var ElvenCurse;
 (function (ElvenCurse) {
     var Game = (function () {
-        function Game(characterid) {
+        function Game() {
             var width = document.body.offsetWidth;
             var height = window.innerHeight - 50; //document.body.offsetHeight;
             this.game = new Phaser.Game(width, height, Phaser.CANVAS, "game");
@@ -14,6 +14,6 @@ var ElvenCurse;
     ElvenCurse.Game = Game;
 })(ElvenCurse || (ElvenCurse = {}));
 window.onload = function () {
-    var id = $("#game").attr("data-characterid");
-    var g = new ElvenCurse.Game(id);
+    var g = new ElvenCurse.Game();
 };
+//# sourceMappingURL=Game.js.map

@@ -1,14 +1,12 @@
 ﻿module ElvenCurse {
     export class Player implements IPlayer {
         game: Phaser.Game;
-        id: number;
         name: string;
         location: ILocation;
 
         playerSprite: Phaser.Sprite;
         
-        constructor(characterId: number, playersprite: Phaser.Sprite, game:Phaser.Game) {
-            this.id = characterId;
+        constructor(playersprite: Phaser.Sprite, game:Phaser.Game) {
             this.game = game;
 
             this.loadPlayer();
@@ -45,7 +43,7 @@
         private loadPlayer() {
             var self = this;
             $.ajax({
-                url: "/api/character/get/" + this.id,
+                url: "/api/character/getactive",
                 success(result :IPlayer) {
                     //var hej = "vi skal sætte vores data her";
                     self.name = result.name;

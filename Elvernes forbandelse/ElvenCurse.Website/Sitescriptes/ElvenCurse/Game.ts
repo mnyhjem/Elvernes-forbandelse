@@ -2,7 +2,7 @@
     export class Game {
         game: Phaser.Game;
 
-        constructor(characterid: string) {
+        constructor() {
             var width = document.body.offsetWidth;
             var height = window.innerHeight - 50;//document.body.offsetHeight;
 
@@ -17,6 +17,5 @@
 }
 
 window.onload = function () {
-    var id = $("#game").attr("data-characterid");
-    var g = new ElvenCurse.Game(id);
+    var g = new ElvenCurse.Game();
 }

@@ -102,6 +102,71 @@ namespace ElvenCurse.Core.Services
             return null;
         }
 
+        public void SetCharacterPosition(int sectionId, int i, int i1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetCharacterOnline(string userId, int selectedCharacterId)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SetCharacterOnline";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("userId", userId));
+                    cmd.Parameters.Add(new SqlParameter("characterId", selectedCharacterId));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public Character GetOnlineCharacter(string userId)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetOnlineCharacterForUser";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("userId", userId));
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            var character = new Character
+                            {
+                                Id = (int)dr["id"],
+                                Name = (string)dr["name"]
+                            };
+
+                            if (dr["Worldsectionid"] == DBNull.Value)
+                            {
+                                character.Location = GetDefaultLocation(character);
+                            }
+                            else
+                            {
+                                character.Location = new Location
+                                {
+                                    Jsonname = (string)dr["jsonname"],
+                                    WorldsectionId = (int)dr["worldsectionid"],
+                                    X = (int)dr["x"],
+                                    Y = (int)dr["y"]
+                                };
+                            }
+
+                            return character;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         private Location GetDefaultLocation(Character character)
         {
             return new Location

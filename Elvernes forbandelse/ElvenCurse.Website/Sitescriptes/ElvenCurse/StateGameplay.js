@@ -13,13 +13,13 @@ var ElvenCurse;
             this.changingMap = false;
             this.mapPath = "/content/assets/";
             this.initializing = true;
-            this.characterId = parseInt($("#game").attr("data-characterid"));
         }
         StateGameplay.prototype.create = function () {
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            this.player = new ElvenCurse.Player(this.characterId, this.game.add.sprite(450, 80, "car"), this.game);
+            this.player = new ElvenCurse.Player(this.game.add.sprite(450, 80, "car"), this.game);
             //this.createMap();
             this.changeMap("playerposition");
+            this.wireupSignalR();
             //this.player = this.game.add.sprite(450, 80, 'car');
             //this.player.anchor.setTo(0.5, 0.5);
             //this.placeplayer(this.player.location.x, this.player.location.y);
@@ -133,7 +133,22 @@ var ElvenCurse;
             this.changingMap = false;
             this.initializing = false;
         };
+        StateGameplay.prototype.wireupSignalR = function () {
+            this.characterHub = $.connection.characterHub;
+            //this.characterHub.client.methodehalløj = function ()
+            this.characterHub.client.hello = function (text) {
+                var t = 0;
+            };
+            var self = this;
+            $.connection.hub.start()
+                .done(function () {
+                // map sende events up
+                //self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
+                self.characterHub.server.test();
+            });
+        };
         return StateGameplay;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

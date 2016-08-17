@@ -49,6 +49,20 @@ namespace ElvenCurse.Website.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public ActionResult EnterWorld(CharacterlistViewmodel model)
+        {
+            var character = _characterService.GetCharacter(User.Identity.GetUserId(), model.SelectedCharacterId);
+            if (character == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            _characterService.SetCharacterOnline(User.Identity.GetUserId(), model.SelectedCharacterId);
+
+            return RedirectToAction("Index", "World");
+        }
     }
 
     public class CharacterlistViewmodel
