@@ -214,9 +214,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NinjectSignalRDependencyResolver.cs" />
     <Compile Include="App_Start\NinjectWeb.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SignalRContractResolver.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -228,7 +230,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\CharacterHub.cs" />
+    <Compile Include="Hubs\GameHub.cs" />
     <Compile Include="Hubs\Chathub.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -239,6 +241,7 @@
   <ItemGroup>
     <Content Include="Content\Assets\Graphics\graphics-tiles-waterflow.png" />
     <Content Include="Content\Assets\Graphics\ground_tiles.png" />
+    <Content Include="Content\Assets\Graphics\player.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -345,7 +348,7 @@
     <TypeScriptCompile Include="Scripts\typings\phaser.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Game.ts" />
-    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\ICharacterHub.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IGameHub.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IPlayer.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Player.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StateGameplay.ts" />

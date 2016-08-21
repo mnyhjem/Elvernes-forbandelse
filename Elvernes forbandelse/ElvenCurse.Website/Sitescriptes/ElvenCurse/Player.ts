@@ -1,5 +1,8 @@
 ﻿module ElvenCurse {
     export class Player implements IPlayer {
+        rotationSpeed = 50;
+        moveSpeed = 100;
+
         game: Phaser.Game;
         name: string;
         location: ILocation;
@@ -21,18 +24,18 @@
             this.playerSprite.body.angularVelocity = 0;
 
             if (cursors.left.isDown) {
-                this.playerSprite.body.angularVelocity = -200;
+                this.playerSprite.body.angularVelocity = -this.rotationSpeed;
             }
             else if (cursors.right.isDown) {
-                this.playerSprite.body.angularVelocity = 200;
+                this.playerSprite.body.angularVelocity = this.rotationSpeed;
             }
 
             if (cursors.up.isDown) {
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, 300));
+                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, this.moveSpeed));
             }
 
             if (cursors.down.isDown) {
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, -300));
+                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, -this.moveSpeed));
             }
         }
 

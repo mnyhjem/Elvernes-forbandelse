@@ -1,5 +1,11 @@
+using ElvenCurse.Core.Engines;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Services;
+using ElvenCurse.Website.Hubs;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNet.SignalR.Infrastructure;
+using Newtonsoft.Json;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(ElvenCurse.Website.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(ElvenCurse.Website.App_Start.NinjectWebCommon), "Stop")]
@@ -16,7 +22,7 @@ namespace ElvenCurse.Website.App_Start
 
     public static class NinjectWebCommon 
     {
-        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        internal static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
@@ -64,7 +70,16 @@ namespace ElvenCurse.Website.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            var jsettings = new JsonSerializerSettings();
+            jsettings.ContractResolver = new SignalRContractResolver();
+            var serializezr = JsonSerializer.Create(jsettings);
+            kernel.Bind<JsonSerializer>().ToConstant(serializezr);
+
             kernel.Bind<ICharacterService>().To<CharacterService>();
+
+            kernel.Bind<IGameEngine>().To<GameEngine>().InSingletonScope();
+
+            
         }        
     }
 }

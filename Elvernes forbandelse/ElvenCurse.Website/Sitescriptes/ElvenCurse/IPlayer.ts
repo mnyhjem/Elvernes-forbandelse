@@ -8,8 +8,9 @@
     }
 
     export interface IPlayer {
-        //id: number;
+        id: number;
         name: string;
         location: ILocation;
+        playerSprite: Phaser.Sprite;
     }
 }

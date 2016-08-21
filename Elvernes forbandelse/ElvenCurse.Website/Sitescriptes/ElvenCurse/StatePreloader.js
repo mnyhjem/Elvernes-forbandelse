@@ -31,9 +31,10 @@ var ElvenCurse;
             //this.load.path = "/content/assets/graphics/";
             //this.load.audio("Bang", "Bang.mp3");
             //this.load.images(["graphics-tiles-waterflow", "ground_tiles"]);
-            this.game.load.tilemap('world', '/content/assets/01.json', null, Phaser.Tilemap.TILED_JSON);
-            this.game.load.image('water', '/content/assets/graphics/graphics-tiles-waterflow.png');
-            this.game.load.image('ground', '/content/assets/graphics/ground_tiles.png');
+            this.game.load.tilemap("world", "/content/assets/01.json", null, Phaser.Tilemap.TILED_JSON);
+            this.game.load.image("water", "/content/assets/graphics/graphics-tiles-waterflow.png");
+            this.game.load.image("ground", "/content/assets/graphics/ground_tiles.png");
+            this.game.load.image("player", "/content/assets/graphics/player.png");
             this.load.onFileComplete.add(this.fileLoaded, this);
         };
         StatePreloader.prototype.fileLoaded = function (progress) {
@@ -58,4 +59,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StatePreloader = StatePreloader;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StatePreloader.js.map

@@ -1,5 +1,5 @@
 ﻿module ElvenCurse {
-    export interface ICharacterHub {
+    export interface IGameHub {
         server: any;
         client:any;
     }

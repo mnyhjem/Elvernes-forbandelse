@@ -2,6 +2,8 @@ var ElvenCurse;
 (function (ElvenCurse) {
     var Player = (function () {
         function Player(playersprite, game) {
+            this.rotationSpeed = 50;
+            this.moveSpeed = 100;
             this.game = game;
             this.loadPlayer();
             this.playerSprite = playersprite;
@@ -12,16 +14,16 @@ var ElvenCurse;
             this.playerSprite.body.velocity.y = 0;
             this.playerSprite.body.angularVelocity = 0;
             if (cursors.left.isDown) {
-                this.playerSprite.body.angularVelocity = -200;
+                this.playerSprite.body.angularVelocity = -this.rotationSpeed;
             }
             else if (cursors.right.isDown) {
-                this.playerSprite.body.angularVelocity = 200;
+                this.playerSprite.body.angularVelocity = this.rotationSpeed;
             }
             if (cursors.up.isDown) {
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, 300));
+                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, this.moveSpeed));
             }
             if (cursors.down.isDown) {
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, -300));
+                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, -this.moveSpeed));
             }
         };
         Player.prototype.checkCollisions = function (layer) {
@@ -43,4 +45,3 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Player.js.map

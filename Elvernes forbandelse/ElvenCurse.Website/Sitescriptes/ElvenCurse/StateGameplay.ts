@@ -1,6 +1,11 @@
 ﻿module ElvenCurse {
     export class StateGameplay extends Phaser.State {
-        characterHub: ICharacterHub;
+        // debug
+        onlineCount:number;
+        // debug
+
+
+        gameHub: IGameHub;
 
         game: Phaser.Game;
         map: Phaser.Tilemap;
@@ -9,6 +14,7 @@
 
         //player: Phaser.Sprite;
         player: Player;
+        players: IPlayer[];
 
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
@@ -16,15 +22,18 @@
         
         mapPath: string = "/content/assets/";
         initializing: boolean = true;
+        signalRInitializing: boolean = true;
 
         constructor() {
             super();
         }
 
         create() {
+            this.players = new Array<IPlayer>();
+
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-            this.player = new Player(this.game.add.sprite(450, 80, "car"), this.game);
+            this.player = new Player(this.game.add.sprite(450, 80, "player"), this.game);
 
             //this.createMap();
             this.changeMap("playerposition");
@@ -43,13 +52,27 @@
 
         update() {
             this.player.checkCollisions(this.blocking);
-            
-            this.player.move(this.cursors);
-            
+
             // Change map stuff...
             if (this.changingMap) {
                 return;
             }
+
+            // move
+            if (this.signalRInitializing) {
+                return;
+            }
+
+            var oldX = this.player.location.x, oldY = this.player.location.y;
+            this.player.move(this.cursors);
+            this.player.location.x = this.background.getTileX(this.player.playerSprite.x);
+            this.player.location.y = this.background.getTileX(this.player.playerSprite.y);
+            if (this.player.location.x !== oldX || this.player.location.y !== oldY) {
+                this.gameHub.server.movePlayer(this.player.location.x, this.player.location.y);
+            }
+
+            this.placeOtherPlayers();
+            
 
             if (this.background.getTileX(this.player.playerSprite.x) < 1) {
                 this.changeMap("left");
@@ -73,6 +96,8 @@
             this.game.debug.text(this.background.layer.properties.name, 32, 32, "rgb(0,0,0)");
             this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48, "rgb(0,0,0)");
             this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64, "rgb(0,0,0)");
+
+            this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
         }
 
         private changeMap(direction: string) {
@@ -167,21 +192,60 @@
         }
 
         private wireupSignalR() {
-            this.characterHub = $.connection.characterHub;
+            var self = this;
+
+            this.gameHub = $.connection.gameHub;
             //this.characterHub.client.methodehalløj = function ()
-            this.characterHub.client.hello = function(text) {
+            this.gameHub.client.hello = function(text) {
                 var t = 0;
             }
 
+            this.gameHub.client.onlinecount = function(cnt) {
+                self.onlineCount = cnt;
+            };
 
+            this.gameHub.client.updatePlayer = function (player: IPlayer) {
+                for (var i = 0; i < self.players.length; i++) {
+                    if (self.players[i].id === player.id) {
+                        self.players[i].location.x = player.location.x;
+                        self.players[i].location.y = player.location.y;
+                        console.log(player.name + " moved");
+                        return;
+                    }
+                }
 
-            var self = this;
+                self.players.push(player);
+                console.log(player.name + " added");
+            };
+
+            
             $.connection.hub.start()
                 .done(function() {
                     // map sende events up
                     //self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
-                    self.characterHub.server.test();
+                    self.gameHub.server.test();
+                    self.gameHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
+
+                    self.gameHub.server.onlinecount();
+
+                    self.signalRInitializing = false;
                 });
+        }
+
+        private placeOtherPlayers() {
+            for (var i = 0; i < this.players.length; i++) {
+                var p = this.players[i];
+
+                var x = p.location.x * this.map.tileWidth;
+                var y = p.location.y * this.map.tileHeight;
+
+                if (p.playerSprite == undefined) {
+                    p.playerSprite = this.game.add.sprite(x, y, "player");
+                }
+
+                p.playerSprite.x = x;
+                p.playerSprite.y = y;
+            }
         }
     }
 }
