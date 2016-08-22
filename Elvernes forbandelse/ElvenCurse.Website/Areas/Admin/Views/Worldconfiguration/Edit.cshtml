@@ -1,0 +1,66 @@
+﻿@model ElvenCurse.Website.Areas.Admin.Controllers.EditWorldsectionViewmodel
+
+@{
+    ViewBag.Title = "title";
+//    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        
+        @using (Html.BeginForm("Edit", "Worldconfiguration", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(a=>a.Worldsection.Id)
+            @Html.ValidationSummary()
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Worldsection.Name)
+                @Html.TextBoxFor(a=>a.Worldsection.Name, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Worldsection.MapchangeLeft, null, new { @class = "" })
+                @Html.DropDownListFor(a => a.Worldsection.MapchangeLeft, Model.Worldsections, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Worldsection.MapchangeRight, null, new { @class = "" })
+                @Html.DropDownListFor(a => a.Worldsection.MapchangeRight, Model.Worldsections, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Worldsection.MapchangeUp, null, new { @class = "" })
+                @Html.DropDownListFor(a => a.Worldsection.MapchangeUp, Model.Worldsections, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Worldsection.MapchangeDown, null, new { @class = "" })
+                @Html.DropDownListFor(a => a.Worldsection.MapchangeDown, Model.Worldsections, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Worldsection.Json, null, new { @class = "" })
+                <input type="file" name="file"/>
+            </div>
+
+            <input type="submit" value="Gem" class="btn btn-default"/>
+        }
+    </div>
+    
+    <div class="col-md-6">
+        <p>Map assets</p>
+        @if (Model.Worldsection.Tilemap == null)
+        {
+            <span>None</span>
+        }
+        else
+        {
+            <ul>
+                @foreach (var tilemapimage in Model.Worldsection.Tilemap.tilesets)
+                {
+                    <li>@tilemapimage.image</li>
+                }
+            </ul>
+        }
+    </div>
+</div>

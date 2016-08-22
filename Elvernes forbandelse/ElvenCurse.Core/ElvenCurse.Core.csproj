@@ -67,12 +67,28 @@
     <Compile Include="Interfaces\IWorldService.cs" />
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Tilemap\Layer.cs" />
+    <Compile Include="Model\Tilemap\Properties.cs" />
+    <Compile Include="Model\Tilemap\Propertytypes.cs" />
+    <Compile Include="Model\Tilemap\Tilemap.cs" />
+    <Compile Include="Model\Tilemap\Tileset.cs" />
+    <Compile Include="Model\Worldsection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CharacterService.cs" />
+    <Compile Include="Services\WorldService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Maps\01.tmx" />
+    <None Include="Maps\02.tmx" />
+    <None Include="Maps\03.tmx" />
+    <None Include="Maps\04.tmx" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Maps\catastrophi_tiles_16.png" />
+    <Content Include="Maps\graphics-tiles-waterflow.png" />
+    <Content Include="Maps\ground_tiles.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

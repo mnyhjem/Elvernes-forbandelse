@@ -7,8 +7,7 @@ c.Id,
 c.Name, 
 WorldsectionId, 
 X, 
-Y,
-ws.Jsonname
+Y
 from 
 Characters c 
 left outer join Characterlocations loc on c.Id = loc.characterId 

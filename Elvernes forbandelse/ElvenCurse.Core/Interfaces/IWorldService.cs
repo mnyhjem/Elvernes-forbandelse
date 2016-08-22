@@ -8,5 +8,8 @@ namespace ElvenCurse.Core.Interfaces
         IEnumerable<Character> GetOnlineCharacters();
         void EnterWorld(string getUserId);
         void LeaveWorld(string getUserId);
+        Worldsection GetMap(int locationWorldsectionId);
+        List<Worldsection> GetMaps();
+        bool SaveMap(Worldsection modelWorldsection);
     }
 }

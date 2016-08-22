@@ -7,4 +7,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="characterId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="54c71fc2-0b72-414c-ab9e-7a0b1f362014" ChangeDateTime="08/21/2016 20:18:29">
+    <Property Name="ElementName" Value="[dbo].[Worldsections].[Jsonname]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Worldsections]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Json" />
+  </Operation>
 </Operations>

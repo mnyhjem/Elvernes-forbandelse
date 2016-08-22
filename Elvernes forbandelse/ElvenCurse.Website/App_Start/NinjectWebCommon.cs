@@ -76,6 +76,7 @@ namespace ElvenCurse.Website.App_Start
             kernel.Bind<JsonSerializer>().ToConstant(serializezr);
 
             kernel.Bind<ICharacterService>().To<CharacterService>();
+            kernel.Bind<IWorldService>().To<WorldService>();
 
             kernel.Bind<IGameEngine>().To<GameEngine>().InSingletonScope();
 

@@ -211,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="api\CharacterController.cs" />
+    <Compile Include="api\MapController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -221,6 +222,8 @@
     <Compile Include="App_Start\SignalRContractResolver.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\WorldconfigurationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CharacterController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
@@ -262,7 +265,16 @@
     <Content Include="Content\Assets\02.json" />
     <Content Include="Content\Assets\03.json" />
     <Content Include="Content\Assets\04.json" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Worldconfiguration\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Worldconfiguration\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\Filepublish.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -277,6 +289,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -331,6 +344,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Content\Assets\Sounds\" />
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +364,7 @@
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Game.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IGameHub.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IPlayer.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IWorldsection.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Player.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StateGameplay.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StatePreloader.ts" />

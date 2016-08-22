@@ -80,6 +80,9 @@
     <Build Include="dbo\StoredProcedures\GetCharacter.sql" />
     <Build Include="dbo\StoredProcedures\SetCharacterOnline.sql" />
     <Build Include="dbo\StoredProcedures\GetOnlineCharacterForUser.sql" />
+    <Build Include="dbo\StoredProcedures\GetWorldsection.sql" />
+    <Build Include="dbo\StoredProcedures\GetAllWorldsections.sql" />
+    <Build Include="dbo\StoredProcedures\SaveWorldsection.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

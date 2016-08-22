@@ -6,6 +6,9 @@
             var width = document.body.offsetWidth;
             var height = window.innerHeight - 50;//document.body.offsetHeight;
 
+            height = 600;
+            width = 800;
+
             this.game = new Phaser.Game(width, height, Phaser.CANVAS, "game");
 
             this.game.state.add("Preloader", StatePreloader);

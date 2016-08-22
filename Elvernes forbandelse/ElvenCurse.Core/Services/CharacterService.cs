@@ -87,7 +87,6 @@ namespace ElvenCurse.Core.Services
                             {
                                 character.Location = new Location
                                 {
-                                    Jsonname = (string)dr["jsonname"],
                                     WorldsectionId = (int)dr["worldsectionid"],
                                     X = (int)dr["x"],
                                     Y = (int)dr["y"]
@@ -152,7 +151,6 @@ namespace ElvenCurse.Core.Services
                             {
                                 character.Location = new Location
                                 {
-                                    Jsonname = (string)dr["jsonname"],
                                     WorldsectionId = (int)dr["worldsectionid"],
                                     X = (int)dr["x"],
                                     Y = (int)dr["y"]
@@ -173,8 +171,7 @@ namespace ElvenCurse.Core.Services
             {
                 X = 80,
                 Y = 30,
-                WorldsectionId = 1,
-                Jsonname = "01"
+                WorldsectionId = 3
             };
         }
     }

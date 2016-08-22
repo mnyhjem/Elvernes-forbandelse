@@ -6,6 +6,7 @@
         game: Phaser.Game;
         name: string;
         location: ILocation;
+        id: number;
 
         playerSprite: Phaser.Sprite;
         

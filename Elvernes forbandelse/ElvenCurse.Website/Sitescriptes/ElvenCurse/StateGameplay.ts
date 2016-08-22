@@ -34,15 +34,8 @@
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
             this.player = new Player(this.game.add.sprite(450, 80, "player"), this.game);
-
-            //this.createMap();
-            this.changeMap("playerposition");
-
+            
             this.wireupSignalR();
-
-            //this.player = this.game.add.sprite(450, 80, 'car');
-            //this.player.anchor.setTo(0.5, 0.5);
-            //this.placeplayer(this.player.location.x, this.player.location.y);
 
             this.game.physics.arcade.enable(this.player.playerSprite);
             this.game.camera.follow(this.player.playerSprite);
@@ -68,22 +61,26 @@
             this.player.location.x = this.background.getTileX(this.player.playerSprite.x);
             this.player.location.y = this.background.getTileX(this.player.playerSprite.y);
             if (this.player.location.x !== oldX || this.player.location.y !== oldY) {
-                this.gameHub.server.movePlayer(this.player.location.x, this.player.location.y);
+                this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
 
-            this.placeOtherPlayers();
+            this.placeOtherPlayers(false);
             
 
             if (this.background.getTileX(this.player.playerSprite.x) < 1) {
+                //this.gameHub.server.changeMap("left");
                 this.changeMap("left");
             }
             else if (this.background.getTileX(this.player.playerSprite.x) >= this.map.width) {
+                //this.gameHub.server.changeMap("right");
                 this.changeMap("right");
             }
             else if (this.background.getTileY(this.player.playerSprite.y) > this.map.height) {
+                //this.gameHub.server.changeMap("down");
                 this.changeMap("down");
             }
             else if (this.background.getTileY(this.player.playerSprite.y) < 1) {
+                //this.gameHub.server.changeMap("up");
                 this.changeMap("up");
             }
         }
@@ -101,58 +98,71 @@
         }
 
         private changeMap(direction: string) {
+            this.log("changeMap");
+
             this.changingMap = true;
-            var mapToLoad = "";
-            switch (direction) {
-                case "left":
-                    mapToLoad = this.background.layer.properties.mapchange_left + ".json";
-                    this.mapMovedInThisPosition = "left";
-                    break;
-                case "right":
-                    mapToLoad = this.background.layer.properties.mapchange_right + ".json";
-                    this.mapMovedInThisPosition = "right";
-                    break;
-                case "up":
-                    mapToLoad = this.background.layer.properties.mapchange_up + ".json";
-                    this.mapMovedInThisPosition = "up";
-                    break;
-                case "down":
-                    mapToLoad = this.background.layer.properties.mapchange_down + ".json";
-                    this.mapMovedInThisPosition = "down";
-                    break;
-                case "playerposition":
-                    mapToLoad = this.player.location.jsonname + ".json";
-                    this.mapMovedInThisPosition = "playerposition";
-                    break;
-            }
+            //var mapToLoad = "";
+            //switch (direction) {
+            //    case "left":
+            //        mapToLoad = this.background.layer.properties.mapchange_left + ".json";
+            //        this.mapMovedInThisPosition = "left";
+            //        break;
+            //    case "right":
+            //        mapToLoad = this.background.layer.properties.mapchange_right + ".json";
+            //        this.mapMovedInThisPosition = "right";
+            //        break;
+            //    case "up":
+            //        mapToLoad = this.background.layer.properties.mapchange_up + ".json";
+            //        this.mapMovedInThisPosition = "up";
+            //        break;
+            //    case "down":
+            //        mapToLoad = this.background.layer.properties.mapchange_down + ".json";
+            //        this.mapMovedInThisPosition = "down";
+            //        break;
+            //    case "playerposition":
+            //        mapToLoad = this.player.location.jsonname + ".json";
+            //        this.mapMovedInThisPosition = "playerposition";
+            //        break;
+            //}
 
-            if (mapToLoad === "undefined.json") {
-                console.log("End of world");
-                return;
-            }
+            //if (mapToLoad === "undefined.json") {
+            //    console.log("End of world");
+            //    return;
+            //}
 
-            if (this.map) {
-                this.map.destroy();
-            }
+            this.gameHub.server.changeMap(direction);
+
+            //if (this.map) {
+            //    this.map.destroy();
+            //}
             
-            this.game.load.tilemap("world", this.mapPath + mapToLoad, null, Phaser.Tilemap.TILED_JSON);
+            //this.game.load.tilemap("world", this.mapPath + mapToLoad, null, Phaser.Tilemap.TILED_JSON);
 
-            this.game.load.onLoadComplete.add(this.createMap, this);
-            this.game.load.start();
+            //this.game.load.onLoadComplete.add(this.createMap, this);
+            //this.game.load.start();
         }
 
         private placeplayer(x: number, y: number) {
+            this.log("placeplayer");
+
             if (!y || y < 0) {
-                y = this.background.getTileY(this.player.playerSprite.position.y);
+                y = this.background == undefined ? this.player.playerSprite.position.y / 32 : this.background.getTileY(this.player.playerSprite.position.y);
             }
             if (!x || x < 0) {
-                x = this.background.getTileX(this.player.playerSprite.position.x);
+                x = this.background == undefined ? this.player.playerSprite.position.x / 32 :this.background.getTileX(this.player.playerSprite.position.x);
             }
-            this.player.playerSprite.position.x = x * this.map.tileWidth;
-            this.player.playerSprite.position.y = y * this.map.tileHeight;
+
+            var height = this.map == undefined ? 32 : this.map.tileHeight;
+            var width = this.map == undefined ? 32 : this.map.tileWidth;
+
+            this.player.playerSprite.position.x = x * width;
+            this.player.playerSprite.position.y = y * height;
+            //this.player.location
         }
 
         private createMap() {
+            this.log("CreateMap");
+
             this.map = this.game.add.tilemap("world");
 
             this.map.addTilesetImage("water", "water");
@@ -168,24 +178,7 @@
 
             if (this.player) {
                 this.player.playerSprite.bringToTop();
-
-                switch (this.mapMovedInThisPosition) {
-                    case "left":
-                        this.placeplayer(99, -1);
-                        break;
-                    case "right":
-                        this.placeplayer(1, -1);
-                        break;
-                    case "up":
-                        this.placeplayer(-1, 99);
-                        break;
-                    case "down":
-                        this.placeplayer(-1, 1);
-                        break;
-                    case "playerposition":
-                        this.placeplayer(this.player.location.x, this.player.location.y);
-                        break;
-                }
+                this.placeOtherPlayers(true);
             }
             this.changingMap = false;
             this.initializing = false;
@@ -200,15 +193,20 @@
                 var t = 0;
             }
 
-            this.gameHub.client.onlinecount = function(cnt) {
+            this.gameHub.client.onlinecount = function (cnt) {
+                self.log("onlinecount callback");
+
                 self.onlineCount = cnt;
             };
 
             this.gameHub.client.updatePlayer = function (player: IPlayer) {
+                self.log("updatePlayer callback");
+
                 for (var i = 0; i < self.players.length; i++) {
                     if (self.players[i].id === player.id) {
                         self.players[i].location.x = player.location.x;
                         self.players[i].location.y = player.location.y;
+                        self.players[i].location.worldsectionId = player.location.worldsectionId;
                         console.log(player.name + " moved");
                         return;
                     }
@@ -217,6 +215,46 @@
                 self.players.push(player);
                 console.log(player.name + " added");
             };
+
+            this.gameHub.client.updateOwnPlayer = function (player: IPlayer) {
+                self.log("updateOwnPlayer callback");
+                self.player.location.x = player.location.x;
+                self.player.location.y = player.location.y;
+                self.player.location.worldsectionId = player.location.worldsectionId;
+                self.placeplayer(player.location.x, player.location.y);
+            }
+
+            this.gameHub.client.changeMap = function (mapToLoad: IWorldsection) {
+                self.log("Changemap callback");
+
+                if (mapToLoad === null || mapToLoad === undefined) {
+                    // end of world
+                    self.changingMap = false;
+                    return;
+                }
+
+                if (self.map) {
+                    self.map.destroy();
+                }
+                
+                // Load json
+                //self.game.load.tilemap("world", null, mapToLoad.json, Phaser.Tilemap.TILED_JSON);
+                self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
+
+                // Load images
+                for (var i = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
+                    if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
+                        self.game.load.image(
+                            mapToLoad.tilemap.tilesets[i].name,
+                            "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image);
+                    }
+                }
+
+                //self.game.load.tilemap("world", self.mapPath + mapToLoad, null, Phaser.Tilemap.TILED_JSON);
+
+                self.game.load.onLoadComplete.add(self.createMap, self);
+                self.game.load.start();
+            }
 
             
             $.connection.hub.start()
@@ -229,12 +267,17 @@
                     self.gameHub.server.onlinecount();
 
                     self.signalRInitializing = false;
+
+                    self.changeMap("playerposition");
                 });
         }
 
-        private placeOtherPlayers() {
+        private placeOtherPlayers(setOnTop: boolean) {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
+                if (p.location.worldsectionId !== this.player.location.worldsectionId) {
+                    continue;
+                }
 
                 var x = p.location.x * this.map.tileWidth;
                 var y = p.location.y * this.map.tileHeight;
@@ -245,7 +288,15 @@
 
                 p.playerSprite.x = x;
                 p.playerSprite.y = y;
+
+                if (setOnTop) {
+                    p.playerSprite.bringToTop();
+                }
             }
+        }
+
+        private log(msg:string) {
+            console.log(msg);
         }
     }
 }

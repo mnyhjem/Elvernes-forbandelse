@@ -63,12 +63,17 @@ namespace ElvenCurse.Website.Hubs
             _gameEngine.EnterWorldsection(HttpContext.Current.User.Identity.GetUserId(), sectionId, x, y);
         }
 
-        public void MovePlayer(int x, int y)
+        public void MovePlayer(int sectionId, int x, int y)
         {
             //Clients.OthersInGroup("test")
             //Context.
             //_characterService.SetCharacterPosition(sectionId, x, y);
-            _gameEngine.MovePlayer(Context.ConnectionId, HttpContext.Current.User.Identity.GetUserId(), x, y);
+            _gameEngine.MovePlayer(Context.ConnectionId, HttpContext.Current.User.Identity.GetUserId(), sectionId, x, y);
+        }
+
+        public void ChangeMap(string direction)
+        {
+            _gameEngine.ChangeMap(Context.ConnectionId, HttpContext.Current.User.Identity.GetUserId(), direction);
         }
     }
 }
