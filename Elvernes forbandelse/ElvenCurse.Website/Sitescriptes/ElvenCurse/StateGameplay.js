@@ -115,6 +115,12 @@ var ElvenCurse;
                             self.players.splice(i, 1);
                             return;
                         }
+                        else if (player.location.worldsectionId !== self.player.location.worldsectionId) {
+                            self.log(player.name + " left worldsection");
+                            self.players[i].destroy();
+                            self.players.splice(i, 1);
+                            return;
+                        }
                         self.players[i].updatePosition(player);
                         self.log(player.name + " moved");
                         return;
@@ -138,6 +144,7 @@ var ElvenCurse;
                     // end of world
                     return;
                 }
+                self.destroyAllPlayers();
                 if (self.map) {
                     self.map.destroy();
                 }
@@ -164,6 +171,13 @@ var ElvenCurse;
                 self.gameHub.server.changeMap("playerposition");
             });
         };
+        StateGameplay.prototype.destroyAllPlayers = function () {
+            for (var i = 0; i < this.players.length; i++) {
+                var p = this.players[i];
+                p.destroy();
+            }
+            this.players = new Array();
+        };
         StateGameplay.prototype.placeOtherPlayers = function () {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
@@ -180,3 +194,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

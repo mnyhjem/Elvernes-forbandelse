@@ -26,7 +26,25 @@ namespace ElvenCurse.Core.Engines
         {
             get { return _characters.Count; }
         }
-        
+
+        private dynamic AllInWorldSectionExceptCurrent(Character c)
+        {
+            return
+                _clients.Clients(
+                    _characters.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId && a.Id != c.Id)
+                        .Select(a => a.ConnectionId)
+                        .ToList());
+        }
+
+        private dynamic AllInWorldSection(int sectionId)
+        {
+            return
+                _clients.Clients(
+                    _characters.Where(a => a.Location.WorldsectionId == sectionId)
+                        .Select(a => a.ConnectionId)
+                        .ToList());
+        }
+
         public GameEngine(
             IHubConnectionContext<dynamic> clients, 
             ICharacterService characterService,
@@ -84,7 +102,7 @@ namespace ElvenCurse.Core.Engines
                 c.Connectionstatus = Connectionstatus.Offline;
                 _characters.Remove(c);
 
-                _clients.AllExcept(connectionId).updatePlayer(c);
+                AllInWorldSectionExceptCurrent(c).updatePlayer(c);
             }
         }
 
@@ -123,24 +141,28 @@ namespace ElvenCurse.Core.Engines
             {
                 //this.gameHub.server.changeMap("left");
                 ChangeMap(connectionId, getUserId, "left");
+                return;
             }
-            else if (c.Location.X >= currentmap.Tilemap.width)
+            if (c.Location.X >= currentmap.Tilemap.width)
             {
                 //this.gameHub.server.changeMap("right");
                 ChangeMap(connectionId, getUserId, "right");
+                return;
             }
-            else if (c.Location.Y > currentmap.Tilemap.height)
+            if (c.Location.Y > currentmap.Tilemap.height)
             {
                 //this.gameHub.server.changeMap("down");
                 ChangeMap(connectionId, getUserId, "down");
+                return;
             }
-            else if (c.Location.Y < 1)
+            if (c.Location.Y < 1)
             {
                 //this.gameHub.server.changeMap("up");
                 ChangeMap(connectionId, getUserId, "up");
+                return;
             }
 
-            _clients.AllExcept(connectionId).updatePlayer(c);
+            AllInWorldSectionExceptCurrent(c).updatePlayer(c);
         }
 
         public void ChangeMap(string connectionId, string getUserId, string direction)
@@ -159,7 +181,7 @@ namespace ElvenCurse.Core.Engines
                 Y = c.Location.Y
             };
 
-            var newPlayerlocationFailed = new Location
+            var oldPlayerLocation = new Location
             {
                 WorldsectionId = c.Location.WorldsectionId,
                 X = c.Location.X,
@@ -174,8 +196,8 @@ namespace ElvenCurse.Core.Engines
                     newPlayerlocationSuccess.X = 99;
                     newPlayerlocationSuccess.Y = -1;
 
-                    newPlayerlocationFailed.X -= 1;
-                    newPlayerlocationFailed.Y = -1;
+                    oldPlayerLocation.X -= 1;
+                    oldPlayerLocation.Y = -1;
                     break;
 
                 case "right":
@@ -183,8 +205,8 @@ namespace ElvenCurse.Core.Engines
                     newPlayerlocationSuccess.X = 1;
                     newPlayerlocationSuccess.Y = -1;
 
-                    newPlayerlocationFailed.X = 99;
-                    newPlayerlocationFailed.Y = -1;
+                    oldPlayerLocation.X = 99;
+                    oldPlayerLocation.Y = -1;
                     break;
 
                 case "up":
@@ -192,8 +214,8 @@ namespace ElvenCurse.Core.Engines
                     newPlayerlocationSuccess.X = -1;
                     newPlayerlocationSuccess.Y = 99;
 
-                    newPlayerlocationFailed.X = -1;
-                    newPlayerlocationFailed.Y -= 1;
+                    oldPlayerLocation.X = -1;
+                    oldPlayerLocation.Y -= 1;
                     break;
 
                 case "down":
@@ -201,8 +223,8 @@ namespace ElvenCurse.Core.Engines
                     newPlayerlocationSuccess.X = -1;
                     newPlayerlocationSuccess.Y = 1;
 
-                    newPlayerlocationFailed.X = -1;
-                    newPlayerlocationFailed.Y = 99;
+                    oldPlayerLocation.X = -1;
+                    oldPlayerLocation.Y = 99;
                     break;
 
                 case "playerposition":
@@ -219,10 +241,13 @@ namespace ElvenCurse.Core.Engines
                 {
                     map.Tilemap.layers[i].data = null;
                 }
+
+                // fortæl spillerne i den section vi forlader, at vi er taget afsted
+                AllInWorldSection(oldPlayerLocation.WorldsectionId).updatePlayer(c);
             }
             else
             {
-                c.Location = newPlayerlocationFailed;
+                c.Location = oldPlayerLocation;
             }
 
             // indlæs kort mm.
@@ -232,7 +257,7 @@ namespace ElvenCurse.Core.Engines
             _clients.Client(connectionId).updateOwnPlayer(c);
 
             // fortæl de andre spillere at vi er kommet
-            _clients.AllExcept(connectionId).updatePlayer(c);
+            AllInWorldSectionExceptCurrent(c).updatePlayer(c);
 
             // placer de andre spillere på kortet
             foreach (var otherplacer in _characters.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId && a.ConnectionId != connectionId))
@@ -240,6 +265,8 @@ namespace ElvenCurse.Core.Engines
                 _clients.Client(connectionId).updatePlayer(otherplacer);
             }
         }
+
+
 
         private void TimerTick(object state)
         {

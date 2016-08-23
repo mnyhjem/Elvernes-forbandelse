@@ -165,6 +165,11 @@
                             self.players[i].destroy();
                             self.players.splice(i, 1);
                             return;
+                        } else if (player.location.worldsectionId !== self.player.location.worldsectionId) {
+                            self.log(player.name + " left worldsection");
+                            self.players[i].destroy();
+                            self.players.splice(i, 1);
+                            return;
                         }
                         self.players[i].updatePosition(player);
                         self.log(player.name + " moved");
@@ -193,6 +198,8 @@
                     // end of world
                     return;
                 }
+
+                self.destroyAllPlayers();
 
                 if (self.map) {
                     self.map.destroy();
@@ -229,6 +236,14 @@
 
                     self.gameHub.server.changeMap("playerposition");
                 });
+        }
+
+        private destroyAllPlayers() {
+            for (var i = 0; i < this.players.length; i++) {
+                var p = this.players[i];
+                p.destroy();
+            }
+            this.players = new Array<OtherPlayer>();
         }
 
         private placeOtherPlayers() {
