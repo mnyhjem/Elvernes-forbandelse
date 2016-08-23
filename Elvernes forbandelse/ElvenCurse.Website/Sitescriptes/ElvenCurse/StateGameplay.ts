@@ -34,7 +34,7 @@
         }
 
         create() {
-            //this.game.stage.disableVisibilityChange = true;
+            this.game.stage.disableVisibilityChange = true;
 
             this.backgroundGroup = this.game.add.group();
             this.middelgroundGroup = this.game.add.group();
@@ -159,6 +159,13 @@
                         //self.players[i].location.x = player.location.x;
                         //self.players[i].location.y = player.location.y;
                         //self.players[i].location.worldsectionId = player.location.worldsectionId;
+
+                        if (player.connectionstatus === 0) {
+                            self.log(player.name + " went offline");
+                            self.players[i].destroy();
+                            self.players.splice(i, 1);
+                            return;
+                        }
                         self.players[i].updatePosition(player);
                         self.log(player.name + " moved");
                         return;
@@ -217,9 +224,7 @@
                     //self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
                     self.gameHub.server.test();
                     self.gameHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
-
-                    self.gameHub.server.onlinecount();
-
+                    
                     self.signalRInitializing = false;
 
                     self.gameHub.server.changeMap("playerposition");

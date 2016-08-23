@@ -29,24 +29,28 @@ namespace ElvenCurse.Website.Hubs
         public override Task OnConnected()
         {
             _gameEngine.EnterWorld(HttpContext.Current.User.Identity.GetUserId(), Context.ConnectionId);
+            Clients.All.onlinecount(_gameEngine.Onlinecount);
 
             return base.OnConnected();
         }
 
+        //public override Task OnReconnected()
+        //{
+        //    if (HttpContext.Current != null)
+        //    {
+        //        _gameEngine.EnterWorld(HttpContext.Current.User.Identity.GetUserId(), Context.ConnectionId);
+        //        Clients.All.onlinecount(_gameEngine.Onlinecount);
+        //    }
+            
+        //    return base.OnReconnected();
+        //}
+
         public override Task OnDisconnected(bool stopCalled)
         {
-            if (HttpContext.Current != null)
-            {
-                _gameEngine.LeaveWorld(HttpContext.Current.User.Identity.GetUserId(), Context.ConnectionId);
-            }
-            
+            _gameEngine.LeaveWorld(Context.ConnectionId);
+            Clients.All.onlinecount(_gameEngine.Onlinecount);
 
             return base.OnDisconnected(stopCalled);
-        }
-
-        public void Onlinecount()
-        {
-            Clients.All.onlinecount(_gameEngine.Onlinecount);
         }
 
         public void Test()

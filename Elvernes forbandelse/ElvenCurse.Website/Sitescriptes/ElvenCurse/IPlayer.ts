@@ -11,5 +11,6 @@
         name: string;
         location: ILocation;
         playerSprite: Phaser.Sprite;
+        connectionstatus: number;
     }
 }

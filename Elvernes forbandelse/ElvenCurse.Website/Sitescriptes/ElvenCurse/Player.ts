@@ -11,7 +11,8 @@
         playerSprite: Phaser.Sprite;
         nameplate: Nameplate;
 
-        playerGroup:Phaser.Group;
+        playerGroup: Phaser.Group;
+        connectionstatus: number;
 
         
         constructor(playersprite: Phaser.Sprite, game:Phaser.Game) {
@@ -40,26 +41,37 @@
             this.playerSprite.body.velocity.y = 0;
             this.playerSprite.body.angularVelocity = 0;
 
-            if (cursors.left.isDown) {
-                //this.playerSprite.body.angularVelocity = -this.rotationSpeed;
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(180, this.moveSpeed));
+            var angleToMove = -1;
+
+            if (cursors.right.isDown && cursors.down.isDown) {
+                angleToMove = 45;
+            }
+            else if (cursors.left.isDown && cursors.down.isDown) {
+                angleToMove = 135;
+            }
+            else if (cursors.right.isDown && cursors.up.isDown) {
+                angleToMove = 315;
+            }
+            else if (cursors.left.isDown && cursors.up.isDown) {
+                angleToMove = 225;
+            }
+            else if (cursors.left.isDown) {
+                angleToMove = 180;
             }
             else if (cursors.right.isDown) {
-                //this.playerSprite.body.angularVelocity = this.rotationSpeed;
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(0, this.moveSpeed));
+                angleToMove = 0;
+            }
+            else if (cursors.up.isDown) {
+                angleToMove = 270;
+            }
+            else if (cursors.down.isDown) {
+                angleToMove = 90;
             }
 
-            if (cursors.up.isDown) {
-                //this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, this.moveSpeed));
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(270, this.moveSpeed));
+            if (angleToMove > -1) {
+                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(angleToMove, this.moveSpeed));
+                this.nameplate.setPosition(this.playerSprite.x, this.playerSprite.y);
             }
-
-            if (cursors.down.isDown) {
-                //this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.playerSprite.angle, -this.moveSpeed));
-                this.playerSprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(90, this.moveSpeed));
-            }
-
-            this.nameplate.setPosition(this.playerSprite.x, this.playerSprite.y);
         }
 
         public checkCollisions(layer: Phaser.TilemapLayer) {

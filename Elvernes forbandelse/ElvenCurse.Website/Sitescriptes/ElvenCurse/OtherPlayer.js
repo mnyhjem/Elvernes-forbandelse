@@ -25,8 +25,11 @@ var ElvenCurse;
             this.playerSprite.y = y;
             this.nameplate.setPosition(x, y);
         };
+        OtherPlayer.prototype.destroy = function () {
+            //this.playerGroup.removeAll(true);
+            this.playerGroup.destroy(true);
+        };
         return OtherPlayer;
     }());
     ElvenCurse.OtherPlayer = OtherPlayer;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=OtherPlayer.js.map

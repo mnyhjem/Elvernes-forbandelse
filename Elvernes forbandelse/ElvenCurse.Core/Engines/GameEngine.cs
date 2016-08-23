@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Utilities;
@@ -14,6 +16,11 @@ namespace ElvenCurse.Core.Engines
         private readonly IWorldService _worldService;
         private List<Character> _characters;
         private List<Worldsection> _worldsections;
+
+        private Timer _timer;
+        private readonly TimeSpan _timerUpdateInterval = TimeSpan.FromMilliseconds(250);
+        private readonly object _timerUpdateLock = new object();
+        private volatile bool _updatingTimer;
 
         public int Onlinecount
         {
@@ -30,6 +37,8 @@ namespace ElvenCurse.Core.Engines
             _worldService = worldService;
             _characters = new List<Character>();
             _worldsections = new List<Worldsection>();
+
+            _timer = new Timer(TimerTick, null, _timerUpdateInterval, _timerUpdateInterval);
         }
 
         private Worldsection GetWorldsection(int sectionId, bool getReferenceObject = false)
@@ -56,17 +65,27 @@ namespace ElvenCurse.Core.Engines
             var foundPlayer = _characters.FirstOrDefault(a => a.Id == c.Id);
             if (foundPlayer == null)
             {
+                foundPlayer = c;
                 _characters.Add(c);
             }
             else
             {
                 foundPlayer.ConnectionId = connectionId;
             }
+
+            foundPlayer.Connectionstatus = Connectionstatus.Online;
         }
 
-        public void LeaveWorld(string getUserId, string connectionId)
+        public void LeaveWorld(string connectionId)
         {
-            _characters.Remove(_characters.FirstOrDefault(a => a.ConnectionId == connectionId));
+            var c = _characters.FirstOrDefault(a => a.ConnectionId == connectionId);
+            if (c != null)
+            {
+                c.Connectionstatus = Connectionstatus.Offline;
+                _characters.Remove(c);
+
+                _clients.AllExcept(connectionId).updatePlayer(c);
+            }
         }
 
         public void EnterWorldsection(string userId, int sectionId, int x, int y)
@@ -216,9 +235,24 @@ namespace ElvenCurse.Core.Engines
             _clients.AllExcept(connectionId).updatePlayer(c);
 
             // placer de andre spillere på kortet
-            foreach (var otherplacer in _characters.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId))
+            foreach (var otherplacer in _characters.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId && a.ConnectionId != connectionId))
             {
                 _clients.Client(connectionId).updatePlayer(otherplacer);
+            }
+        }
+
+        private void TimerTick(object state)
+        {
+            lock (_timerUpdateLock)
+            {
+                if (!_updatingTimer)
+                {
+                    _updatingTimer = true;
+
+                    // update
+
+                    _updatingTimer = false;
+                }
             }
         }
     }

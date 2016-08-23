@@ -38,5 +38,10 @@
             this.playerSprite.y = y;
             this.nameplate.setPosition(x, y);
         }
+
+        public destroy() {
+            //this.playerGroup.removeAll(true);
+            this.playerGroup.destroy(true);
+        }
     }
 }
