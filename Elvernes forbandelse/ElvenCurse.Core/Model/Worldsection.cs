@@ -1,5 +1,8 @@
-﻿namespace ElvenCurse.Core.Model
+﻿using System;
+
+namespace ElvenCurse.Core.Model
 {
+    [Serializable]
     public class Worldsection
     {
         public int Id { get; set; }

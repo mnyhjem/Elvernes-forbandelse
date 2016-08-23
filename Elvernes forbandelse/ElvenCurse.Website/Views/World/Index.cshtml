@@ -11,13 +11,12 @@
 
 @section scripts
 {
-    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    @Scripts.Render("~/bundles/frameworks")
+
+    
 <script src="~/signalr/hubs"></script>
-    <script src="~/Sitescriptes/phaser.js"></script>
-    <script src="~/Sitescriptes/ElvenCurse/Game.js"></script>
-    <script src="~/Sitescriptes/ElvenCurse/StatePreloader.js"></script>
-    <script src="~/Sitescriptes/ElvenCurse/StateGameplay.js"></script>
-<script src="~/Sitescriptes/ElvenCurse/Player.js"></script>
+    @Scripts.Render("~/bundles/elvencurse")
+
 }
 
 @section header

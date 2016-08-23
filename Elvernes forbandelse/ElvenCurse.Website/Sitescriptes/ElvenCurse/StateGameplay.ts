@@ -12,13 +12,18 @@
         background: Phaser.TilemapLayer;
         blocking: Phaser.TilemapLayer;
 
+        // groups
+        backgroundGroup: Phaser.Group;
+        middelgroundGroup: Phaser.Group;
+        uiGroup: Phaser.Group;
+
         //player: Phaser.Sprite;
         player: Player;
-        players: IPlayer[];
+        players: OtherPlayer[];
 
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
-        changingMap: boolean = false;
+        //waitingForServer: boolean = true;
         
         mapPath: string = "/content/assets/";
         initializing: boolean = true;
@@ -29,11 +34,20 @@
         }
 
         create() {
-            this.players = new Array<IPlayer>();
+            //this.game.stage.disableVisibilityChange = true;
+
+            this.backgroundGroup = this.game.add.group();
+            this.middelgroundGroup = this.game.add.group();
+            this.game.world.bringToTop(this.middelgroundGroup);
+            this.uiGroup = this.game.add.group();
+            //this.game.world.bringToTop(this.uiGroup);
+
+            this.players = new Array<OtherPlayer>();
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
             this.player = new Player(this.game.add.sprite(450, 80, "player"), this.game);
+            this.middelgroundGroup.add(this.player.playerGroup);
             
             this.wireupSignalR();
 
@@ -46,8 +60,7 @@
         update() {
             this.player.checkCollisions(this.blocking);
 
-            // Change map stuff...
-            if (this.changingMap) {
+            if (this.background == undefined) {
                 return;
             }
 
@@ -64,25 +77,7 @@
                 this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
 
-            this.placeOtherPlayers(false);
-            
-
-            if (this.background.getTileX(this.player.playerSprite.x) < 1) {
-                //this.gameHub.server.changeMap("left");
-                this.changeMap("left");
-            }
-            else if (this.background.getTileX(this.player.playerSprite.x) >= this.map.width) {
-                //this.gameHub.server.changeMap("right");
-                this.changeMap("right");
-            }
-            else if (this.background.getTileY(this.player.playerSprite.y) > this.map.height) {
-                //this.gameHub.server.changeMap("down");
-                this.changeMap("down");
-            }
-            else if (this.background.getTileY(this.player.playerSprite.y) < 1) {
-                //this.gameHub.server.changeMap("up");
-                this.changeMap("up");
-            }
+            this.placeOtherPlayers();
         }
 
         render() {
@@ -95,51 +90,6 @@
             this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64, "rgb(0,0,0)");
 
             this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
-        }
-
-        private changeMap(direction: string) {
-            this.log("changeMap");
-
-            this.changingMap = true;
-            //var mapToLoad = "";
-            //switch (direction) {
-            //    case "left":
-            //        mapToLoad = this.background.layer.properties.mapchange_left + ".json";
-            //        this.mapMovedInThisPosition = "left";
-            //        break;
-            //    case "right":
-            //        mapToLoad = this.background.layer.properties.mapchange_right + ".json";
-            //        this.mapMovedInThisPosition = "right";
-            //        break;
-            //    case "up":
-            //        mapToLoad = this.background.layer.properties.mapchange_up + ".json";
-            //        this.mapMovedInThisPosition = "up";
-            //        break;
-            //    case "down":
-            //        mapToLoad = this.background.layer.properties.mapchange_down + ".json";
-            //        this.mapMovedInThisPosition = "down";
-            //        break;
-            //    case "playerposition":
-            //        mapToLoad = this.player.location.jsonname + ".json";
-            //        this.mapMovedInThisPosition = "playerposition";
-            //        break;
-            //}
-
-            //if (mapToLoad === "undefined.json") {
-            //    console.log("End of world");
-            //    return;
-            //}
-
-            this.gameHub.server.changeMap(direction);
-
-            //if (this.map) {
-            //    this.map.destroy();
-            //}
-            
-            //this.game.load.tilemap("world", this.mapPath + mapToLoad, null, Phaser.Tilemap.TILED_JSON);
-
-            //this.game.load.onLoadComplete.add(this.createMap, this);
-            //this.game.load.start();
         }
 
         private placeplayer(x: number, y: number) {
@@ -170,6 +120,8 @@
 
             this.blocking = this.map.createLayer("blocking");
             this.background = this.map.createLayer("background");
+            this.backgroundGroup.add(this.background);
+            this.backgroundGroup.add(this.blocking);
 
             this.background.resizeWorld();
 
@@ -177,10 +129,10 @@
             //map.setCollision(23, true, background)
 
             if (this.player) {
-                this.player.playerSprite.bringToTop();
-                this.placeOtherPlayers(true);
+                //this.player.bringToTop();
+                //this.game.world.bringToTop(this.middelgroundGroup);
+                this.placeOtherPlayers();
             }
-            this.changingMap = false;
             this.initializing = false;
         }
 
@@ -203,16 +155,19 @@
                 self.log("updatePlayer callback");
 
                 for (var i = 0; i < self.players.length; i++) {
-                    if (self.players[i].id === player.id) {
-                        self.players[i].location.x = player.location.x;
-                        self.players[i].location.y = player.location.y;
-                        self.players[i].location.worldsectionId = player.location.worldsectionId;
-                        console.log(player.name + " moved");
+                    if (self.players[i].player.id === player.id) {
+                        //self.players[i].location.x = player.location.x;
+                        //self.players[i].location.y = player.location.y;
+                        //self.players[i].location.worldsectionId = player.location.worldsectionId;
+                        self.players[i].updatePosition(player);
+                        self.log(player.name + " moved");
                         return;
                     }
                 }
 
-                self.players.push(player);
+                var newplayer = new OtherPlayer(self.game, player);
+                self.middelgroundGroup.add(newplayer.playerGroup);
+                self.players.push(newplayer);
                 console.log(player.name + " added");
             };
 
@@ -229,7 +184,6 @@
 
                 if (mapToLoad === null || mapToLoad === undefined) {
                     // end of world
-                    self.changingMap = false;
                     return;
                 }
 
@@ -268,30 +222,18 @@
 
                     self.signalRInitializing = false;
 
-                    self.changeMap("playerposition");
+                    self.gameHub.server.changeMap("playerposition");
                 });
         }
 
-        private placeOtherPlayers(setOnTop: boolean) {
+        private placeOtherPlayers() {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
-                if (p.location.worldsectionId !== this.player.location.worldsectionId) {
+                if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }
 
-                var x = p.location.x * this.map.tileWidth;
-                var y = p.location.y * this.map.tileHeight;
-
-                if (p.playerSprite == undefined) {
-                    p.playerSprite = this.game.add.sprite(x, y, "player");
-                }
-
-                p.playerSprite.x = x;
-                p.playerSprite.y = y;
-
-                if (setOnTop) {
-                    p.playerSprite.bringToTop();
-                }
+                p.placeGroup();
             }
         }
 

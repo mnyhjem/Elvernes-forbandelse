@@ -2,6 +2,7 @@
 using System.Linq;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Utilities;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace ElvenCurse.Core.Engines
@@ -12,6 +13,7 @@ namespace ElvenCurse.Core.Engines
         private readonly ICharacterService _characterService;
         private readonly IWorldService _worldService;
         private List<Character> _characters;
+        private List<Worldsection> _worldsections;
 
         public int Onlinecount
         {
@@ -27,6 +29,23 @@ namespace ElvenCurse.Core.Engines
             _characterService = characterService;
             _worldService = worldService;
             _characters = new List<Character>();
+            _worldsections = new List<Worldsection>();
+        }
+
+        private Worldsection GetWorldsection(int sectionId, bool getReferenceObject = false)
+        {
+            var section = _worldsections.FirstOrDefault(a => a.Id == sectionId);
+            if (section == null)
+            {
+                section = _worldService.GetMap(sectionId);
+                _worldsections.Add(section);
+            }
+
+            if (getReferenceObject)
+            {
+                return section;
+            }
+            return ExtensionsAndUtilities.DeepCopy(section);
         }
 
         public void EnterWorld(string getUserId, string connectionId)
@@ -74,15 +93,33 @@ namespace ElvenCurse.Core.Engines
             {
                 return;
             }
-
-            //if (c.Location.WorldsectionId != sectionId)
-            //{
-            //    _clients.AllExcept(connectionId).updatePlayer(c);
-            //}
-
+            
             c.Location.X = x;
             c.Location.Y = y;
             c.Location.WorldsectionId = sectionId;
+
+            var currentmap = GetWorldsection(c.Location.WorldsectionId);
+
+            if (c.Location.X < 1)
+            {
+                //this.gameHub.server.changeMap("left");
+                ChangeMap(connectionId, getUserId, "left");
+            }
+            else if (c.Location.X >= currentmap.Tilemap.width)
+            {
+                //this.gameHub.server.changeMap("right");
+                ChangeMap(connectionId, getUserId, "right");
+            }
+            else if (c.Location.Y > currentmap.Tilemap.height)
+            {
+                //this.gameHub.server.changeMap("down");
+                ChangeMap(connectionId, getUserId, "down");
+            }
+            else if (c.Location.Y < 1)
+            {
+                //this.gameHub.server.changeMap("up");
+                ChangeMap(connectionId, getUserId, "up");
+            }
 
             _clients.AllExcept(connectionId).updatePlayer(c);
         }
@@ -95,7 +132,7 @@ namespace ElvenCurse.Core.Engines
                 return;
             }
 
-            var currentMap = _worldService.GetMap(c.Location.WorldsectionId);
+            var currentMap = GetWorldsection(c.Location.WorldsectionId);
             var newPlayerlocationSuccess = new Location
             {
                 WorldsectionId = c.Location.WorldsectionId,
@@ -154,7 +191,7 @@ namespace ElvenCurse.Core.Engines
                     break;
             }
             
-            var map = _worldService.GetMap(mapToLoad);
+            var map = GetWorldsection(mapToLoad);
             if (map != null)
             {
                 c.Location = newPlayerlocationSuccess;
@@ -169,10 +206,20 @@ namespace ElvenCurse.Core.Engines
                 c.Location = newPlayerlocationFailed;
             }
 
+            // indlæs kort mm.
             _clients.Client(connectionId).changeMap(map);
-
-
+            
+            // placer vores egen spiller på kortet
             _clients.Client(connectionId).updateOwnPlayer(c);
+
+            // fortæl de andre spillere at vi er kommet
+            _clients.AllExcept(connectionId).updatePlayer(c);
+
+            // placer de andre spillere på kortet
+            foreach (var otherplacer in _characters.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId))
+            {
+                _clients.Client(connectionId).updatePlayer(otherplacer);
+            }
         }
     }
 }

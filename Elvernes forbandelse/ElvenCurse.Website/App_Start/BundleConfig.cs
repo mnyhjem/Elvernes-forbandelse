@@ -8,6 +8,22 @@ namespace ElvenCurse.Website
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            BundleTable.EnableOptimizations = true;
+
+            bundles.Add(new ScriptBundle("~/bundles/frameworks").Include(
+                "~/Scripts/jquery.signalR-2.2.1.min.js",
+                "~/Sitescriptes/phaser.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/elvencurse").Include(
+                "~/Sitescriptes/ElvenCurse/Game.js",
+                "~/Sitescriptes/ElvenCurse/StatePreloader.js",
+                "~/Sitescriptes/ElvenCurse/StateGameplay.js",
+                "~/Sitescriptes/ElvenCurse/Player.js",
+                "~/Sitescriptes/ElvenCurse/Nameplate.js",
+                "~/Sitescriptes/ElvenCurse/OtherPlayer.js"
+                ));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -26,6 +42,8 @@ namespace ElvenCurse.Website
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            
         }
     }
 }

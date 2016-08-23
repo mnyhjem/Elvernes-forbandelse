@@ -1,5 +1,8 @@
-﻿namespace ElvenCurse.Core.Model.Tilemap
+﻿using System;
+
+namespace ElvenCurse.Core.Model.Tilemap
 {
+    [Serializable]
     public class Tileset
     {
         public int columns { get; set; }

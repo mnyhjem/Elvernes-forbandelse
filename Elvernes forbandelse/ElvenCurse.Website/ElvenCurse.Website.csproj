@@ -365,6 +365,8 @@
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IGameHub.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IPlayer.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IWorldsection.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Nameplate.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\OtherPlayer.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Player.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StateGameplay.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\StatePreloader.ts" />

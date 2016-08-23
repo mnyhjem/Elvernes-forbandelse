@@ -1,5 +1,8 @@
-﻿namespace ElvenCurse.Core.Model.Tilemap
+﻿using System;
+
+namespace ElvenCurse.Core.Model.Tilemap
 {
+    [Serializable]
     public class Propertytypes
     {
         public string mapchange_down { get; set; }

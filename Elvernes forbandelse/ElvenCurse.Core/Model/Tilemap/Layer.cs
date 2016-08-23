@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ElvenCurse.Core.Model.Tilemap
 {
+    [Serializable]
     public class Layer
     {
         public List<int> data { get; set; }
