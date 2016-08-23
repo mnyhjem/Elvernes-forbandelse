@@ -8,7 +8,7 @@ namespace ElvenCurse.Website
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            BundleTable.EnableOptimizations = true;
+            //BundleTable.EnableOptimizations = true;
 
             bundles.Add(new ScriptBundle("~/bundles/frameworks").Include(
                 "~/Scripts/jquery.signalR-2.2.1.min.js",

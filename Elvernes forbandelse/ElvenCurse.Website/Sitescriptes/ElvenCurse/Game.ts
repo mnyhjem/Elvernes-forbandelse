@@ -3,11 +3,11 @@
         game: Phaser.Game;
 
         constructor() {
-            var width = document.body.offsetWidth;
-            var height = window.innerHeight - 50;//document.body.offsetHeight;
+            var width = document.body.offsetWidth - 100;
+            var height = window.innerHeight - 100;//document.body.offsetHeight;
 
-            height = 600;
-            width = 800;
+            //height = 600;
+            //width = 800;
 
             this.game = new Phaser.Game(width, height, Phaser.CANVAS, "game");
 

@@ -75,12 +75,31 @@ var ElvenCurse;
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
             this.map = this.game.add.tilemap("world");
-            this.map.addTilesetImage("water", "water");
-            this.map.addTilesetImage("ground", "ground");
+            //this.map.addTilesetImage("water", "water");
+            //this.map.addTilesetImage("ground", "ground");
+            for (var i = 0; i < this.map.tilesets.length; i++) {
+                var tileset = this.map.tilesets[i];
+                this.map.addTilesetImage(tileset.name, tileset.name);
+            }
             this.blocking = this.map.createLayer("blocking");
-            this.background = this.map.createLayer("background");
-            this.backgroundGroup.add(this.background);
             this.backgroundGroup.add(this.blocking);
+            for (var i = 0; i < this.map.tilesets.length; i++) {
+                var layer = this.map.layers[i];
+                if (layer == undefined) {
+                    continue;
+                }
+                if (layer.name === "blocking") {
+                    continue;
+                }
+                if (layer.name === "background") {
+                    this.background = this.map.createLayer("background");
+                    this.backgroundGroup.add(this.background);
+                }
+                var l = this.map.createLayer(layer.name);
+                this.backgroundGroup.add(l);
+            }
+            //this.background = this.map.createLayer("background");
+            //this.backgroundGroup.add(this.background);
             this.background.resizeWorld();
             this.map.setCollisionBetween(1, 100, true, this.blocking);
             //map.setCollision(23, true, background)
@@ -154,7 +173,6 @@ var ElvenCurse;
                 // Load images
                 for (var i = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
                     if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
-                        self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image);
                     }
                 }
                 //self.game.load.tilemap("world", self.mapPath + mapToLoad, null, Phaser.Tilemap.TILED_JSON);
