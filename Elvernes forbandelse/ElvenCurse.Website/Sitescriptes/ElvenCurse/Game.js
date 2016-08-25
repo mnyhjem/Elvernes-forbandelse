@@ -18,4 +18,3 @@ var ElvenCurse;
 window.onload = function () {
     var g = new ElvenCurse.Game();
 };
-//# sourceMappingURL=Game.js.map

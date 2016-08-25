@@ -25,6 +25,7 @@
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
         //waitingForServer: boolean = true;
+        currentMap: IWorldsection;
         
         mapPath: string = "/content/assets/";
         initializing: boolean = true;
@@ -85,8 +86,8 @@
             if (this.initializing) {
                 return;
             }
-
-            this.game.debug.text(this.background.layer.properties.name, 32, 32, "rgb(0,0,0)");
+            
+            this.game.debug.text(this.currentMap.name, 32, 32, "rgb(0,0,0)");
             this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48, "rgb(0,0,0)");
             this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64, "rgb(0,0,0)");
 
@@ -122,35 +123,25 @@
                 var tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name);
             }
-
-            this.blocking = this.map.createLayer("blocking");
-            this.backgroundGroup.add(this.blocking);
-
-            for (var i = 0; i < this.map.tilesets.length; i++) {
+            
+            for (var i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
-                if (layer == undefined) {
-                    continue;
-                }
-                if (layer.name === "blocking") {
-                    continue;
-                }
-                if (layer.name === "background") {
-                    this.background = this.map.createLayer("background");
-                    this.backgroundGroup.add(this.background);
-                }
-
+                
                 var l = this.map.createLayer(layer.name);
                 this.backgroundGroup.add(l);
+
+                if (layer.name === "background") {
+                    this.background = l;
+                }
+                else if (layer.name === "blocking") {
+                    this.blocking = l;
+                }
             }
-
-            //this.background = this.map.createLayer("background");
-            //this.backgroundGroup.add(this.background);
             
-
             this.background.resizeWorld();
-
-            this.map.setCollisionBetween(1, 100, true, this.blocking);
-            //map.setCollision(23, true, background)
+            
+            //this.map.setCollisionBetween(1, 100, true, this.blocking);
+            this.map.setCollision([13, 133], true, this.blocking);
 
             if (this.player) {
                 //this.player.bringToTop();
@@ -228,6 +219,8 @@
                 if (self.map) {
                     self.map.destroy();
                 }
+
+                self.currentMap = mapToLoad;
                 
                 // Load json
                 //self.game.load.tilemap("world", null, mapToLoad.json, Phaser.Tilemap.TILED_JSON);
