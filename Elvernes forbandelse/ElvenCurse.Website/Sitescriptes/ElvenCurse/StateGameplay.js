@@ -23,7 +23,7 @@ var ElvenCurse;
             //this.game.world.bringToTop(this.uiGroup);
             this.players = new Array();
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            this.player = new ElvenCurse.Player(this.game.add.sprite(450, 80, "player"), this.game);
+            this.player = new ElvenCurse.Player(this.game);
             this.middelgroundGroup.add(this.player.playerGroup);
             this.wireupSignalR();
             this.game.physics.arcade.enable(this.player.playerSprite);

@@ -242,7 +242,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Assets\Graphics\beach_sand_woa.png" />
+    <Content Include="Content\Assets\Graphics\beach_sand_woa2.png" />
+    <Content Include="Content\Assets\Graphics\beach_sand_woa3.png" />
     <Content Include="Content\Assets\Graphics\Cliff_tileset.png" />
+    <Content Include="Content\Assets\Graphics\playertest.png" />
+    <Content Include="Content\Assets\Graphics\Dragon_NPC_2.png" />
     <Content Include="Content\Assets\Graphics\Extra_Unfinished4.png" />
     <Content Include="Content\Assets\Graphics\graphics-tiles-waterflow.png" />
     <Content Include="Content\Assets\Graphics\ground_tiles.png" />

@@ -48,7 +48,7 @@
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-            this.player = new Player(this.game.add.sprite(450, 80, "player"), this.game);
+            this.player = new Player(this.game);
             this.middelgroundGroup.add(this.player.playerGroup);
             
             this.wireupSignalR();
