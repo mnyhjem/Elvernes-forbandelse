@@ -83,6 +83,9 @@
     <Build Include="dbo\StoredProcedures\GetWorldsection.sql" />
     <Build Include="dbo\StoredProcedures\GetAllWorldsections.sql" />
     <Build Include="dbo\StoredProcedures\SaveWorldsection.sql" />
+    <Build Include="dbo\Tables\Npcs.sql" />
+    <Build Include="dbo\Tables\NpcLocations.sql" />
+    <Build Include="dbo\StoredProcedures\GetAllNpcs.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

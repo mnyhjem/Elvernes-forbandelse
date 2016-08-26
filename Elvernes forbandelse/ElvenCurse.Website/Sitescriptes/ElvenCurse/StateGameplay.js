@@ -20,8 +20,8 @@ var ElvenCurse;
             this.middelgroundGroup = this.game.add.group();
             this.game.world.bringToTop(this.middelgroundGroup);
             this.uiGroup = this.game.add.group();
-            //this.game.world.bringToTop(this.uiGroup);
             this.players = new Array();
+            this.npcs = new Array();
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.player = new ElvenCurse.Player(this.game);
             this.middelgroundGroup.add(this.player.playerGroup);
@@ -31,7 +31,7 @@ var ElvenCurse;
             this.cursors = this.game.input.keyboard.createCursorKeys();
         };
         StateGameplay.prototype.update = function () {
-            this.player.checkCollisions(this.blocking);
+            this.player.checkCollisions(this.collisionLayer);
             if (this.background == undefined) {
                 return;
             }
@@ -46,7 +46,7 @@ var ElvenCurse;
             if (this.player.location.x !== oldX || this.player.location.y !== oldY) {
                 this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
-            this.placeOtherPlayers();
+            this.placeOtherPlayersAndNpcs();
         };
         StateGameplay.prototype.render = function () {
             if (this.initializing) {
@@ -76,9 +76,18 @@ var ElvenCurse;
             this.map = this.game.add.tilemap("world");
             //this.map.addTilesetImage("water", "water");
             //this.map.addTilesetImage("ground", "ground");
+            var collisionTileId = -1;
             for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
-                this.map.addTilesetImage(tileset.name, tileset.name);
+                if (tileset.name == "treesv6_0") {
+                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
+                }
+                else {
+                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
+                }
+                if (tileset.name === "Collision") {
+                    collisionTileId = tileset.firstgid;
+                }
             }
             for (var i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
@@ -87,17 +96,19 @@ var ElvenCurse;
                 if (layer.name === "background") {
                     this.background = l;
                 }
-                else if (layer.name === "blocking") {
-                    this.blocking = l;
+                else if (layer.name === "collision" || layer.name === "collisionLayer") {
+                    //l.visible = false;
+                    this.collisionLayer = l;
                 }
             }
             this.background.resizeWorld();
             //this.map.setCollisionBetween(1, 100, true, this.blocking);
-            this.map.setCollision([13, 133], true, this.blocking);
+            //this.map.setCollision([13, 133], true, this.blocking);
+            this.map.setCollision(collisionTileId, true, this.collisionLayer);
             if (this.player) {
                 //this.player.bringToTop();
                 //this.game.world.bringToTop(this.middelgroundGroup);
-                this.placeOtherPlayers();
+                this.placeOtherPlayersAndNpcs();
             }
             this.initializing = false;
         };
@@ -113,33 +124,52 @@ var ElvenCurse;
                 self.onlineCount = cnt;
             };
             this.gameHub.client.updatePlayer = function (player) {
-                self.log("updatePlayer callback");
                 for (var i = 0; i < self.players.length; i++) {
                     if (self.players[i].player.id === player.id) {
                         //self.players[i].location.x = player.location.x;
                         //self.players[i].location.y = player.location.y;
                         //self.players[i].location.worldsectionId = player.location.worldsectionId;
                         if (player.connectionstatus === 0) {
-                            self.log(player.name + " went offline");
                             self.players[i].destroy();
                             self.players.splice(i, 1);
                             return;
                         }
                         else if (player.location.worldsectionId !== self.player.location.worldsectionId) {
-                            self.log(player.name + " left worldsection");
                             self.players[i].destroy();
                             self.players.splice(i, 1);
                             return;
                         }
                         self.players[i].updatePosition(player);
-                        self.log(player.name + " moved");
                         return;
                     }
                 }
                 var newplayer = new ElvenCurse.OtherPlayer(self.game, player);
                 self.middelgroundGroup.add(newplayer.playerGroup);
                 self.players.push(newplayer);
-                console.log(player.name + " added");
+            };
+            this.gameHub.client.updateNpc = function (npc) {
+                for (var i = 0; i < self.npcs.length; i++) {
+                    if (self.npcs[i].player.id === npc.id) {
+                        //self.players[i].location.x = player.location.x;
+                        //self.players[i].location.y = player.location.y;
+                        //self.players[i].location.worldsectionId = player.location.worldsectionId;
+                        if (npc.connectionstatus === 0) {
+                            self.npcs[i].destroy();
+                            self.npcs.splice(i, 1);
+                            return;
+                        }
+                        else if (npc.location.worldsectionId !== self.player.location.worldsectionId) {
+                            self.npcs[i].destroy();
+                            self.npcs.splice(i, 1);
+                            return;
+                        }
+                        self.npcs[i].updatePosition(npc);
+                        return;
+                    }
+                }
+                var newnpc = new ElvenCurse.OtherPlayer(self.game, npc);
+                self.middelgroundGroup.add(newnpc.playerGroup);
+                self.npcs.push(newnpc);
             };
             this.gameHub.client.updateOwnPlayer = function (player) {
                 self.log("updateOwnPlayer callback");
@@ -154,7 +184,7 @@ var ElvenCurse;
                     // end of world
                     return;
                 }
-                self.destroyAllPlayers();
+                self.destroyAllPlayersAndNpcs();
                 if (self.map) {
                     self.map.destroy();
                 }
@@ -181,16 +211,28 @@ var ElvenCurse;
                 self.gameHub.server.changeMap("playerposition");
             });
         };
-        StateGameplay.prototype.destroyAllPlayers = function () {
+        StateGameplay.prototype.destroyAllPlayersAndNpcs = function () {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array();
+            for (var i = 0; i < this.npcs.length; i++) {
+                var p = this.npcs[i];
+                p.destroy();
+            }
+            this.npcs = new Array();
         };
-        StateGameplay.prototype.placeOtherPlayers = function () {
+        StateGameplay.prototype.placeOtherPlayersAndNpcs = function () {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
+                if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                    continue;
+                }
+                p.placeGroup();
+            }
+            for (var i = 0; i < this.npcs.length; i++) {
+                var p = this.npcs[i];
                 if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }
@@ -204,3 +246,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

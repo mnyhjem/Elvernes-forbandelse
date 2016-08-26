@@ -11,5 +11,6 @@ namespace ElvenCurse.Core.Interfaces
         Worldsection GetMap(int locationWorldsectionId);
         List<Worldsection> GetMaps();
         bool SaveMap(Worldsection modelWorldsection);
+        List<Npc> GetAllNpcs();
     }
 }

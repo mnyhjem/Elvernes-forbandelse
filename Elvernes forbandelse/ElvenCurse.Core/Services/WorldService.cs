@@ -83,6 +83,55 @@ namespace ElvenCurse.Core.Services
             }
         }
 
+        public List<Npc> GetAllNpcs()
+        {
+            var list = new List<Npc>();
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetAllNpcs";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            Npc npc;
+                            switch ((Npctype) dr["type"])
+                            {
+                                case Npctype.Hunter:
+                                    npc = new HunterNpc();
+                                    break;
+
+                                default:
+                                    continue;
+                            }
+
+                            // standard items
+                            npc.Name = (string) dr["name"];
+                            npc.Race = (Npcrace) dr["race"];
+                            npc.Status = (Npcstatus) dr["status"];
+                            npc.CurrentLocation = new Location
+                            {
+                                WorldsectionId = (int) dr["CurrentWorldsectionId"],
+                                X = (int) dr["CurrentX"],
+                                Y = (int) dr["CurrentY"]
+                            };
+                            npc.DefaultLocation = new Location
+                            {
+                                WorldsectionId = (int) dr["DefaultWorldsectionId"],
+                                X = (int) dr["DefaultX"],
+                                Y = (int) dr["DefaultY"]
+                            };
+                            list.Add(npc);
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
         public Worldsection GetMap(int locationWorldsectionId)
         {
             using (var con = new SqlConnection(_connectionstring))

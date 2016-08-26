@@ -10,7 +10,7 @@
         game: Phaser.Game;
         map: Phaser.Tilemap;
         background: Phaser.TilemapLayer;
-        blocking: Phaser.TilemapLayer;
+        collisionLayer: Phaser.TilemapLayer;
         tileLayers:Phaser.TilemapLayer[];
 
         // groups
@@ -18,13 +18,12 @@
         middelgroundGroup: Phaser.Group;
         uiGroup: Phaser.Group;
 
-        //player: Phaser.Sprite;
         player: Player;
         players: OtherPlayer[];
+        npcs: OtherPlayer[];
 
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
-        //waitingForServer: boolean = true;
         currentMap: IWorldsection;
         
         mapPath: string = "/content/assets/";
@@ -42,9 +41,9 @@
             this.middelgroundGroup = this.game.add.group();
             this.game.world.bringToTop(this.middelgroundGroup);
             this.uiGroup = this.game.add.group();
-            //this.game.world.bringToTop(this.uiGroup);
 
             this.players = new Array<OtherPlayer>();
+            this.npcs = new Array<OtherPlayer>();
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -60,7 +59,7 @@
         }
 
         update() {
-            this.player.checkCollisions(this.blocking);
+            this.player.checkCollisions(this.collisionLayer);
 
             if (this.background == undefined) {
                 return;
@@ -79,7 +78,7 @@
                 this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
 
-            this.placeOtherPlayers();
+            this.placeOtherPlayersAndNpcs();
         }
 
         render() {
@@ -119,9 +118,18 @@
 
             //this.map.addTilesetImage("water", "water");
             //this.map.addTilesetImage("ground", "ground");
+            var collisionTileId = -1;
             for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
-                this.map.addTilesetImage(tileset.name, tileset.name);
+                if (tileset.name == "treesv6_0") {
+                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
+                } else {
+                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
+                }
+                
+                if (tileset.name === "Collision") {
+                    collisionTileId = tileset.firstgid;
+                }
             }
             
             for (var i = 0; i < this.map.layers.length; i++) {
@@ -133,20 +141,22 @@
                 if (layer.name === "background") {
                     this.background = l;
                 }
-                else if (layer.name === "blocking") {
-                    this.blocking = l;
+                else if (layer.name === "collision" || layer.name === "collisionLayer") {
+                    //l.visible = false;
+                    this.collisionLayer = l;
                 }
             }
             
             this.background.resizeWorld();
             
             //this.map.setCollisionBetween(1, 100, true, this.blocking);
-            this.map.setCollision([13, 133], true, this.blocking);
+            //this.map.setCollision([13, 133], true, this.blocking);
+            this.map.setCollision(collisionTileId, true, this.collisionLayer);
 
             if (this.player) {
                 //this.player.bringToTop();
                 //this.game.world.bringToTop(this.middelgroundGroup);
-                this.placeOtherPlayers();
+                this.placeOtherPlayersAndNpcs();
             }
             this.initializing = false;
         }
@@ -167,8 +177,6 @@
             };
 
             this.gameHub.client.updatePlayer = function (player: IPlayer) {
-                self.log("updatePlayer callback");
-
                 for (var i = 0; i < self.players.length; i++) {
                     if (self.players[i].player.id === player.id) {
                         //self.players[i].location.x = player.location.x;
@@ -176,18 +184,15 @@
                         //self.players[i].location.worldsectionId = player.location.worldsectionId;
 
                         if (player.connectionstatus === 0) {
-                            self.log(player.name + " went offline");
                             self.players[i].destroy();
                             self.players.splice(i, 1);
                             return;
                         } else if (player.location.worldsectionId !== self.player.location.worldsectionId) {
-                            self.log(player.name + " left worldsection");
                             self.players[i].destroy();
                             self.players.splice(i, 1);
                             return;
                         }
                         self.players[i].updatePosition(player);
-                        self.log(player.name + " moved");
                         return;
                     }
                 }
@@ -195,7 +200,32 @@
                 var newplayer = new OtherPlayer(self.game, player);
                 self.middelgroundGroup.add(newplayer.playerGroup);
                 self.players.push(newplayer);
-                console.log(player.name + " added");
+            };
+
+            this.gameHub.client.updateNpc = function (npc: IPlayer) {
+                for (var i = 0; i < self.npcs.length; i++) {
+                    if (self.npcs[i].player.id === npc.id) {
+                        //self.players[i].location.x = player.location.x;
+                        //self.players[i].location.y = player.location.y;
+                        //self.players[i].location.worldsectionId = player.location.worldsectionId;
+
+                        if (npc.connectionstatus === 0) {
+                            self.npcs[i].destroy();
+                            self.npcs.splice(i, 1);
+                            return;
+                        } else if (npc.location.worldsectionId !== self.player.location.worldsectionId) {
+                            self.npcs[i].destroy();
+                            self.npcs.splice(i, 1);
+                            return;
+                        }
+                        self.npcs[i].updatePosition(npc);
+                        return;
+                    }
+                }
+
+                var newnpc = new OtherPlayer(self.game, npc);
+                self.middelgroundGroup.add(newnpc.playerGroup);
+                self.npcs.push(newnpc);
             };
 
             this.gameHub.client.updateOwnPlayer = function (player: IPlayer) {
@@ -214,7 +244,7 @@
                     return;
                 }
 
-                self.destroyAllPlayers();
+                self.destroyAllPlayersAndNpcs();
 
                 if (self.map) {
                     self.map.destroy();
@@ -253,17 +283,32 @@
                 });
         }
 
-        private destroyAllPlayers() {
+        private destroyAllPlayersAndNpcs() {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array<OtherPlayer>();
+
+            for (var i = 0; i < this.npcs.length; i++) {
+                var p = this.npcs[i];
+                p.destroy();
+            }
+            this.npcs = new Array<OtherPlayer>();
         }
 
-        private placeOtherPlayers() {
+        private placeOtherPlayersAndNpcs() {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
+                if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                    continue;
+                }
+
+                p.placeGroup();
+            }
+
+            for (var i = 0; i < this.npcs.length; i++) {
+                var p = this.npcs[i];
                 if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }

@@ -14,4 +14,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Json" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="978586a9-ae11-4eae-8675-d7897afe96c0" ChangeDateTime="08/26/2016 15:46:54">
+    <Property Name="ElementName" Value="[dbo].[NpcLocations].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[NpcLocations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="npcId" />
+  </Operation>
 </Operations>

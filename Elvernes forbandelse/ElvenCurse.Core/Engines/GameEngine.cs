@@ -16,11 +16,14 @@ namespace ElvenCurse.Core.Engines
         private readonly IWorldService _worldService;
         private List<Character> _characters;
         private List<Worldsection> _worldsections;
+        private List<Npc> _npcs;
 
         private Timer _timer;
         private readonly TimeSpan _timerUpdateInterval = TimeSpan.FromMilliseconds(250);
         private readonly object _timerUpdateLock = new object();
         private volatile bool _updatingTimer;
+
+        private readonly DateTime _serverBoottime;
 
         public int Onlinecount
         {
@@ -50,11 +53,15 @@ namespace ElvenCurse.Core.Engines
             ICharacterService characterService,
             IWorldService worldService)
         {
+            _serverBoottime = DateTime.Now;
+
+
             _clients = clients;
             _characterService = characterService;
             _worldService = worldService;
             _characters = new List<Character>();
             _worldsections = new List<Worldsection>();
+            _npcs = _worldService.GetAllNpcs();
 
             _timer = new Timer(TimerTick, null, _timerUpdateInterval, _timerUpdateInterval);
         }
@@ -264,6 +271,12 @@ namespace ElvenCurse.Core.Engines
             {
                 _clients.Client(connectionId).updatePlayer(otherplacer);
             }
+
+            // placer npcere på kortet
+            foreach (var npc in _npcs.Where(a => a.CurrentLocation.WorldsectionId == c.Location.WorldsectionId))
+            {
+                _clients.Client(connectionId).updateNpc(npc.ToIPlayer());
+            }
         }
 
 
@@ -277,6 +290,14 @@ namespace ElvenCurse.Core.Engines
                     _updatingTimer = true;
 
                     // update
+                    foreach (var npc in _npcs)
+                    {
+                        npc.CalculateNextMove(_characters);
+                        if (npc.UpdateNeeded)
+                        {
+                            AllInWorldSection(npc.CurrentLocation.WorldsectionId).updateNpc(npc.ToIPlayer());
+                        }
+                    }
 
                     _updatingTimer = false;
                 }
