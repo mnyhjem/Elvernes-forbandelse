@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using ElvenCurse.Website.Models;
+using Microsoft.Owin.Security.OAuth;
 
 namespace ElvenCurse.Website
 {
@@ -24,6 +25,8 @@ namespace ElvenCurse.Website
             // Configure the sign in cookie
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                CookieName = "ElvenCurseAuthcookie",
+                //AuthenticationType = "Forms",
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider
@@ -34,7 +37,16 @@ namespace ElvenCurse.Website
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
+
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
+            {
+                //AuthenticationType = DefaultAuthenticationTypes.ExternalBearer
+                
+            });
+            
+            
+                       
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.

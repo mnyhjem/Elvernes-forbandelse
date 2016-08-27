@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ElvenCurse.Website.Controllers.WorldViewmodel
+@{
     ViewBag.Title = "title";
 }
 
@@ -8,15 +9,22 @@
     </div>
 </div>
 
+<div id="serverpath" style="display:none">@Model.Serverpath</div>
 
 @section scripts
 {
     @Scripts.Render("~/bundles/frameworks")
 
-    
-<script src="~/signalr/hubs"></script>
+    <script src="@Model.Serverpath/signalr/hubs"></script>
+
     @Scripts.Render("~/bundles/elvencurse")
 
+    <script>
+        window.onload = function () {
+            //$.connection.hub.url = "@Model.Serverpath/signalr";
+            var g = new ElvenCurse.Game();
+        }
+    </script>
 }
 
 @section header

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ElvenCurse.Core.Interfaces;
@@ -99,6 +100,8 @@ namespace ElvenCurse.Core.Engines
             }
 
             foundPlayer.Connectionstatus = Connectionstatus.Online;
+
+            Trace.WriteLine($"{foundPlayer.Name} entered the world");
         }
 
         public void LeaveWorld(string connectionId)
@@ -110,6 +113,8 @@ namespace ElvenCurse.Core.Engines
                 _characters.Remove(c);
 
                 AllInWorldSectionExceptCurrent(c).updatePlayer(c);
+
+                Trace.WriteLine($"{c.Name} left the world");
             }
         }
 

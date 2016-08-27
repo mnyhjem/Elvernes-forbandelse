@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNet.SignalR;
 using Ninject;
 
-namespace ElvenCurse.Website.App_Start
+namespace ElvenCurse.Server.App_Start
 {
     public class NinjectSignalRDependencyResolver : DefaultDependencyResolver
     {

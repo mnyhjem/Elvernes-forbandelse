@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using Microsoft.AspNet.SignalR;
 
-namespace ElvenCurse.Website.Hubs
+namespace ElvenCurse.Server.Hubs
 {
     [Authorize]
     public class Chathub : Hub

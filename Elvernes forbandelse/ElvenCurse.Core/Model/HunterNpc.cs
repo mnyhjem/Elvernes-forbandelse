@@ -2,7 +2,7 @@
 {
     public class HunterNpc : Npc
     {
-        public HunterNpc():base(5)
+        public HunterNpc():base(5, 5)
         {
             
         }

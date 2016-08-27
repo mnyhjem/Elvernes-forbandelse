@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Configuration;
+using System.Web.Mvc;
 using ElvenCurse.Core.Interfaces;
 using Microsoft.AspNet.Identity;
 
@@ -22,7 +23,17 @@ namespace ElvenCurse.Website.Controllers
             {
                 return RedirectToAction("Index", "Character");
             }
-            return View();
+
+            var model = new WorldViewmodel
+            {
+                Serverpath = ConfigurationManager.AppSettings["serverPath"]
+            };
+            return View(model);
         }
+    }
+
+    public class WorldViewmodel
+    {
+        public string Serverpath { get; set; }
     }
 }

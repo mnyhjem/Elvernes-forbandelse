@@ -142,7 +142,7 @@
                     this.background = l;
                 }
                 else if (layer.name === "collision" || layer.name === "collisionLayer") {
-                    //l.visible = false;
+                    l.visible = false;
                     this.collisionLayer = l;
                 }
             }
@@ -164,6 +164,8 @@
         private wireupSignalR() {
             var self = this;
 
+            //$.connection.hub.url = "http://localhost:1234/signalr";
+            $.connection.hub.url = $("#serverpath").text() +"/signalr";
             this.gameHub = $.connection.gameHub;
             //this.characterHub.client.methodehalløj = function ()
             this.gameHub.client.hello = function(text) {

@@ -106,3 +106,6 @@ C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurs
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.Core.xml
 C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.Owin.Cors.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\System.Web.Cors.dll
+C:\sourcecode\mnyhjem.github\Elvernes-forbandelse\Elvernes forbandelse\ElvenCurse.Website\bin\Microsoft.Owin.Cors.xml

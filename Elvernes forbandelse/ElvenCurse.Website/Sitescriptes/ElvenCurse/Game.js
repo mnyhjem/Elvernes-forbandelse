@@ -15,7 +15,4 @@ var ElvenCurse;
     }());
     ElvenCurse.Game = Game;
 })(ElvenCurse || (ElvenCurse = {}));
-window.onload = function () {
-    var g = new ElvenCurse.Game();
-};
 //# sourceMappingURL=Game.js.map

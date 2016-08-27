@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -79,6 +80,13 @@ namespace ElvenCurse.Website.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    var ctx = Request.GetOwinContext();
+                    var am = ctx.Authentication;
+                    var claims = new List<Claim>();
+                    //claims.Add(new Claim(ClaimTypes.Name, "Brock"));
+                    claims.Add(new Claim(ClaimTypes.Email, model.Email));
+                    var id = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+                    am.SignIn(id);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

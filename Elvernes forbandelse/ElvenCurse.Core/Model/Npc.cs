@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ElvenCurse.Core.Model
@@ -7,13 +6,16 @@ namespace ElvenCurse.Core.Model
     public abstract class Npc
     {
         public int Id { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public Npcrace Race { get; set; }
         public string Name { get; set; }
         public Location DefaultLocation { get; set; }
         public Location CurrentLocation { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public Npcstatus Status { get; set; }
 
         private readonly int _viewDistace;
+        private readonly int _attachDistance;
         private readonly int _maxDistanceFromDefault = 25;
 
         public NpcAction Action { get; set; }
@@ -30,9 +32,10 @@ namespace ElvenCurse.Core.Model
 
         private bool _updateNeeded;
 
-        public Npc(int viewDistance)
+        protected Npc(int viewDistance, int attachDistance)
         {
             _viewDistace = viewDistance;
+            _attachDistance = attachDistance;
         }
 
         public abstract void Attack(Character characterToAttack);
@@ -104,8 +107,8 @@ namespace ElvenCurse.Core.Model
         {
             return new
             {
-                Id = Id,
-                Name = Name,
+                Id,
+                Name,
                 Location = CurrentLocation
             };
         }

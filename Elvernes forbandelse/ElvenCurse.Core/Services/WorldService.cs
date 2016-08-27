@@ -109,6 +109,7 @@ namespace ElvenCurse.Core.Services
                             }
 
                             // standard items
+                            npc.Id = (int) dr["id"];
                             npc.Name = (string) dr["name"];
                             npc.Race = (Npcrace) dr["race"];
                             npc.Status = (Npcstatus) dr["status"];
