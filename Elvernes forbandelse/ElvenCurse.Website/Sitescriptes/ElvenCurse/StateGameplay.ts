@@ -16,6 +16,7 @@
         // groups
         backgroundGroup: Phaser.Group;
         middelgroundGroup: Phaser.Group;
+        aboveMiddelgroup: Phaser.Group;
         uiGroup: Phaser.Group;
 
         player: Player;
@@ -40,7 +41,9 @@
 
             this.backgroundGroup = this.game.add.group();
             this.middelgroundGroup = this.game.add.group();
+            this.aboveMiddelgroup = this.game.add.group();
             this.game.world.bringToTop(this.middelgroundGroup);
+            this.game.world.bringToTop(this.aboveMiddelgroup);
             this.uiGroup = this.game.add.group();
 
             this.players = new Array<OtherPlayer>();
@@ -126,11 +129,7 @@
             var collisionTileId = -1;
             for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
-                if (tileset.name === "treesv6_0") {
-                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
-                } else {
-                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
-                }
+                this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 
                 if (tileset.name === "Collision") {
                     collisionTileId = tileset.firstgid;

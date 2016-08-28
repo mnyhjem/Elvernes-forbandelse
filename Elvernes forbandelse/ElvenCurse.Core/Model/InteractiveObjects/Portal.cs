@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using ElvenCurse.Core.Utilities;
 
 namespace ElvenCurse.Core.Model.InteractiveObjects
 {
     public class Portal:InteractiveObject
     {
-        public Location Destination
+        private Location Destination
         {
             get
             {
@@ -32,6 +33,10 @@ namespace ElvenCurse.Core.Model.InteractiveObjects
         public override InteractiveobjectResult Interact(Character character)
         {
             // man må maks være én tile fra portalen for den kan virke..
+            if (!character.Location.IsWithinReachOf(Location, 1))
+            {
+                return InteractiveobjectResult.NoChange;
+            }
 
             // Send brugeren afsted..
             character.Location.WorldsectionId = Destination.WorldsectionId;

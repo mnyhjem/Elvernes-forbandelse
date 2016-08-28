@@ -2,6 +2,7 @@
 {
     public enum InteractiveobjectResult
     {
-        ChangeUsersMap = 0
+        ChangeUsersMap = 0,
+        NoChange = 1
     }
 }

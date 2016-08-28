@@ -57,6 +57,7 @@ namespace ElvenCurse.Core.Engines
             IWorldService worldService)
         {
             _serverBoottime = DateTime.Now;
+            Trace.WriteLine($"Server bootup at {_serverBoottime}");
             
             _clients = clients;
             _characterService = characterService;
@@ -95,15 +96,15 @@ namespace ElvenCurse.Core.Engines
             {
                 foundPlayer = c;
                 _characters.Add(c);
+                Trace.WriteLine($"{foundPlayer.Name} entered the world");
             }
             else
             {
                 foundPlayer.ConnectionId = connectionId;
+                Trace.WriteLine($"{foundPlayer.Name} reconnected to the world");
             }
 
             foundPlayer.Connectionstatus = Connectionstatus.Online;
-
-            Trace.WriteLine($"{foundPlayer.Name} entered the world");
         }
 
         public void LeaveWorld(string connectionId)

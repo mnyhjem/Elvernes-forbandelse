@@ -94790,6 +94790,8 @@ Phaser.Tilemap.prototype = {
 
         if (this.tilesets[idx])
         {
+            //this.tilesets[idx].tileSpacing = tileSpacing;
+            //this.tilesets[idx].tileMargin = tileMargin;
             this.tilesets[idx].setImage(img);
             return this.tilesets[idx];
         }
@@ -98603,6 +98605,11 @@ Phaser.Tileset.prototype = {
 
         if (coordIndex >= 0 && (coordIndex + 1) < this.drawCoords.length)
         {
+            if (this.tileHeight - 32 > 0) {
+                y -= (this.tileHeight - 32);
+
+            }
+
             context.drawImage(
                 this.image,
                 this.drawCoords[coordIndex],
@@ -98705,6 +98712,7 @@ Phaser.Tileset.prototype = {
 
         var tx = this.tileMargin;
         var ty = this.tileMargin;
+        //var ty = this.tileSpacing;
 
         for (var y = 0; y < this.rows; y++)
         {

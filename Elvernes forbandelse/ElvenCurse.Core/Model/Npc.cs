@@ -60,7 +60,6 @@ namespace ElvenCurse.Core.Model
             {
                 Action = NpcAction.FollowPlayer;
                 MoveTowardsLocation(collisionWithPlayer.Location);
-                return;
             }
         }
 

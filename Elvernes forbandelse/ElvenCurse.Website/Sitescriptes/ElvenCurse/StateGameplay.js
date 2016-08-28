@@ -18,7 +18,9 @@ var ElvenCurse;
             this.game.stage.disableVisibilityChange = true;
             this.backgroundGroup = this.game.add.group();
             this.middelgroundGroup = this.game.add.group();
+            this.aboveMiddelgroup = this.game.add.group();
             this.game.world.bringToTop(this.middelgroundGroup);
+            this.game.world.bringToTop(this.aboveMiddelgroup);
             this.uiGroup = this.game.add.group();
             this.players = new Array();
             this.npcs = new Array();
@@ -82,12 +84,7 @@ var ElvenCurse;
             var collisionTileId = -1;
             for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
-                if (tileset.name === "treesv6_0") {
-                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
-                }
-                else {
-                    this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
-                }
+                this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 if (tileset.name === "Collision") {
                     collisionTileId = tileset.firstgid;
                 }
@@ -290,3 +287,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map
