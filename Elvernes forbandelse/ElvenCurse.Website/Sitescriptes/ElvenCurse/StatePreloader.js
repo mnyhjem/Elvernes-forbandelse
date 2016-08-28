@@ -41,6 +41,8 @@ var ElvenCurse;
             this.game.load.image("Extra_Unfinished4", "/content/assets/graphics/Extra_Unfinished4.png");
             this.game.load.image("object-layer", "/content/assets/graphics/object-layer.png");
             this.game.load.image("treesv6_0", "/content/assets/graphics/treesv6_0.png");
+            this.game.load.image("portal", "/content/assets/graphics/portal.png");
+            this.game.load.audio("medieval", "/content/assets/music/medieval.ogg");
             this.load.onFileComplete.add(this.fileLoaded, this);
         };
         StatePreloader.prototype.fileLoaded = function (progress) {

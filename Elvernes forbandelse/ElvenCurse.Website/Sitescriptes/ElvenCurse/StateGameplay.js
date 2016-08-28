@@ -22,6 +22,7 @@ var ElvenCurse;
             this.uiGroup = this.game.add.group();
             this.players = new Array();
             this.npcs = new Array();
+            this.interactiveObjects = new Array();
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.player = new ElvenCurse.Player(this.game);
             this.middelgroundGroup.add(this.player.playerGroup);
@@ -46,7 +47,7 @@ var ElvenCurse;
             if (this.player.location.x !== oldX || this.player.location.y !== oldY) {
                 this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
-            this.placeOtherPlayersAndNpcs();
+            this.placeOtherPlayersAndObjects();
         };
         StateGameplay.prototype.render = function () {
             if (this.initializing) {
@@ -73,6 +74,8 @@ var ElvenCurse;
         };
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
+            var backgroundMusic = this.game.add.audio("medieval");
+            backgroundMusic.play();
             this.map = this.game.add.tilemap("world");
             //this.map.addTilesetImage("water", "water");
             //this.map.addTilesetImage("ground", "ground");
@@ -108,7 +111,7 @@ var ElvenCurse;
             if (this.player) {
                 //this.player.bringToTop();
                 //this.game.world.bringToTop(this.middelgroundGroup);
-                this.placeOtherPlayersAndNpcs();
+                this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
         };
@@ -173,6 +176,13 @@ var ElvenCurse;
                 self.middelgroundGroup.add(newnpc.playerGroup);
                 self.npcs.push(newnpc);
             };
+            this.gameHub.client.updateInteractiveObjects = function (ios) {
+                for (var i = 0; i < ios.length; i++) {
+                    var newio = new ElvenCurse.InteractiveObject(self.game, ios[i]);
+                    self.middelgroundGroup.add(newio.group);
+                    self.interactiveObjects.push(newio);
+                }
+            };
             this.gameHub.client.updateOwnPlayer = function (player) {
                 self.log("updateOwnPlayer callback");
                 self.player.location.x = player.location.x;
@@ -186,7 +196,7 @@ var ElvenCurse;
                     // end of world
                     return;
                 }
-                self.destroyAllPlayersAndNpcs();
+                self.destroyAllPlayersAndObjects();
                 if (self.map) {
                     self.map.destroy();
                 }
@@ -213,19 +223,25 @@ var ElvenCurse;
                 self.gameHub.server.changeMap("playerposition");
             });
         };
-        StateGameplay.prototype.destroyAllPlayersAndNpcs = function () {
+        StateGameplay.prototype.destroyAllPlayersAndObjects = function () {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array();
             for (var i = 0; i < this.npcs.length; i++) {
-                var p = this.npcs[i];
-                p.destroy();
+                var npc = this.npcs[i];
+                npc.destroy();
             }
             this.npcs = new Array();
+            for (var i = 0; i < this.interactiveObjects.length; i++) {
+                var io = this.interactiveObjects[i];
+                io.destroy();
+            }
+            this.interactiveObjects = new Array();
         };
-        StateGameplay.prototype.placeOtherPlayersAndNpcs = function () {
+        StateGameplay.prototype.placeOtherPlayersAndObjects = function () {
+            // players
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
@@ -233,12 +249,21 @@ var ElvenCurse;
                 }
                 p.placeGroup();
             }
+            // npcs
             for (var i = 0; i < this.npcs.length; i++) {
-                var p = this.npcs[i];
-                if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                var npc = this.npcs[i];
+                if (npc.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }
-                p.placeGroup();
+                npc.placeGroup();
+            }
+            // objects
+            for (var i = 0; i < this.interactiveObjects.length; i++) {
+                var io = this.interactiveObjects[i];
+                if (io.interactiveObject.location.worldsectionId !== this.player.location.worldsectionId) {
+                    continue;
+                }
+                io.placeGroup();
             }
         };
         StateGameplay.prototype.log = function (msg) {

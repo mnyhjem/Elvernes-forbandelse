@@ -21,6 +21,7 @@
         player: Player;
         players: OtherPlayer[];
         npcs: OtherPlayer[];
+        interactiveObjects: InteractiveObject[];
 
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
@@ -44,6 +45,7 @@
 
             this.players = new Array<OtherPlayer>();
             this.npcs = new Array<OtherPlayer>();
+            this.interactiveObjects = new Array<InteractiveObject>();
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -78,7 +80,7 @@
                 this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
 
-            this.placeOtherPlayersAndNpcs();
+            this.placeOtherPlayersAndObjects();
         }
 
         render() {
@@ -113,6 +115,9 @@
 
         private createMap() {
             this.log("CreateMap");
+
+            var backgroundMusic = this.game.add.audio("medieval");
+            backgroundMusic.play();
 
             this.map = this.game.add.tilemap("world");
 
@@ -156,7 +161,7 @@
             if (this.player) {
                 //this.player.bringToTop();
                 //this.game.world.bringToTop(this.middelgroundGroup);
-                this.placeOtherPlayersAndNpcs();
+                this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
         }
@@ -230,6 +235,15 @@
                 self.npcs.push(newnpc);
             };
 
+            this.gameHub.client.updateInteractiveObjects = function (ios: IInteractiveObject[]) {
+                for (var i = 0; i < ios.length; i++) {
+                    var newio = new InteractiveObject(self.game, ios[i]);
+                    self.middelgroundGroup.add(newio.group);
+                    self.interactiveObjects.push(newio);
+                }
+                
+            };
+
             this.gameHub.client.updateOwnPlayer = function (player: IPlayer) {
                 self.log("updateOwnPlayer callback");
                 self.player.location.x = player.location.x;
@@ -246,7 +260,7 @@
                     return;
                 }
 
-                self.destroyAllPlayersAndNpcs();
+                self.destroyAllPlayersAndObjects();
 
                 if (self.map) {
                     self.map.destroy();
@@ -285,7 +299,7 @@
                 });
         }
 
-        private destroyAllPlayersAndNpcs() {
+        private destroyAllPlayersAndObjects() {
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
@@ -293,13 +307,20 @@
             this.players = new Array<OtherPlayer>();
 
             for (var i = 0; i < this.npcs.length; i++) {
-                var p = this.npcs[i];
-                p.destroy();
+                var npc = this.npcs[i];
+                npc.destroy();
             }
             this.npcs = new Array<OtherPlayer>();
+
+            for (var i = 0; i < this.interactiveObjects.length; i++) {
+                var io = this.interactiveObjects[i];
+                io.destroy();
+            }
+            this.interactiveObjects = new Array<InteractiveObject>();
         }
 
-        private placeOtherPlayersAndNpcs() {
+        private placeOtherPlayersAndObjects() {
+            // players
             for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
@@ -309,13 +330,24 @@
                 p.placeGroup();
             }
 
+            // npcs
             for (var i = 0; i < this.npcs.length; i++) {
-                var p = this.npcs[i];
-                if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                var npc = this.npcs[i];
+                if (npc.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }
 
-                p.placeGroup();
+                npc.placeGroup();
+            }
+
+            // objects
+            for (var i = 0; i < this.interactiveObjects.length; i++) {
+                var io = this.interactiveObjects[i];
+                if (io.interactiveObject.location.worldsectionId !== this.player.location.worldsectionId) {
+                    continue;
+                }
+
+                io.placeGroup();
             }
         }
 

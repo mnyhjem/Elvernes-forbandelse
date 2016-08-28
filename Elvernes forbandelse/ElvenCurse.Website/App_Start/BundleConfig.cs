@@ -21,7 +21,8 @@ namespace ElvenCurse.Website
                 "~/Sitescriptes/ElvenCurse/StateGameplay.js",
                 "~/Sitescriptes/ElvenCurse/Player.js",
                 "~/Sitescriptes/ElvenCurse/Nameplate.js",
-                "~/Sitescriptes/ElvenCurse/OtherPlayer.js"
+                "~/Sitescriptes/ElvenCurse/OtherPlayer.js",
+                "~/Sitescriptes/ElvenCurse/InteractiveObject.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

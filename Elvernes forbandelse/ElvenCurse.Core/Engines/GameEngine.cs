@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.InteractiveObjects;
 using ElvenCurse.Core.Utilities;
 using Microsoft.AspNet.SignalR.Hubs;
 
@@ -18,6 +19,7 @@ namespace ElvenCurse.Core.Engines
         private List<Character> _characters;
         private List<Worldsection> _worldsections;
         private List<Npc> _npcs;
+        private List<InteractiveObject> _interactiveObjects;
 
         private Timer _timer;
         private readonly TimeSpan _timerUpdateInterval = TimeSpan.FromMilliseconds(250);
@@ -55,14 +57,14 @@ namespace ElvenCurse.Core.Engines
             IWorldService worldService)
         {
             _serverBoottime = DateTime.Now;
-
-
+            
             _clients = clients;
             _characterService = characterService;
             _worldService = worldService;
             _characters = new List<Character>();
             _worldsections = new List<Worldsection>();
             _npcs = _worldService.GetAllNpcs();
+            _interactiveObjects = _worldService.GetAllInteractiveObjects();
 
             _timer = new Timer(TimerTick, null, _timerUpdateInterval, _timerUpdateInterval);
         }
@@ -282,6 +284,9 @@ namespace ElvenCurse.Core.Engines
             {
                 _clients.Client(connectionId).updateNpc(npc.ToIPlayer());
             }
+
+            // placer interactiveobjects på kortet
+            _clients.Client(connectionId).updateInteractiveObjects(_interactiveObjects.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId));
         }
 
 

@@ -67,6 +67,9 @@
     <Compile Include="Interfaces\IWorldService.cs" />
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\HunterNpc.cs" />
+    <Compile Include="Model\InteractiveObjects\InteractiveObject.cs" />
+    <Compile Include="Model\InteractiveObjects\InteractiveobjectType.cs" />
+    <Compile Include="Model\InteractiveObjects\Portal.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Npc.cs" />
     <Compile Include="Model\NpcAction.cs" />
@@ -111,9 +114,7 @@
     <Content Include="Maps\terrain.png" />
     <Content Include="Maps\treesv6_0.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

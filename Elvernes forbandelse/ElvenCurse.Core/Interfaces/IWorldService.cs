@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.InteractiveObjects;
 
 namespace ElvenCurse.Core.Interfaces
 {
@@ -12,5 +13,6 @@ namespace ElvenCurse.Core.Interfaces
         List<Worldsection> GetMaps();
         bool SaveMap(Worldsection modelWorldsection);
         List<Npc> GetAllNpcs();
+        List<InteractiveObject> GetAllInteractiveObjects();
     }
 }

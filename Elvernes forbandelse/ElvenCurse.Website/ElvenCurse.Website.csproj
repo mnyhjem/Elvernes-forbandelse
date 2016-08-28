@@ -258,6 +258,7 @@
     <Content Include="Content\Assets\Graphics\ground_tiles.png" />
     <Content Include="Content\Assets\Graphics\object-layer.png" />
     <Content Include="Content\Assets\Graphics\player.png" />
+    <Content Include="Content\Assets\Graphics\portal.png" />
     <Content Include="Content\Assets\Graphics\treesv6_0.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -284,6 +285,7 @@
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Worldconfiguration\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Worldconfiguration\Edit.cshtml" />
+    <Content Include="Content\Assets\Music\medieval.ogg" />
     <None Include="Properties\PublishProfiles\Filepublish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -377,6 +379,8 @@
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Game.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IGameHub.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IInteractiveObject.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\InteractiveObject.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IPlayer.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\IWorldsection.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Nameplate.ts" />

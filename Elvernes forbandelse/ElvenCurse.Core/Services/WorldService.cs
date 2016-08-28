@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.InteractiveObjects;
 using ElvenCurse.Core.Model.Tilemap;
 using Newtonsoft.Json;
 
@@ -126,6 +127,48 @@ namespace ElvenCurse.Core.Services
                                 Y = (int) dr["DefaultY"]
                             };
                             list.Add(npc);
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public List<InteractiveObject> GetAllInteractiveObjects()
+        {
+            var list = new List<InteractiveObject>();
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetAllInteractiveObjects";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            InteractiveObject io;
+                            switch ((InteractiveobjectType)dr["type"])
+                            {
+                                case InteractiveobjectType.Portal:
+                                    io = new Portal();
+                                    break;
+
+                                default:
+                                    continue;
+                            }
+
+                            // standard items
+                            io.Id = (int)dr["id"];
+                            io.Name = (string)dr["name"];
+                            io.Location = new Location
+                            {
+                                WorldsectionId = (int)dr["WorldsectionId"],
+                                X = (int)dr["X"],
+                                Y = (int)dr["Y"]
+                            };
+                            list.Add(io);
                         }
                     }
                 }
