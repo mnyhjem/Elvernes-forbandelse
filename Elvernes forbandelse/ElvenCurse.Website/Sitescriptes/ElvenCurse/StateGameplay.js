@@ -82,7 +82,7 @@ var ElvenCurse;
             var collisionTileId = -1;
             for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
-                if (tileset.name == "treesv6_0") {
+                if (tileset.name === "treesv6_0") {
                     this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 }
                 else {
@@ -178,7 +178,7 @@ var ElvenCurse;
             };
             this.gameHub.client.updateInteractiveObjects = function (ios) {
                 for (var i = 0; i < ios.length; i++) {
-                    var newio = new ElvenCurse.InteractiveObject(self.game, ios[i]);
+                    var newio = new ElvenCurse.InteractiveObject(self.game, ios[i], self.gameHub);
                     self.middelgroundGroup.add(newio.group);
                     self.interactiveObjects.push(newio);
                 }
@@ -197,9 +197,7 @@ var ElvenCurse;
                     return;
                 }
                 self.destroyAllPlayersAndObjects();
-                if (self.map) {
-                    self.map.destroy();
-                }
+                self.destroyMap();
                 self.currentMap = mapToLoad;
                 // Load json
                 //self.game.load.tilemap("world", null, mapToLoad.json, Phaser.Tilemap.TILED_JSON);
@@ -222,6 +220,25 @@ var ElvenCurse;
                 self.signalRInitializing = false;
                 self.gameHub.server.changeMap("playerposition");
             });
+        };
+        StateGameplay.prototype.destroyMap = function () {
+            if (!this.map) {
+                return;
+            }
+            //for (var i = 0; i < this.map.tilesets.length; i++) {
+            //    this.map.tilesets[i].
+            //}
+            for (var layerindex = 0; layerindex < this.map.layers.length; layerindex++) {
+                for (var tileindex = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
+                    for (var j = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
+                        this.map.layers[layerindex].data[tileindex][j].destroy();
+                        this.map.layers[layerindex].data[tileindex][j] = null;
+                    }
+                }
+            }
+            this.collisionLayer.destroy();
+            this.background.destroy();
+            this.map.destroy();
         };
         StateGameplay.prototype.destroyAllPlayersAndObjects = function () {
             for (var i = 0; i < this.players.length; i++) {
@@ -273,4 +290,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

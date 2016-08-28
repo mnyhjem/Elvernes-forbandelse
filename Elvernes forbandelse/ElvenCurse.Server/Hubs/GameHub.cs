@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using ElvenCurse.Core.Interfaces;
+using ElvenCurse.Core.Model.InteractiveObjects;
 using Microsoft.AspNet.SignalR;
 using ElvenCurse.Server.Extensions;
 
@@ -52,6 +53,11 @@ namespace ElvenCurse.Server.Hubs
         public void ChangeMap(string direction)
         {
             _gameEngine.ChangeMap(Context.ConnectionId, ((ClaimsPrincipal)Context.User).GetUserId(), direction);
+        }
+
+        public void ClickOnInteractiveObject(int ioId)
+        {
+            _gameEngine.ClickOnInteractiveObject(Context.ConnectionId, ((ClaimsPrincipal)Context.User).GetUserId(), ioId);
         }
     }
 }

@@ -289,6 +289,29 @@ namespace ElvenCurse.Core.Engines
             _clients.Client(connectionId).updateInteractiveObjects(_interactiveObjects.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId));
         }
 
+        public void ClickOnInteractiveObject(string connectionId, string getUserId, int ioId)
+        {
+            var c = _characters.FirstOrDefault(a => a.ConnectionId == connectionId);
+            if (c == null)
+            {
+                return;
+            }
+
+            // find objektet..
+            var io = _interactiveObjects.FirstOrDefault(a => a.Id == ioId);
+            if (io == null)
+            {
+                return;
+            }
+
+            var result = io.Interact(c);
+            switch (result)
+            {
+                case InteractiveobjectResult.ChangeUsersMap:
+                    ChangeMap(connectionId, getUserId, "playerposition");
+                    break;
+            }
+        }
 
 
         private void TimerTick(object state)

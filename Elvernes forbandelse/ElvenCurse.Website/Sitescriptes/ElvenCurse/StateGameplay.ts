@@ -126,7 +126,7 @@
             var collisionTileId = -1;
             for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
-                if (tileset.name == "treesv6_0") {
+                if (tileset.name === "treesv6_0") {
                     this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 } else {
                     this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
@@ -237,7 +237,7 @@
 
             this.gameHub.client.updateInteractiveObjects = function (ios: IInteractiveObject[]) {
                 for (var i = 0; i < ios.length; i++) {
-                    var newio = new InteractiveObject(self.game, ios[i]);
+                    var newio = new InteractiveObject(self.game, ios[i], self.gameHub);
                     self.middelgroundGroup.add(newio.group);
                     self.interactiveObjects.push(newio);
                 }
@@ -262,9 +262,7 @@
 
                 self.destroyAllPlayersAndObjects();
 
-                if (self.map) {
-                    self.map.destroy();
-                }
+                self.destroyMap();
 
                 self.currentMap = mapToLoad;
                 
@@ -297,6 +295,29 @@
 
                     self.gameHub.server.changeMap("playerposition");
                 });
+        }
+
+        private destroyMap() {
+            if (!this.map) {
+                return;
+            }
+            
+            //for (var i = 0; i < this.map.tilesets.length; i++) {
+            //    this.map.tilesets[i].
+            //}
+            for (var layerindex = 0; layerindex < this.map.layers.length; layerindex++) {
+                for (var tileindex = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
+                    for (var j = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
+                        this.map.layers[layerindex].data[tileindex][j].destroy();
+                        this.map.layers[layerindex].data[tileindex][j] = null;
+                    }
+                    
+                }
+            }
+
+            this.collisionLayer.destroy();
+            this.background.destroy();
+            this.map.destroy();
         }
 
         private destroyAllPlayersAndObjects() {

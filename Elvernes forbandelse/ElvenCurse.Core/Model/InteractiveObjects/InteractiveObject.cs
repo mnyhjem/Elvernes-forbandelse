@@ -1,4 +1,6 @@
-﻿namespace ElvenCurse.Core.Model.InteractiveObjects
+﻿using System.Collections.Generic;
+
+namespace ElvenCurse.Core.Model.InteractiveObjects
 {
     public abstract class InteractiveObject
     {
@@ -7,6 +9,8 @@
         public string Name { get; set; }
         public Location Location { get; set; }
 
-        public abstract void Interact(Character character);
+        public abstract InteractiveobjectResult Interact(Character character);
+
+        public List<InteractiveobjectParameter> Parameters { get; set; }
     }
 }

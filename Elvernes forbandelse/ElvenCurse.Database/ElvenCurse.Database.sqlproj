@@ -88,6 +88,8 @@
     <Build Include="dbo\StoredProcedures\GetAllNpcs.sql" />
     <Build Include="dbo\Tables\InteractiveObjects.sql" />
     <Build Include="dbo\StoredProcedures\GetAllInteractiveObjects.sql" />
+    <Build Include="dbo\Tables\InteractiveObjectsParameters.sql" />
+    <Build Include="dbo\StoredProcedures\GetAllInteractiveObjectParameters.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

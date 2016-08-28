@@ -4,11 +4,13 @@
         interactiveObject : IInteractiveObject;
         sprite: Phaser.Sprite;
         group: Phaser.Group;
-        game:Phaser.Game;
+        game: Phaser.Game;
+        gameHub: IGameHub;
 
-        constructor(game: Phaser.Game, io: IInteractiveObject) {
+        constructor(game: Phaser.Game, io: IInteractiveObject, gameHub: IGameHub) {
             this.interactiveObject = io;
             this.game = game;
+            this.gameHub = gameHub;
 
             this.createSpriteAndAnimations();
 
@@ -19,6 +21,15 @@
         private createSpriteAndAnimations() {
             this.sprite = this.game.add.sprite(this.interactiveObject.location.x, this.interactiveObject.location.y, "portal");
             this.sprite.anchor.setTo(0.5, 0.5);
+
+            this.sprite.inputEnabled = true;
+            this.sprite.events.onInputDown.add(this.clickListener, this);
+        }
+
+        private clickListener() {
+            // send til serveren at der er klikket på os..
+
+            this.gameHub.server.clickOnInteractiveObject(this.interactiveObject.id);
         }
 
         public placeGroup() {
@@ -30,7 +41,6 @@
         }
 
         public destroy() {
-            //this.playerGroup.removeAll(true);
             this.group.destroy(true);
         }
     }

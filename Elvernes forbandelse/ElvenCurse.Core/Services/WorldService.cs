@@ -162,6 +162,7 @@ namespace ElvenCurse.Core.Services
                             // standard items
                             io.Id = (int)dr["id"];
                             io.Name = (string)dr["name"];
+                            io.Parameters = new List<InteractiveobjectParameter>();
                             io.Location = new Location
                             {
                                 WorldsectionId = (int)dr["WorldsectionId"],
@@ -169,6 +170,29 @@ namespace ElvenCurse.Core.Services
                                 Y = (int)dr["Y"]
                             };
                             list.Add(io);
+                        }
+                    }
+                }
+
+                // hent parametre til objecterne..
+                foreach (var io in list)
+                {
+                    using (var cmd = con.CreateCommand())
+                    {
+                        cmd.CommandText = "GetAllInteractiveObjectParameters";
+                        cmd.Parameters.Add(new SqlParameter("ioid", io.Id));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                io.Parameters.Add(new InteractiveobjectParameter
+                                {
+                                    Id = (int)dr["id"],
+                                    Key = (string)dr["key"],
+                                    Value = (string)dr["value"]
+                                });
+                            }
                         }
                     }
                 }

@@ -68,6 +68,8 @@
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\HunterNpc.cs" />
     <Compile Include="Model\InteractiveObjects\InteractiveObject.cs" />
+    <Compile Include="Model\InteractiveObjects\InteractiveobjectParameter.cs" />
+    <Compile Include="Model\InteractiveObjects\InteractiveobjectResult.cs" />
     <Compile Include="Model\InteractiveObjects\InteractiveobjectType.cs" />
     <Compile Include="Model\InteractiveObjects\Portal.cs" />
     <Compile Include="Model\Location.cs" />
