@@ -29,11 +29,11 @@
             this.playerGroup.add(this.nameplate.group);
         }
 
-        public bringToTop() {
-            //this.playerSprite.bringToTop();
+        //public bringToTop() {
+        //    //this.playerSprite.bringToTop();
 
-            this.game.world.bringToTop(this.playerGroup);
-        }
+        //    this.game.world.bringToTop(this.playerGroup);
+        //}
 
         public move(cursors: Phaser.CursorKeys) {
             this.playerSprite.body.velocity.x = 0;

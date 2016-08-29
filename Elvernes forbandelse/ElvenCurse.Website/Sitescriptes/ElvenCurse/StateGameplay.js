@@ -19,18 +19,30 @@ var ElvenCurse;
             this.backgroundGroup = this.game.add.group();
             this.middelgroundGroup = this.game.add.group();
             this.aboveMiddelgroup = this.game.add.group();
+            this.uiGroup = this.game.add.group();
+            this.uiGroup.fixedToCamera = true;
             this.game.world.bringToTop(this.middelgroundGroup);
             this.game.world.bringToTop(this.aboveMiddelgroup);
-            this.uiGroup = this.game.add.group();
+            this.game.world.bringToTop(this.uiGroup);
             this.players = new Array();
             this.npcs = new Array();
             this.interactiveObjects = new Array();
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.player = new ElvenCurse.Player(this.game);
             this.middelgroundGroup.add(this.player.playerGroup);
+            // ui
+            this.playerPortraitplate = new ElvenCurse.EntityPortraitplate(this.game, this.player);
+            this.uiGroup.add(this.playerPortraitplate.group);
+            this.actionbar = new ElvenCurse.Actionbar(this.game, this.player);
+            this.uiGroup.add(this.actionbar.group);
+            this.worldsectionnameplate = new ElvenCurse.Worldsectionnameplate(this.game, this.currentMap);
+            this.uiGroup.add(this.worldsectionnameplate.group);
+            // signalr
             this.wireupSignalR();
+            // physics
             this.game.physics.arcade.enable(this.player.playerSprite);
             this.game.camera.follow(this.player.playerSprite);
+            // inputs
             this.cursors = this.game.input.keyboard.createCursorKeys();
         };
         StateGameplay.prototype.update = function () {
@@ -55,10 +67,10 @@ var ElvenCurse;
             if (this.initializing) {
                 return;
             }
-            this.game.debug.text(this.currentMap.name, 32, 32, "rgb(0,0,0)");
-            this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48, "rgb(0,0,0)");
-            this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64, "rgb(0,0,0)");
-            this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
+            this.game.debug.text(this.currentMap.name, 32, 32 + 50, "rgb(0,0,0)");
+            this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
+            this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
+            this.game.debug.text("Online: " + this.onlineCount, 32, 80 + 50, "rgb(0,0,0)");
         };
         StateGameplay.prototype.placeplayer = function (x, y) {
             this.log("placeplayer");
@@ -92,7 +104,16 @@ var ElvenCurse;
             for (var i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
                 var l = this.map.createLayer(layer.name);
-                this.backgroundGroup.add(l);
+                if (layer.properties.displayGroup !== undefined) {
+                    switch (layer.properties.displayGroup) {
+                        case "aboveMiddelgroup":
+                            this.aboveMiddelgroup.add(l);
+                            break;
+                    }
+                }
+                else {
+                    this.backgroundGroup.add(l);
+                }
                 if (layer.name === "background") {
                     this.background = l;
                 }
@@ -196,6 +217,7 @@ var ElvenCurse;
                 self.destroyAllPlayersAndObjects();
                 self.destroyMap();
                 self.currentMap = mapToLoad;
+                self.worldsectionnameplate.updateMap(mapToLoad);
                 // Load json
                 //self.game.load.tilemap("world", null, mapToLoad.json, Phaser.Tilemap.TILED_JSON);
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
@@ -287,4 +309,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

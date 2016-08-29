@@ -19,11 +19,11 @@
             this.playerGroup.add(this.nameplate.group);
         }
 
-        public bringToTop() {
-            //this.playerSprite.bringToTop();
+        //public bringToTop() {
+        //    //this.playerSprite.bringToTop();
 
-            this.game.world.bringToTop(this.playerGroup);
-        }
+        //    this.game.world.bringToTop(this.playerGroup);
+        //}
         
         public updatePosition(player: IPlayer) {
             this.player = player;

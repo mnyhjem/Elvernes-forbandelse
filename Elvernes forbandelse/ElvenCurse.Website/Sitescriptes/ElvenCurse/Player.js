@@ -12,10 +12,10 @@ var ElvenCurse;
             this.playerGroup.add(this.playerSprite);
             this.playerGroup.add(this.nameplate.group);
         }
-        Player.prototype.bringToTop = function () {
-            //this.playerSprite.bringToTop();
-            this.game.world.bringToTop(this.playerGroup);
-        };
+        //public bringToTop() {
+        //    //this.playerSprite.bringToTop();
+        //    this.game.world.bringToTop(this.playerGroup);
+        //}
         Player.prototype.move = function (cursors) {
             this.playerSprite.body.velocity.x = 0;
             this.playerSprite.body.velocity.y = 0;
@@ -118,4 +118,3 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Player.js.map

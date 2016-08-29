@@ -96,6 +96,8 @@
     <None Include="Maps\02.tmx" />
     <None Include="Maps\03.tmx" />
     <None Include="Maps\04.tmx" />
+    <None Include="Maps\05.tmx" />
+    <None Include="Maps\medieval.ogg" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

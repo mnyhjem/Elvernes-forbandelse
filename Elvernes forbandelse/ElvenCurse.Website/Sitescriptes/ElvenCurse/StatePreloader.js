@@ -32,7 +32,11 @@ var ElvenCurse;
             //this.load.audio("Bang", "Bang.mp3");
             //this.load.images(["graphics-tiles-waterflow", "ground_tiles"]);
             this.game.load.spritesheet("playertest", "/content/assets/graphics/playertest.png", 64, 64);
-            //this.game.load.tilemap("world", "/content/assets/01.json", null, Phaser.Tilemap.TILED_JSON);
+            // ui
+            this.game.load.image("EntityPortraitplate", "/content/assets/graphics/EntityPortraitplate.png");
+            this.game.load.image("Actionbar", "/content/assets/graphics/Actionbar.png");
+            this.game.load.image("Worldsectionnameplate", "/content/assets/graphics/Worldsectionnameplate.png");
+            // tilesets
             this.game.load.image("water", "/content/assets/graphics/graphics-tiles-waterflow.png");
             this.game.load.image("ground", "/content/assets/graphics/ground_tiles.png");
             this.game.load.image("player", "/content/assets/graphics/player.png");
@@ -41,8 +45,12 @@ var ElvenCurse;
             this.game.load.image("Extra_Unfinished4", "/content/assets/graphics/Extra_Unfinished4.png");
             this.game.load.image("object-layer", "/content/assets/graphics/object-layer.png");
             this.game.load.image("treesv6_0", "/content/assets/graphics/treesv6_0.png");
+            // interactive objects
             this.game.load.image("portal", "/content/assets/graphics/portal.png");
+            // music
             this.game.load.audio("medieval", "/content/assets/music/medieval.ogg");
+            // fonts
+            this.game.load.script("webfont", "//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js");
             this.load.onFileComplete.add(this.fileLoaded, this);
         };
         StatePreloader.prototype.fileLoaded = function (progress) {
@@ -67,4 +75,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StatePreloader = StatePreloader;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StatePreloader.js.map
