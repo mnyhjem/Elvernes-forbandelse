@@ -88,8 +88,8 @@ var ElvenCurse;
         };
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
-            var backgroundMusic = this.game.add.audio("medieval");
-            backgroundMusic.play();
+            this.backgroundMusic = this.game.add.audio("medieval");
+            this.backgroundMusic.play();
             this.map = this.game.add.tilemap("world");
             //this.map.addTilesetImage("water", "water");
             //this.map.addTilesetImage("ground", "ground");
@@ -216,6 +216,7 @@ var ElvenCurse;
                 }
                 self.destroyAllPlayersAndObjects();
                 self.destroyMap();
+                self.destroySounds();
                 self.currentMap = mapToLoad;
                 self.worldsectionnameplate.updateMap(mapToLoad);
                 // Load json
@@ -258,6 +259,13 @@ var ElvenCurse;
             this.collisionLayer.destroy();
             this.background.destroy();
             this.map.destroy();
+        };
+        StateGameplay.prototype.destroySounds = function () {
+            if (this.backgroundMusic) {
+                this.backgroundMusic.stop();
+                this.backgroundMusic.destroy(true);
+                this.backgroundMusic = null;
+            }
         };
         StateGameplay.prototype.destroyAllPlayersAndObjects = function () {
             for (var i = 0; i < this.players.length; i++) {
@@ -309,3 +317,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

@@ -55,12 +55,28 @@
         }
         else
         {
+            <p>@Model.Worldsection.Tilemap.tilesets.Count assets i alt</p>
             <ul>
                 @foreach (var tilemapimage in Model.Worldsection.Tilemap.tilesets)
                 {
-                    <li>@tilemapimage.image</li>
+                    if (!string.IsNullOrEmpty(tilemapimage.image))
+                    {
+                        <li>@tilemapimage.image</li>
+                    }
+                    else
+                    {
+                        <li>@tilemapimage.source</li>
+                    }
                 }
             </ul>
         }
     </div>
 </div>
+
+@section header{
+    <style>
+        .container{
+            font-family: "verdana";
+        }
+    </style>
+}

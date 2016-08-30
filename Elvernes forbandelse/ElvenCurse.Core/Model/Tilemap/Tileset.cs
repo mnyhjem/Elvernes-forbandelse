@@ -16,5 +16,6 @@ namespace ElvenCurse.Core.Model.Tilemap
         public int tilecount { get; set; }
         public int tileheight { get; set; }
         public int tilewidth { get; set; }
+        public string source { get; set; }
     }
 }

@@ -45,6 +45,7 @@ var ElvenCurse;
             this.game.load.image("Extra_Unfinished4", "/content/assets/graphics/Extra_Unfinished4.png");
             this.game.load.image("object-layer", "/content/assets/graphics/object-layer.png");
             this.game.load.image("treesv6_0", "/content/assets/graphics/treesv6_0.png");
+            this.game.load.image("terrain", "/content/assets/graphics/terrain.png");
             // interactive objects
             this.game.load.image("portal", "/content/assets/graphics/portal.png");
             // music
@@ -75,3 +76,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StatePreloader = StatePreloader;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StatePreloader.js.map

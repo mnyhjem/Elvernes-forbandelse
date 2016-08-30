@@ -7,4 +7,4 @@ Id,
 [Key],
 [Value] 
 
-from InteractiveObjectsParameters where Id = @ioid
+from InteractiveObjectsParameters where Interactiveobject_Id = @ioid

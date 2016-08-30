@@ -3,9 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Elvernes forbandelse</title>
+    <title>Elvernes forbandelse</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/fontstyle.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: "beyond_wonderlandregular";
+            font-size: 18px;
+        }
+    </style>
     @RenderSection("header", required: false)
 </head>
 <body>

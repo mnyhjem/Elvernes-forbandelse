@@ -261,6 +261,7 @@
     <Content Include="Content\Assets\Graphics\object-layer.png" />
     <Content Include="Content\Assets\Graphics\player.png" />
     <Content Include="Content\Assets\Graphics\portal.png" />
+    <Content Include="Content\Assets\Graphics\terrain.png" />
     <Content Include="Content\Assets\Graphics\treesv6_0.png" />
     <Content Include="Content\Assets\Graphics\Worldsectionnameplate.png" />
     <Content Include="Content\bootstrap-theme.css" />

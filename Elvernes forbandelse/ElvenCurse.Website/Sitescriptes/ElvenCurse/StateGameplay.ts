@@ -32,6 +32,9 @@
         playerPortraitplate: EntityPortraitplate;
         actionbar: Actionbar;
         worldsectionnameplate: Worldsectionnameplate;
+
+        // music
+        backgroundMusic: Phaser.Sound;
         
         mapPath: string = "/content/assets/";
         initializing: boolean = true;
@@ -139,8 +142,8 @@
         private createMap() {
             this.log("CreateMap");
 
-            var backgroundMusic = this.game.add.audio("medieval");
-            backgroundMusic.play();
+            this.backgroundMusic = this.game.add.audio("medieval");
+            this.backgroundMusic.play();
 
             this.map = this.game.add.tilemap("world");
 
@@ -293,6 +296,8 @@
 
                 self.destroyMap();
 
+                self.destroySounds();
+
                 self.currentMap = mapToLoad;
 
                 self.worldsectionnameplate.updateMap(mapToLoad);
@@ -349,6 +354,14 @@
             this.collisionLayer.destroy();
             this.background.destroy();
             this.map.destroy();
+        }
+
+        private destroySounds() {
+            if (this.backgroundMusic) {
+                this.backgroundMusic.stop();
+                this.backgroundMusic.destroy(true);
+                this.backgroundMusic = null; 
+            }
         }
 
         private destroyAllPlayersAndObjects() {

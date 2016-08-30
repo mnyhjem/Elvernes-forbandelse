@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Web.Mvc;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
@@ -64,6 +65,19 @@ namespace ElvenCurse.Website.Areas.Admin.Controllers
             if (Request.Files.Count > 0)
             {
                 var json = System.Text.Encoding.Default.GetString(ReadFully(Request.Files[0].InputStream));
+
+                // lille fiks for at få vores tsx fil til at virke..
+                json = json.Replace(@"""source"":""Terrain.tsx""", @"""columns"":32,
+         ""image"":""terrain.png"",
+         ""imageheight"":1024,
+         ""imagewidth"":1024,
+         ""margin"":0,
+         ""name"":""terrain"",
+         ""spacing"":0,
+         ""tilecount"":1024,
+         ""tileheight"":32,
+         ""tilewidth"":32");
+
                 model.Worldsection.Json = json;
             }
 

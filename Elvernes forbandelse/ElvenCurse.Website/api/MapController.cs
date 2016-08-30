@@ -19,7 +19,7 @@ namespace ElvenCurse.Website.api
         public HttpResponseMessage GetMap(int id)
         {
             var map = _worldService.GetMap(id);
-
+            
             return new HttpResponseMessage
             {
                 Content = new StringContent(map.Json, Encoding.UTF8, "json/application")
