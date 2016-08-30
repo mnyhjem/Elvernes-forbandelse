@@ -3,7 +3,8 @@
         game: Phaser.Game;
         group: Phaser.Group;
         map: IWorldsection;
-        plateSprite:Phaser.Sprite;
+        plateSprite: Phaser.Sprite;
+        text:Phaser.Text;
 
         constructor(game: Phaser.Game, map: IWorldsection) {
             this.game = game;
@@ -24,8 +25,11 @@
             this.map = map;
 
             if (this.map !== undefined) {
+                if (this.text) {
+                    this.text.destroy(true);
+                }
                 var style = { font: "20px beyond_wonderlandregular", fill: "#fffec3"};
-                this.game.add.text(this.plateSprite.x+20, 22, this.map.name, style, this.group);
+                this.text = this.game.add.text(this.plateSprite.x + 20, 22, this.map.name, style, this.group);
             }
         }
         

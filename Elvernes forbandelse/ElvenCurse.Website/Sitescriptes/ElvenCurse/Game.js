@@ -15,4 +15,3 @@ var ElvenCurse;
     }());
     ElvenCurse.Game = Game;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Game.js.map
