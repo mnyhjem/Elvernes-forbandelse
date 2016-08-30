@@ -100,12 +100,7 @@ namespace ElvenCurse.Core.Services
             }
             return null;
         }
-
-        public void SetCharacterPosition(int sectionId, int i, int i1)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public void SetCharacterOnline(string userId, int selectedCharacterId)
         {
             using (var con = new SqlConnection(_connectionstring))
@@ -163,6 +158,28 @@ namespace ElvenCurse.Core.Services
                 }
             }
             return null;
+        }
+
+        public void SavePlayerinformation(Character character)
+        {
+            // Save position
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SetCharacterPosition";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("characterId", character.Id));
+                    cmd.Parameters.Add(new SqlParameter("worldsectionId", character.Location.WorldsectionId));
+                    cmd.Parameters.Add(new SqlParameter("x", character.Location.X));
+                    cmd.Parameters.Add(new SqlParameter("y", character.Location.Y));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            // Save inventory and so on...
         }
 
         private Location GetDefaultLocation(Character character)

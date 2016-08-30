@@ -96,12 +96,12 @@ namespace ElvenCurse.Core.Engines
             {
                 foundPlayer = c;
                 _characters.Add(c);
-                Trace.WriteLine($"{foundPlayer.Name} entered the world");
+                //Trace.WriteLine($"{foundPlayer.Name} entered the world");
             }
             else
             {
                 foundPlayer.ConnectionId = connectionId;
-                Trace.WriteLine($"{foundPlayer.Name} reconnected to the world");
+                //Trace.WriteLine($"{foundPlayer.Name} reconnected to the world");
             }
 
             foundPlayer.Connectionstatus = Connectionstatus.Online;
@@ -117,7 +117,9 @@ namespace ElvenCurse.Core.Engines
 
                 AllInWorldSectionExceptCurrent(c).updatePlayer(c);
 
-                Trace.WriteLine($"{c.Name} left the world");
+                _characterService.SavePlayerinformation(c);
+
+                //Trace.WriteLine($"{c.Name} left the world");
             }
         }
 
@@ -314,6 +316,34 @@ namespace ElvenCurse.Core.Engines
             }
         }
 
+        public void SendToClientsInteractiveObjects(int worldsectionId, bool loadFromDatabase = false)
+        {
+            if (loadFromDatabase)
+            {
+                _interactiveObjects = _worldService.GetAllInteractiveObjects();
+            }
+
+            _clients.Clients(_characters
+                .Where(a => a.Location.WorldsectionId == worldsectionId)
+                .Select(a => a.ConnectionId).ToList())
+                .updateInteractiveObjects(_interactiveObjects.Where(a => a.Location.WorldsectionId == worldsectionId));
+        }
+
+        public void SendToClientsNpcs(int worldsectionId, bool loadFromDatabase = false)
+        {
+            if (loadFromDatabase)
+            {
+                _npcs = _worldService.GetAllNpcs();
+            }
+
+            foreach (var npc in _npcs.Where(a => a.CurrentLocation.WorldsectionId == worldsectionId))
+            {
+                _clients.Clients(_characters
+                .Where(a => a.Location.WorldsectionId == worldsectionId)
+                .Select(a => a.ConnectionId).ToList())
+                .updateNpc(npc.ToIPlayer());
+            }
+        }
 
         private void TimerTick(object state)
         {

@@ -67,7 +67,7 @@ var ElvenCurse;
             if (this.initializing) {
                 return;
             }
-            this.game.debug.text(this.currentMap.name, 32, 32 + 50, "rgb(0,0,0)");
+            //this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
             this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
             this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
             this.game.debug.text("Online: " + this.onlineCount, 32, 80 + 50, "rgb(0,0,0)");
@@ -196,9 +196,18 @@ var ElvenCurse;
             };
             this.gameHub.client.updateInteractiveObjects = function (ios) {
                 for (var i = 0; i < ios.length; i++) {
-                    var newio = new ElvenCurse.InteractiveObject(self.game, ios[i], self.gameHub);
-                    self.middelgroundGroup.add(newio.group);
-                    self.interactiveObjects.push(newio);
+                    var exists = false;
+                    for (var j = 0; j < self.interactiveObjects.length; j++) {
+                        if (self.interactiveObjects[j].interactiveObject.id === ios[i].id) {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists) {
+                        var newio = new ElvenCurse.InteractiveObject(self.game, ios[i], self.gameHub);
+                        self.middelgroundGroup.add(newio.group);
+                        self.interactiveObjects.push(newio);
+                    }
                 }
             };
             this.gameHub.client.updateOwnPlayer = function (player) {
@@ -317,3 +326,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Characterlocations]
 (
-	[characterId] NVARCHAR(50) NOT NULL PRIMARY KEY, 
+	[characterId] INT NOT NULL PRIMARY KEY, 
     [WorldsectionId] INT NOT NULL, 
     [X] INT NOT NULL, 
     [Y] INT NOT NULL, 

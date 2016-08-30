@@ -10,5 +10,8 @@
         void ChangeMap(string connectionId, string getUserId, string direction);
 
         void ClickOnInteractiveObject(string connectionId, string getUserId, int ioId);
+
+        void SendToClientsInteractiveObjects(int worldsectionId, bool loadFromDatabase = false);
+        void SendToClientsNpcs(int worldsectionId, bool loadFromDatabase = false);
     }
 }

@@ -3,5 +3,5 @@
 	@userId nvarchar(50)
 AS
 	
-update Characters set IsOnline = 0 where userId = @userId;
-update Characters set IsOnline = 1 where userId = @userId and id = @characterId;
+update Characters set IsOnline = 0 where UserId = @userId;
+update Characters set IsOnline = 1 where UserId = @userId and id = @characterId;
