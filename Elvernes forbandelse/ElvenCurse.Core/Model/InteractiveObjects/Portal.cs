@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ElvenCurse.Core.Utilities;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace ElvenCurse.Core.Model.InteractiveObjects
 {
@@ -14,13 +15,26 @@ namespace ElvenCurse.Core.Model.InteractiveObjects
                     var d = Parameters.FirstOrDefault(a => a.Key == "Destination");
                     if (d != null)
                     {
+                        var dest = new Location();
+
                         var dSpl = d.Value.Split(',');
-                        _destination = new Location
+                        foreach (var p in dSpl)
                         {
-                            WorldsectionId = int.Parse(dSpl[0]),
-                            Y = int.Parse(dSpl[1]),
-                            X = int.Parse(dSpl[2])
-                        };
+                            var parameter = p.Split(':');
+                            switch (parameter[0].ToLower())
+                            {
+                                case "worldsectionid":
+                                    dest.WorldsectionId = int.Parse(parameter[1]);
+                                    break;
+                                case "x":
+                                    dest.X = int.Parse(parameter[1]);
+                                    break;
+                                case "y":
+                                    dest.Y = int.Parse(parameter[1]);
+                                    break;
+                            }
+                        }
+                        _destination = dest;
                     }
                 }
 

@@ -22,8 +22,12 @@ var ElvenCurse;
         InteractiveObject.prototype.placeGroup = function () {
             var x = this.interactiveObject.location.x * 32;
             var y = this.interactiveObject.location.y * 32;
-            this.sprite.x = x;
-            this.sprite.y = y;
+            if (this.sprite.x !== x) {
+                this.sprite.x = x;
+            }
+            if (this.sprite.y !== y) {
+                this.sprite.y = y;
+            }
         };
         InteractiveObject.prototype.destroy = function () {
             this.group.destroy(true);

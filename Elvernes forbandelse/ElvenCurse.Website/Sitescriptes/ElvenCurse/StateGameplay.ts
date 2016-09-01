@@ -273,6 +273,7 @@
                     for (var j = 0; j < self.interactiveObjects.length; j++) {
                         if (self.interactiveObjects[j].interactiveObject.id === ios[i].id) {
                             exists = true;
+                            self.interactiveObjects[j].interactiveObject = ios[i];
                             break;
                         }
                     }
