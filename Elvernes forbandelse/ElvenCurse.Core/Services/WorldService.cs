@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.InteractiveObjects;
+using ElvenCurse.Core.Model.Npcs;
 using ElvenCurse.Core.Model.Tilemap;
 using Newtonsoft.Json;
 
@@ -17,17 +18,17 @@ namespace ElvenCurse.Core.Services
 
         public IEnumerable<Character> GetOnlineCharacters()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void EnterWorld(string getUserId)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void LeaveWorld(string getUserId)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public List<Worldsection> GetMaps()
@@ -236,7 +237,7 @@ namespace ElvenCurse.Core.Services
         {
             try
             {
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<Tilemap>(json);
+                return JsonConvert.DeserializeObject<Tilemap>(json);
             }
             catch (ArgumentException)
             {

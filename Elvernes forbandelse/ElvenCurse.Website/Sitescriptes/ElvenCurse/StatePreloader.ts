@@ -57,7 +57,7 @@
             this.game.load.image("terrain", "/content/assets/graphics/terrain.png");
 
             // interactive objects
-            this.game.load.image("portal", "/content/assets/graphics/portal.png");
+            this.game.load.spritesheet("portal", "/content/assets/graphics/portal-animation.png", 32, 32);
 
             // music
             this.game.load.audio("medieval", "/content/assets/music/medieval.ogg");

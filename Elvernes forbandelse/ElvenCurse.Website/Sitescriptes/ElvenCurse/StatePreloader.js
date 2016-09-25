@@ -47,7 +47,7 @@ var ElvenCurse;
             this.game.load.image("treesv6_0", "/content/assets/graphics/treesv6_0.png");
             this.game.load.image("terrain", "/content/assets/graphics/terrain.png");
             // interactive objects
-            this.game.load.image("portal", "/content/assets/graphics/portal.png");
+            this.game.load.spritesheet("portal", "/content/assets/graphics/portal-animation.png", 32, 32);
             // music
             this.game.load.audio("medieval", "/content/assets/music/medieval.ogg");
             // fonts
@@ -76,4 +76,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StatePreloader = StatePreloader;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StatePreloader.js.map

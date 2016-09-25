@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.InteractiveObjects;
+using ElvenCurse.Core.Model.Npcs;
 
 namespace ElvenCurse.Core.Interfaces
 {

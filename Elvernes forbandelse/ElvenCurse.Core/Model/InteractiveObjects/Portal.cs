@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using ElvenCurse.Core.Utilities;
-using Microsoft.Owin.Security.DataProtection;
 
 namespace ElvenCurse.Core.Model.InteractiveObjects
 {

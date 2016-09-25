@@ -6,6 +6,7 @@ using System.Threading;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.InteractiveObjects;
+using ElvenCurse.Core.Model.Npcs;
 using ElvenCurse.Core.Utilities;
 using Microsoft.AspNet.SignalR.Hubs;
 

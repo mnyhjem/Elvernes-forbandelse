@@ -30,4 +30,3 @@ var ElvenCurse;
     }());
     ElvenCurse.Worldsectionnameplate = Worldsectionnameplate;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Worldsectionnameplate.js.map
