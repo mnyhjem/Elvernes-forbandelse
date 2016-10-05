@@ -1,21 +1,38 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace ElvenCurse.Core.Model.Tilemap
 {
     [Serializable]
     public class Tileset
     {
-        public int columns { get; set; }
-        public int firstgid { get; set; }
-        public string image { get; set; }
-        public int imageheight { get; set; }
-        public int imagewidth { get; set; }
-        public int margin { get; set; }
-        public string name { get; set; }
-        public int spacing { get; set; }
-        public int tilecount { get; set; }
-        public int tileheight { get; set; }
-        public int tilewidth { get; set; }
-        public string source { get; set; }
+        [XmlAttribute("firstgid")]
+        public int FirstGid { get; set; }
+        [XmlAttribute("name")]
+        public string Name { get; set; }
+        [XmlAttribute("tilewidth")]
+        public int Tilewidth { get; set; }
+        [XmlAttribute("tileheight")]
+        public int Tileheight { get; set; }
+        [XmlAttribute("tilecount")]
+        public int Tilecount { get; set; }
+        [XmlAttribute("columns")]
+        public int Columns { get; set; }
+
+        [XmlElement("image")]
+        public Image Image { get; set; }
+        [XmlAttribute("source")]
+        public string Source { get; set; }
+
+        [XmlElement("terraintypes")]
+        public Terraintypes Terraintypes { get; set; }
+
+        [XmlElement("tile")]
+        public Terraintile[] Terraintiles { get; set; }
+
+        public bool IsTerrainreference
+        {
+            get { return Source?.EndsWith(".tsx") ?? false; }
+        }
     }
 }

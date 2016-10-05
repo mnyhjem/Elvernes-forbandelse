@@ -28,7 +28,7 @@
     export interface ITileset {
         columns: number;
         firstgid: number;
-        image: string;
+        image: IImage;
         imageheight: number;
         imagewidth: number;
         margin: number;
@@ -37,6 +37,13 @@
         tilecount: number;
         tileheight: number;
         tilewidth: number;
+    }
+
+    export interface IImage {
+        source: string;
+        width: number;
+        height: number;
+        transparentcolor: string;
     }
 
     export interface ITilemap {

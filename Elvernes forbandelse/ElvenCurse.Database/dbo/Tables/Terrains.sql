@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Terrains]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Filename] NVARCHAR(50) NOT NULL, 
+    [Data] TEXT NOT NULL
+)

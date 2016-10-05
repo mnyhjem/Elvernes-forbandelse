@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(a => a.Worldsection.Json, null, new { @class = "" })
+                @Html.LabelFor(a => a.Worldsection.Tilemap, null, new { @class = "" })
                 <input type="file" name="file"/>
             </div>
 
@@ -55,17 +55,17 @@
         }
         else
         {
-            <p>@Model.Worldsection.Tilemap.tilesets.Count assets i alt</p>
+            <p>@Model.Worldsection.Tilemap.Tilesets.Length assets i alt</p>
             <ul>
-                @foreach (var tilemapimage in Model.Worldsection.Tilemap.tilesets)
+                @foreach (var tilemapimage in Model.Worldsection.Tilemap.Tilesets)
                 {
-                    if (!string.IsNullOrEmpty(tilemapimage.image))
+                    if (tilemapimage.Image != null)
                     {
-                        <li>@tilemapimage.image</li>
+                        <li>@tilemapimage.Image.Source</li>
                     }
                     else
                     {
-                        <li>@tilemapimage.source</li>
+                        <li>@tilemapimage.Name</li>
                     }
                 }
             </ul>

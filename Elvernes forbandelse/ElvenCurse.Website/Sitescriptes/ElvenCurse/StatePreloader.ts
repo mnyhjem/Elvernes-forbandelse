@@ -50,12 +50,6 @@
             this.game.load.image("player", "/content/assets/graphics/player.png");
             this.game.load.image("Collision", "/content/assets/graphics/Collision.png");
 
-            this.game.load.image("Cliff_tileset", "/content/assets/graphics/Cliff_tileset.png");
-            this.game.load.image("Extra_Unfinished4", "/content/assets/graphics/Extra_Unfinished4.png");
-            this.game.load.image("object-layer", "/content/assets/graphics/object-layer.png");
-            this.game.load.image("treesv6_0", "/content/assets/graphics/treesv6_0.png");
-            this.game.load.image("terrain", "/content/assets/graphics/terrain.png");
-
             // interactive objects
             this.game.load.spritesheet("portal", "/content/assets/graphics/portal-animation.png", 32, 32);
 

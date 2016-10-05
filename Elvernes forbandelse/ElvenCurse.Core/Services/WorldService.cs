@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml;
+using System.Xml.Serialization;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.InteractiveObjects;
 using ElvenCurse.Core.Model.Npcs;
 using ElvenCurse.Core.Model.Tilemap;
-using Newtonsoft.Json;
+using ElvenCurse.Core.Utilities;
 
 namespace ElvenCurse.Core.Services
 {
@@ -29,6 +31,78 @@ namespace ElvenCurse.Core.Services
         public void LeaveWorld(string getUserId)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Terrainfile> GetTerrains()
+        {
+            var list = new List<Terrainfile>();
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetAllTerrains";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            list.Add(new Terrainfile
+                            {
+                                Id = (int)dr["id"],
+                                Filename = (string)dr["Filename"],
+                                Tileset = ParseTerrain((string)dr["data"])
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public Terrainfile GetTerrain(int id)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetTerrain";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("id", id));
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            return new Terrainfile
+                            {
+                                Id = (int)dr["id"],
+                                Filename = (string)dr["Filename"],
+                                Tileset = ParseTerrain((string)dr["data"])
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public bool SaveTerrain(Terrainfile model, string data)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SaveTerrain";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("Id", model.Id));
+                    cmd.Parameters.Add(new SqlParameter("Filename", model.Filename));
+                    cmd.Parameters.Add(new SqlParameter("data", data));
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
         }
 
         public List<Worldsection> GetMaps()
@@ -52,7 +126,6 @@ namespace ElvenCurse.Core.Services
                                 MapchangeUp = (int)dr["Mapchange_Up"],
                                 MapchangeRight = (int)dr["Mapchange_Right"],
                                 MapchangeLeft = (int)dr["Mapchange_Left"],
-                                Json = (string)dr["Json"],
                                 Tilemap = ParseTilemap((string)dr["Json"]),
                                 Name = (string)dr["Name"]
                             });
@@ -63,7 +136,7 @@ namespace ElvenCurse.Core.Services
             return list;
         }
 
-        public bool SaveMap(Worldsection section)
+        public bool SaveMap(Worldsection section, string mapdata)
         {
             using (var con = new SqlConnection(_connectionstring))
             {
@@ -77,7 +150,7 @@ namespace ElvenCurse.Core.Services
                     cmd.Parameters.Add(new SqlParameter("Mapchange_Up", section.MapchangeUp));
                     cmd.Parameters.Add(new SqlParameter("Mapchange_Right", section.MapchangeRight));
                     cmd.Parameters.Add(new SqlParameter("Mapchange_Left", section.MapchangeLeft));
-                    cmd.Parameters.Add(new SqlParameter("Json", section.Json));
+                    cmd.Parameters.Add(new SqlParameter("Json", mapdata));
                     cmd.Parameters.Add(new SqlParameter("Name", section.Name));
 
                     return cmd.ExecuteNonQuery() > 0;
@@ -222,7 +295,7 @@ namespace ElvenCurse.Core.Services
                                 MapchangeUp = (int)dr["Mapchange_Up"],
                                 MapchangeRight = (int)dr["Mapchange_Right"],
                                 MapchangeLeft = (int)dr["Mapchange_Left"],
-                                Json = (string)dr["Json"],
+                                //Mapdata = (string)dr["Json"],
                                 Tilemap = ParseTilemap((string)dr["Json"]),
                                 Name = (string)dr["Name"]
                             };
@@ -233,17 +306,43 @@ namespace ElvenCurse.Core.Services
             return null;
         }
 
-        private Tilemap ParseTilemap(string json)
+        private Tilemap ParseTilemap(string mapdata)
         {
             try
             {
-                return JsonConvert.DeserializeObject<Tilemap>(json);
+                var xRoot = new XmlRootAttribute();
+                xRoot.ElementName = "map";
+
+                var t = new XmlSerializer(typeof(Tilemap), xRoot);
+                var map = t.Deserialize(mapdata.ToStream()) as Tilemap;
+                return map;
             }
-            catch (ArgumentException)
+            catch (XmlException)
             {
                 return null;
             }
-            catch (JsonSerializationException)
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
+        private Tileset ParseTerrain(string data)
+        {
+            try
+            {
+                var xRoot = new XmlRootAttribute();
+                xRoot.ElementName = "tileset";
+
+                var t = new XmlSerializer(typeof(Tileset), xRoot);
+                var terrain = t.Deserialize(data.ToStream()) as Tileset;
+                return terrain;
+            }
+            catch (XmlException)
+            {
+                return null;
+            }
+            catch (InvalidOperationException)
             {
                 return null;
             }

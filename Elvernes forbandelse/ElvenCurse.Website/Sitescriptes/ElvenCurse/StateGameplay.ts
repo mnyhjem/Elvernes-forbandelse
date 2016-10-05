@@ -313,18 +313,15 @@
                 self.worldsectionnameplate.updateMap(mapToLoad);
                 
                 // Load json
-                //self.game.load.tilemap("world", null, mapToLoad.json, Phaser.Tilemap.TILED_JSON);
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
 
                 // Load images
                 for (var i = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
                     if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
-                        //self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image);
+                        self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image.source);
                     }
                 }
-
-                //self.game.load.tilemap("world", self.mapPath + mapToLoad, null, Phaser.Tilemap.TILED_JSON);
-
+                
                 self.game.load.onLoadComplete.add(self.createMap, self);
                 self.game.load.start();
             }

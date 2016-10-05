@@ -99,6 +99,16 @@
         }],
  "nextobjectid":4,
  "orientation":"orthogonal",
+ "properties":
+    {
+     "testint":45,
+     "teststring":"hej"
+    },
+ "propertytypes":
+    {
+     "testint":"int",
+     "teststring":"string"
+    },
  "renderorder":"right-down",
  "tileheight":32,
  "tilesets":[

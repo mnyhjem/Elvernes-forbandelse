@@ -91,6 +91,10 @@
     <Build Include="dbo\Tables\InteractiveObjectsParameters.sql" />
     <Build Include="dbo\StoredProcedures\GetAllInteractiveObjectParameters.sql" />
     <Build Include="dbo\StoredProcedures\SetCharacterPosition.sql" />
+    <Build Include="dbo\Tables\Terrains.sql" />
+    <Build Include="dbo\StoredProcedures\SaveTerrain.sql" />
+    <Build Include="dbo\StoredProcedures\GetAllTerrains.sql" />
+    <Build Include="dbo\StoredProcedures\GetTerrain.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

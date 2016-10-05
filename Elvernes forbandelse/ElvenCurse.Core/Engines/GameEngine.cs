@@ -77,6 +77,11 @@ namespace ElvenCurse.Core.Engines
             if (section == null)
             {
                 section = _worldService.GetMap(sectionId);
+                if (section == null)
+                {
+                    // dette kort findes ikke..
+                    return null;
+                }
                 _worldsections.Add(section);
             }
 
@@ -161,13 +166,13 @@ namespace ElvenCurse.Core.Engines
                 ChangeMap(connectionId, getUserId, "left");
                 return;
             }
-            if (c.Location.X >= currentmap.Tilemap.width)
+            if (c.Location.X >= currentmap.Tilemap.Width)
             {
                 //this.gameHub.server.changeMap("right");
                 ChangeMap(connectionId, getUserId, "right");
                 return;
             }
-            if (c.Location.Y > currentmap.Tilemap.height)
+            if (c.Location.Y > currentmap.Tilemap.Height)
             {
                 //this.gameHub.server.changeMap("down");
                 ChangeMap(connectionId, getUserId, "down");
@@ -255,13 +260,34 @@ namespace ElvenCurse.Core.Engines
             {
                 c.Location = newPlayerlocationSuccess;
                 c.Location.WorldsectionId = mapToLoad;
-                for (var i = 0; i < map.Tilemap.layers.Count; i++)
+                for (var i = 0; i < map.Tilemap.Layers.Length; i++)
                 {
-                    map.Tilemap.layers[i].data = null;
+                    map.Tilemap.Layers[i].Data = null;
                 }
 
                 // fortæl spillerne i den section vi forlader, at vi er taget afsted
                 AllInWorldSection(oldPlayerLocation.WorldsectionId).updatePlayer(c);
+
+                if (map.Tilemap.HasTerrainreferences)
+                {
+                    // vores javascript klient har det dårligt med terrain referencer, så vi erstatter disse med de rigtige tilesets..
+                    var terrains = _worldService.GetTerrains();
+                    if (terrains != null)
+                    {
+                        for (int index = 0; index < map.Tilemap.Tilesets.Length; index++)
+                        {
+                            var tileset = map.Tilemap.Tilesets[index];
+                            if (tileset.IsTerrainreference)
+                            {
+                                var correctTileset = terrains.FirstOrDefault(a => string.Equals(a.Filename, tileset.Source, StringComparison.CurrentCultureIgnoreCase));
+                                if (correctTileset != null)
+                                {
+                                    map.Tilemap.Tilesets[index] = correctTileset.Tileset;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else
             {

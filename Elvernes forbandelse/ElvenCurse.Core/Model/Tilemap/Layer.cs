@@ -1,21 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ElvenCurse.Core.Model.Tilemap
 {
     [Serializable]
     public class Layer
     {
-        public List<int> data { get; set; }
-        public int height { get; set; }
-        public string name { get; set; }
-        public int opacity { get; set; }
-        public string type { get; set; }
-        public bool visible { get; set; }
-        public int width { get; set; }
-        public int x { get; set; }
-        public int y { get; set; }
-        public Properties properties { get; set; }
-        public Propertytypes propertytypes { get; set; }
+        [XmlAttribute("name")]
+        public string Name { get; set; }
+        [XmlAttribute("width")]
+        public int Width { get; set; }
+        [XmlAttribute("height")]
+        public int Height { get; set; }
+
+        [XmlElement("data")]
+        public string Rawdata { get; set; }
+
+        public int[] Data
+        {
+            get
+            {
+                if (_data == null)
+                {
+                    // parse raw data..
+                    var list = new List<int>();
+                    foreach (var point in Rawdata.Trim().Split(','))
+                    {
+                        list.Add(int.Parse(point));
+                    }
+                    _data = list.ToArray();
+                }
+                return _data;
+            }
+            set { _data = value; }
+        }
+
+        private int[] _data;
+
+        [XmlElement("properties")]
+        public PropertyCollection Properties { get; set; }
     }
 }

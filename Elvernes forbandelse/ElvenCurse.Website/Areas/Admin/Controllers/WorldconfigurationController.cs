@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.Tilemap;
+using ElvenCurse.Website.Areas.Admin.Models;
 
 namespace ElvenCurse.Website.Areas.Admin.Controllers
 {
@@ -20,11 +21,17 @@ namespace ElvenCurse.Website.Areas.Admin.Controllers
         public ActionResult Index()
         {
             var maps = _worldService.GetMaps();
+            var terrains = _worldService.GetTerrains();
 
+            var model = new WorldconfigurationViewmodel
+            {
+                Worldsections = maps,
+                Terrains = terrains
+            };
             //var test = Newtonsoft.Json.JsonConvert.DeserializeObject(map.Json);
             //var test2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Tilemap>(map.Json);
 
-            return View(maps);
+            return View(model);
         }
 
         public ActionResult Create()
@@ -62,26 +69,13 @@ namespace ElvenCurse.Website.Areas.Admin.Controllers
                 return HttpNotFound("Map not found");
             }
 
+            var mapdata = "";
             if (Request.Files.Count > 0)
             {
-                var json = System.Text.Encoding.Default.GetString(ReadFully(Request.Files[0].InputStream));
-
-                // lille fiks for at få vores tsx fil til at virke..
-                json = json.Replace(@"""source"":""Terrain.tsx""", @"""columns"":32,
-         ""image"":""terrain.png"",
-         ""imageheight"":1024,
-         ""imagewidth"":1024,
-         ""margin"":0,
-         ""name"":""terrain"",
-         ""spacing"":0,
-         ""tilecount"":1024,
-         ""tileheight"":32,
-         ""tilewidth"":32");
-
-                model.Worldsection.Json = json;
+                mapdata = System.Text.Encoding.Default.GetString(ReadFully(Request.Files[0].InputStream));
             }
 
-            if (!_worldService.SaveMap(model.Worldsection))
+            if (!_worldService.SaveMap(model.Worldsection, mapdata))
             {
                 var allmaps = _worldService.GetMaps();
                 allmaps.Insert(0, new Worldsection { Id = 0, Name = "Ingen" });
@@ -100,6 +94,48 @@ namespace ElvenCurse.Website.Areas.Admin.Controllers
                 input.CopyTo(ms);
                 return ms.ToArray();
             }
+        }
+
+        [HttpGet]
+        public ActionResult Createterrain()
+        {
+            var model = new Terrainfile();
+            return View("Editterrain", model);
+        }
+
+        [HttpGet]
+        public ActionResult Editterrain(int id)
+        {
+            var terrain = _worldService.GetTerrain(id);
+            if (terrain == null)
+            {
+                return HttpNotFound("Terrain not found");
+            }
+            return View(terrain);
+        }
+
+        [HttpPost]
+        public ActionResult Editterrain(Terrainfile model)
+        {
+            if (model.Id > 0 && _worldService.GetTerrain(model.Id) == null)
+            {
+                return HttpNotFound("Terrain not found");
+            }
+
+            var data = "";
+            if (Request.Files.Count > 0)
+            {
+                data = System.Text.Encoding.Default.GetString(ReadFully(Request.Files[0].InputStream));
+                model.Filename = Request.Files[0].FileName;
+            }
+
+            if (!_worldService.SaveTerrain(model, data))
+            {
+                ModelState.AddModelError("", "Kunne ikke gemme");
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 

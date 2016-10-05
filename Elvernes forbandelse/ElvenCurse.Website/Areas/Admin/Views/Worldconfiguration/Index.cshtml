@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ElvenCurse.Core.Model.Worldsection>
+﻿@model ElvenCurse.Website.Areas.Admin.Models.WorldconfigurationViewmodel
 @{
     ViewBag.Title = "Index";
 }
@@ -9,9 +9,21 @@
         <p>@Html.ActionLink("New mapsection", "Create", null, new { @class = "btn btn-default" })</p>
 
         <ul id="characterlist">
-            @foreach (var section in Model)
+            @foreach (var section in Model.Worldsections)
             {
                 <li>@Html.ActionLink(section.Name, "Edit", new { id = section.Id })</li>
+            }
+        </ul>
+    </div>
+    
+    <div class="col-md-2">
+
+        <p>@Html.ActionLink("New terrain", "Createterrain", null, new { @class = "btn btn-default" })</p>
+
+        <ul id="characterlist">
+            @foreach (var terrain in Model.Terrains)
+            {
+                <li>@Html.ActionLink(terrain.Filename, "Editterrain", new { id = terrain.Id })</li>
             }
         </ul>
     </div>

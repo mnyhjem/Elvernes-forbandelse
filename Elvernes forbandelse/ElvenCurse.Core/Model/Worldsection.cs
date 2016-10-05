@@ -10,7 +10,7 @@ namespace ElvenCurse.Core.Model
         public int MapchangeLeft { get; set; }
         public int MapchangeUp { get; set; }
         public int MapchangeDown { get; set; }
-        public string Json { get; set; }
+        //public string Mapdata { get; set; }
         public Tilemap.Tilemap Tilemap { get; set; }
         public string Name { get; set; }
     }

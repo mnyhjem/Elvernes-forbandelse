@@ -79,9 +79,14 @@
     <Compile Include="Model\Npcs\Npcstatus.cs" />
     <Compile Include="Model\Npcs\Npcrace.cs" />
     <Compile Include="Model\Npcs\Npctype.cs" />
+    <Compile Include="Model\Terrainfile.cs" />
+    <Compile Include="Model\Tilemap\Image.cs" />
     <Compile Include="Model\Tilemap\Layer.cs" />
-    <Compile Include="Model\Tilemap\Properties.cs" />
-    <Compile Include="Model\Tilemap\Propertytypes.cs" />
+    <Compile Include="Model\Tilemap\Property.cs" />
+    <Compile Include="Model\Tilemap\PropertyCollection.cs" />
+    <Compile Include="Model\Tilemap\Terrain.cs" />
+    <Compile Include="Model\Tilemap\Terraintile.cs" />
+    <Compile Include="Model\Tilemap\Terraintypes.cs" />
     <Compile Include="Model\Tilemap\Tilemap.cs" />
     <Compile Include="Model\Tilemap\Tileset.cs" />
     <Compile Include="Model\Worldsection.cs" />
