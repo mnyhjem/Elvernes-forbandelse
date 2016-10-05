@@ -4,7 +4,9 @@
         group: Phaser.Group;
         map: IWorldsection;
         plateSprite: Phaser.Sprite;
-        text:Phaser.Text;
+        text: Phaser.Text;
+
+        playerpositiontext:Phaser.Text;
 
         constructor(game: Phaser.Game, map: IWorldsection) {
             this.game = game;
@@ -36,6 +38,14 @@
         public destroy() {
             //this.playerGroup.removeAll(true);
             this.group.destroy(true);
+        }
+
+        public setPlayerPosition(player: Player) {
+            if (this.playerpositiontext === undefined) {
+                var style = { font: "16px verdana", fill: "#fffec3" };
+                this.playerpositiontext = this.game.add.text(this.plateSprite.x + 20, 60, "", style, this.group);
+            }
+            this.playerpositiontext.text = `[${player.location.x}, ${player.location.y}]`;
         }
     }
 }

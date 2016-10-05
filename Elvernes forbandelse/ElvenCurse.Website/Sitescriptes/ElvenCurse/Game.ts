@@ -11,10 +11,11 @@
 
             this.game = new Phaser.Game(width, height, Phaser.CANVAS, "game");
 
+            this.game.state.add("Booter", Booter);
             this.game.state.add("Preloader", StatePreloader);
             this.game.state.add("Gameplay", StateGameplay);
 
-            this.game.state.start("Preloader");
+            this.game.state.start("Booter");
         }
     }
 }

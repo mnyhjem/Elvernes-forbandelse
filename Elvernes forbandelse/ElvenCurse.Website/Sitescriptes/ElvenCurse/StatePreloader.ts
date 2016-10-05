@@ -9,7 +9,7 @@
         }
 
         init() {
-            this.createLoadingbox();
+            
 
             //this.game.add.plugin(Fabrique.Plugins.InputField);
 
@@ -32,10 +32,12 @@
         }
 
         preload() {
-            //this.load.path = "/content/assets/graphics/";
+            var bg = this.add.image(0, 0, "loadingbackground");
+            bg.height = this.game.height;
+            bg.width = this.game.width;
+            bg.smoothed = true;
 
-            //this.load.audio("Bang", "Bang.mp3");
-            //this.load.images(["graphics-tiles-waterflow", "ground_tiles"]);
+            this.createLoadingbox();
 
             this.game.load.spritesheet("playertest", "/content/assets/graphics/playertest.png", 64, 64);
 
@@ -72,6 +74,7 @@
 
         create() {
             this.game.state.start("Gameplay");
+
             //this.add.tween(this.spinner.scale).to({ x: 0, y: 0 }, 1000, "Elastic.easeIn", true, 250);
             //var t = this.add.tween(this.text).to({ alpha: 0 }, 1000, "Linear", true);
             //var self = this;

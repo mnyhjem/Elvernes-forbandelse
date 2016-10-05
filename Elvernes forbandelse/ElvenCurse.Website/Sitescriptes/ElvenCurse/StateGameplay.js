@@ -10,7 +10,6 @@ var ElvenCurse;
         function StateGameplay() {
             _super.call(this);
             this.mapMovedInThisPosition = "";
-            this.mapPath = "/content/assets/";
             this.initializing = true;
             this.signalRInitializing = true;
         }
@@ -62,15 +61,16 @@ var ElvenCurse;
                 this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
             }
             this.placeOtherPlayersAndObjects();
+            this.worldsectionnameplate.setPlayerPosition(this.player);
         };
         StateGameplay.prototype.render = function () {
             if (this.initializing) {
                 return;
             }
             //this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
-            this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
-            this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
-            this.game.debug.text("Online: " + this.onlineCount, 32, 80 + 50, "rgb(0,0,0)");
+            //this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
+            //this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
+            this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
         };
         StateGameplay.prototype.placeplayer = function (x, y) {
             this.log("placeplayer");
@@ -89,19 +89,18 @@ var ElvenCurse;
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
             this.backgroundMusic = this.game.add.audio("medieval");
-            this.backgroundMusic.play();
+            //this.backgroundMusic.play();
             this.map = this.game.add.tilemap("world");
-            //this.map.addTilesetImage("water", "water");
-            //this.map.addTilesetImage("ground", "ground");
             var collisionTileId = -1;
-            for (var i = 0; i < this.map.tilesets.length; i++) {
+            var i;
+            for (i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 if (tileset.name === "Collision") {
                     collisionTileId = tileset.firstgid;
                 }
             }
-            for (var i = 0; i < this.map.layers.length; i++) {
+            for (i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
                 var l = this.map.createLayer(layer.name);
                 if (layer.properties.displayGroup !== undefined) {
@@ -123,25 +122,21 @@ var ElvenCurse;
                 }
             }
             this.background.resizeWorld();
-            //this.map.setCollisionBetween(1, 100, true, this.blocking);
-            //this.map.setCollision([13, 133], true, this.blocking);
             this.map.setCollision(collisionTileId, true, this.collisionLayer);
             if (this.player) {
-                //this.player.bringToTop();
-                //this.game.world.bringToTop(this.middelgroundGroup);
                 this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
+            this.backgroundimage.destroy();
+            this.backgroundimage = null;
         };
         StateGameplay.prototype.wireupSignalR = function () {
             var self = this;
-            //$.connection.hub.url = "http://localhost:1234/signalr";
             $.connection.hub.url = $("#serverpath").text() + "/signalr";
             this.gameHub = $.connection.gameHub;
-            //this.characterHub.client.methodehalløj = function ()
-            this.gameHub.client.hello = function (text) {
-                var t = 0;
-            };
+            //this.gameHub.client.hello = function (text) {
+            //    var t = 0;
+            //}
             this.gameHub.client.onlinecount = function (cnt) {
                 self.log("onlinecount callback");
                 self.onlineCount = cnt;
@@ -220,6 +215,7 @@ var ElvenCurse;
             };
             this.gameHub.client.changeMap = function (mapToLoad) {
                 self.log("Changemap callback");
+                self.setBackgroundimage();
                 if (mapToLoad === null || mapToLoad === undefined) {
                     // end of world
                     return;
@@ -250,6 +246,12 @@ var ElvenCurse;
                 self.gameHub.server.changeMap("playerposition");
             });
         };
+        StateGameplay.prototype.setBackgroundimage = function () {
+            this.backgroundimage = this.add.image(0, 0, "loadingbackground");
+            //this.backgroundimage.height = this.game.height;
+            //this.backgroundimage.width = this.game.width;
+            this.backgroundimage.smoothed = true;
+        };
         StateGameplay.prototype.destroyMap = function () {
             if (!this.map) {
                 return;
@@ -277,17 +279,18 @@ var ElvenCurse;
             }
         };
         StateGameplay.prototype.destroyAllPlayersAndObjects = function () {
-            for (var i = 0; i < this.players.length; i++) {
+            var i;
+            for (i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array();
-            for (var i = 0; i < this.npcs.length; i++) {
+            for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
                 npc.destroy();
             }
             this.npcs = new Array();
-            for (var i = 0; i < this.interactiveObjects.length; i++) {
+            for (i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
                 io.destroy();
             }
@@ -295,7 +298,8 @@ var ElvenCurse;
         };
         StateGameplay.prototype.placeOtherPlayersAndObjects = function () {
             // players
-            for (var i = 0; i < this.players.length; i++) {
+            var i;
+            for (i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
@@ -303,7 +307,7 @@ var ElvenCurse;
                 p.placeGroup();
             }
             // npcs
-            for (var i = 0; i < this.npcs.length; i++) {
+            for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
                 if (npc.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
@@ -311,7 +315,7 @@ var ElvenCurse;
                 npc.placeGroup();
             }
             // objects
-            for (var i = 0; i < this.interactiveObjects.length; i++) {
+            for (i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
                 if (io.interactiveObject.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;

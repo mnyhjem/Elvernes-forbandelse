@@ -41,36 +41,36 @@
             this.playerSprite.body.angularVelocity = 0;
 
             var angleToMove = -1;
-
-            if (cursors.right.isDown && cursors.down.isDown) {
+            
+            if ((cursors.right.isDown && cursors.down.isDown) || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
                 angleToMove = 45;
                 this.playAnimation("walkRight");
             }
-            else if (cursors.left.isDown && cursors.down.isDown) {
+            else if (cursors.left.isDown && cursors.down.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.A) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
                 angleToMove = 135;
                 this.playAnimation("walkLeft");
             }
-            else if (cursors.right.isDown && cursors.up.isDown) {
+            else if (cursors.right.isDown && cursors.up.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.W))) {
                 angleToMove = 315;
                 this.playAnimation("walkRight");
             }
-            else if (cursors.left.isDown && cursors.up.isDown) {
+            else if (cursors.left.isDown && cursors.up.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.A) && this.game.input.keyboard.isDown(Phaser.KeyCode.W))) {
                 angleToMove = 225;
                 this.playAnimation("walkLeft");
             }
-            else if (cursors.left.isDown) {
+            else if (cursors.left.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.A)) {
                 this.playAnimation("walkLeft");
                 angleToMove = 180;
             }
-            else if (cursors.right.isDown) {
+            else if (cursors.right.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.D)) {
                 angleToMove = 0;
                 this.playAnimation("walkRight");
             }
-            else if (cursors.up.isDown) {
+            else if (cursors.up.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.W)) {
                 angleToMove = 270;
                 this.playAnimation("walkBack");
             }
-            else if (cursors.down.isDown) {
+            else if (cursors.down.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.S)) {
                 angleToMove = 90;
                 this.playAnimation("walkFront");
             }

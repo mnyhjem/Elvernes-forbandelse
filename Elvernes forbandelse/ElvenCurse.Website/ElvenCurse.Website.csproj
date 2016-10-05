@@ -248,6 +248,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Assets\Graphics\Actionbar.png" />
+    <Content Include="Content\Assets\Graphics\backgrounds\17fc97357e1f5933f983b7079384d8c3_full.jpg" />
+    <Content Include="Content\Assets\Graphics\backgrounds\dekaron-online-fantasy-mmo-rpg-middle-ages-medieval-1dekao-action-fighting-2moons-dark-evil-wallpaper-1.jpg" />
+    <Content Include="Content\Assets\Graphics\backgrounds\medieval-medieval-huts-mountains-path-artwork-trees-landscape-full-hd-road-wallpaper-desktop-images-1920x1080.jpg" />
+    <Content Include="Content\Assets\Graphics\backgrounds\mjfMHfm.jpg" />
     <Content Include="Content\Assets\Graphics\beach_sand_woa.png" />
     <Content Include="Content\Assets\Graphics\beach_sand_woa2.png" />
     <Content Include="Content\Assets\Graphics\beach_sand_woa3.png" />
@@ -1228,6 +1232,7 @@
     <TypeScriptCompile Include="Scripts\typings\phaser-input.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\phaser.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Booter.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Worldsectionnameplate.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Actionbar.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\EntityPortraitplate.ts" />

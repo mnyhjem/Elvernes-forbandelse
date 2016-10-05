@@ -7,7 +7,7 @@
   <image source="ground_tiles.png" width="672" height="701"/>
  </tileset>
  <tileset firstgid="523" name="Collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="../../ElvenCurse.Website/Content/Assets/Graphics/Collision.png" width="32" height="32"/>
+  <image source="Collision.png" width="32" height="32"/>
  </tileset>
  <layer name="blocking" width="100" height="100">
   <data encoding="csv">

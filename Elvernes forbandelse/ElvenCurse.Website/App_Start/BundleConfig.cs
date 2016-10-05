@@ -17,6 +17,7 @@ namespace ElvenCurse.Website
 
             bundles.Add(new ScriptBundle("~/bundles/elvencurse").Include(
                 "~/Sitescriptes/ElvenCurse/Game.js",
+                "~/Sitescriptes/ElvenCurse/Booter.js",
                 "~/Sitescriptes/ElvenCurse/StatePreloader.js",
                 "~/Sitescriptes/ElvenCurse/StateGameplay.js",
                 "~/Sitescriptes/ElvenCurse/Player.js",

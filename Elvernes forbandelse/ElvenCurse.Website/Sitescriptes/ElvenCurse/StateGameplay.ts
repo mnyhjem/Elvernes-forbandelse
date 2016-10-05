@@ -4,6 +4,7 @@
         onlineCount:number;
         // debug
 
+        backgroundimage:Phaser.Image;
 
         gameHub: IGameHub;
 
@@ -36,7 +37,6 @@
         // music
         backgroundMusic: Phaser.Sound;
         
-        mapPath: string = "/content/assets/";
         initializing: boolean = true;
         signalRInitializing: boolean = true;
 
@@ -107,6 +107,8 @@
             }
 
             this.placeOtherPlayersAndObjects();
+
+            this.worldsectionnameplate.setPlayerPosition(this.player);
         }
 
         render() {
@@ -115,10 +117,10 @@
             }
             
             //this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
-            this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
-            this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
+            //this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
+            //this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
 
-            this.game.debug.text("Online: " + this.onlineCount, 32, 80 + 50, "rgb(0,0,0)");
+            this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
         }
 
         private placeplayer(x: number, y: number) {
@@ -143,14 +145,13 @@
             this.log("CreateMap");
 
             this.backgroundMusic = this.game.add.audio("medieval");
-            this.backgroundMusic.play();
+            //this.backgroundMusic.play();
 
             this.map = this.game.add.tilemap("world");
 
-            //this.map.addTilesetImage("water", "water");
-            //this.map.addTilesetImage("ground", "ground");
             var collisionTileId = -1;
-            for (var i = 0; i < this.map.tilesets.length; i++) {
+            var i: number;
+            for (i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 
@@ -159,7 +160,7 @@
                 }
             }
             
-            for (var i = 0; i < this.map.layers.length; i++) {
+            for (i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
                 
                 var l = this.map.createLayer(layer.name);
@@ -184,30 +185,27 @@
             }
             
             this.background.resizeWorld();
-            
-            
-            //this.map.setCollisionBetween(1, 100, true, this.blocking);
-            //this.map.setCollision([13, 133], true, this.blocking);
+
             this.map.setCollision(collisionTileId, true, this.collisionLayer);
 
             if (this.player) {
-                //this.player.bringToTop();
-                //this.game.world.bringToTop(this.middelgroundGroup);
                 this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
+
+            this.backgroundimage.destroy();
+            this.backgroundimage = null;
         }
 
         private wireupSignalR() {
             var self = this;
 
-            //$.connection.hub.url = "http://localhost:1234/signalr";
             $.connection.hub.url = $("#serverpath").text() +"/signalr";
             this.gameHub = $.connection.gameHub;
-            //this.characterHub.client.methodehalløj = function ()
-            this.gameHub.client.hello = function(text) {
-                var t = 0;
-            }
+
+            //this.gameHub.client.hello = function (text) {
+            //    var t = 0;
+            //}
 
             this.gameHub.client.onlinecount = function (cnt) {
                 self.log("onlinecount callback");
@@ -296,6 +294,7 @@
 
             this.gameHub.client.changeMap = function (mapToLoad: IWorldsection) {
                 self.log("Changemap callback");
+                self.setBackgroundimage();
 
                 if (mapToLoad === null || mapToLoad === undefined) {
                     // end of world
@@ -340,6 +339,14 @@
                 });
         }
 
+        private setBackgroundimage() {
+            this.backgroundimage = this.add.image(0, 0, "loadingbackground");
+            //this.backgroundimage.height = this.game.height;
+            //this.backgroundimage.width = this.game.width;
+            this.backgroundimage.smoothed = true;
+            
+        }
+
         private destroyMap() {
             if (!this.map) {
                 return;
@@ -372,19 +379,20 @@
         }
 
         private destroyAllPlayersAndObjects() {
-            for (var i = 0; i < this.players.length; i++) {
+            var i: number;
+            for (i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array<OtherPlayer>();
 
-            for (var i = 0; i < this.npcs.length; i++) {
+            for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
                 npc.destroy();
             }
             this.npcs = new Array<OtherPlayer>();
 
-            for (var i = 0; i < this.interactiveObjects.length; i++) {
+            for (i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
                 io.destroy();
             }
@@ -393,7 +401,8 @@
 
         private placeOtherPlayersAndObjects() {
             // players
-            for (var i = 0; i < this.players.length; i++) {
+            var i: number;
+            for (i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
@@ -403,7 +412,7 @@
             }
 
             // npcs
-            for (var i = 0; i < this.npcs.length; i++) {
+            for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
                 if (npc.player.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
@@ -413,7 +422,7 @@
             }
 
             // objects
-            for (var i = 0; i < this.interactiveObjects.length; i++) {
+            for (i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
                 if (io.interactiveObject.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;

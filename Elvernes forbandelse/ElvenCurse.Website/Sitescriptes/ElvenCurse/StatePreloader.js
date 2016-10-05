@@ -11,7 +11,6 @@ var ElvenCurse;
             _super.call(this);
         }
         StatePreloader.prototype.init = function () {
-            this.createLoadingbox();
             //this.game.add.plugin(Fabrique.Plugins.InputField);
             this.input.maxPointers = 1;
             this.scale.pageAlignHorizontally = true;
@@ -28,9 +27,11 @@ var ElvenCurse;
             this.text = this.add.text(50, 75, "Indlæser 0%", { font: "32px Arial", fill: "#ffffff", align: "center" });
         };
         StatePreloader.prototype.preload = function () {
-            //this.load.path = "/content/assets/graphics/";
-            //this.load.audio("Bang", "Bang.mp3");
-            //this.load.images(["graphics-tiles-waterflow", "ground_tiles"]);
+            var bg = this.add.image(0, 0, "loadingbackground");
+            bg.height = this.game.height;
+            bg.width = this.game.width;
+            bg.smoothed = true;
+            this.createLoadingbox();
             this.game.load.spritesheet("playertest", "/content/assets/graphics/playertest.png", 64, 64);
             // ui
             this.game.load.image("EntityPortraitplate", "/content/assets/graphics/EntityPortraitplate.png");
