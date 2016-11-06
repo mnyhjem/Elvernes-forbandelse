@@ -3,6 +3,7 @@
     public enum Npctype
     {
         Hunter = 0,
-        Wolf = 1
+        Wolf = 1,
+        Bunny = 2
     }
 }

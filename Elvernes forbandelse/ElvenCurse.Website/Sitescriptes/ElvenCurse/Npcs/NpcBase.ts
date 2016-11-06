@@ -13,6 +13,8 @@
 
         private playAnimation(animationName: string) {
             var animation = this.npcSprite.animations.getAnimation(animationName);
+
+            //this.nameplate.nametext.text = animation.frameTotal.toString();
             if (animation === undefined || animation === null) {
                 return;
             }
@@ -27,6 +29,14 @@
         }
 
         public placeGroup() {
+            //var x = this.npc.location.x * 32;
+            //var y = this.npc.location.y * 32;
+            //this.npcSprite.x = x;
+            //this.npcSprite.y = y;
+            //this.nameplate.setPosition(x, y);
+            //this.playAnimation("walkRight");
+            //return;
+
             var x = this.npc.location.x * 32;
             var y = this.npc.location.y * 32;
 

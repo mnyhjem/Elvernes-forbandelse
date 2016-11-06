@@ -16,6 +16,8 @@ namespace ElvenCurse.Core.Services
 {
     public class WorldService:IWorldService
     {
+        private Random _rnd = new Random();
+
         private readonly string _connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         public IEnumerable<Character> GetOnlineCharacters()
@@ -180,7 +182,11 @@ namespace ElvenCurse.Core.Services
                                     break;
 
                                 case Npctype.Wolf:
-                                    npc = new Wolf();
+                                    npc = new Wolf(_rnd);
+                                    break;
+
+                                case Npctype.Bunny:
+                                    npc = new Bunny(_rnd);
                                     break;
 
                                 default:

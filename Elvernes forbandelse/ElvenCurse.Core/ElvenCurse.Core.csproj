@@ -79,6 +79,7 @@
     <Compile Include="Model\Npcs\Npcstatus.cs" />
     <Compile Include="Model\Npcs\Npcrace.cs" />
     <Compile Include="Model\Npcs\Npctype.cs" />
+    <Compile Include="Model\Npcs\Bunny.cs" />
     <Compile Include="Model\Npcs\Wolf.cs" />
     <Compile Include="Model\Terrainfile.cs" />
     <Compile Include="Model\Tilemap\Image.cs" />

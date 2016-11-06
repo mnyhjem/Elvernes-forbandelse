@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ElvenCurse.Core.Model.Npcs
@@ -63,6 +64,53 @@ namespace ElvenCurse.Core.Model.Npcs
                 Action = NpcAction.FollowPlayer;
                 MoveTowardsLocation(collisionWithPlayer.Location);
             }
+        }
+
+        protected void MoveRandomly(Random rnd)
+        {
+            var directions = new List<Location>();
+            directions.Add(DefaultLocation);
+
+            if (CurrentLocation.X > DefaultLocation.X - 20)
+            {
+                directions.Add(new Location
+                {
+                    WorldsectionId = DefaultLocation.WorldsectionId,
+                    X = DefaultLocation.X - 20,
+                    Y = DefaultLocation.Y
+                });
+            }
+            if (CurrentLocation.X < DefaultLocation.X + 20)
+            {
+                directions.Add(new Location
+                {
+                    WorldsectionId = DefaultLocation.WorldsectionId,
+                    X = DefaultLocation.X + 20,
+                    Y = DefaultLocation.Y
+                });
+            }
+            if (CurrentLocation.Y > DefaultLocation.Y - 20)
+            {
+                directions.Add(new Location
+                {
+                    WorldsectionId = DefaultLocation.WorldsectionId,
+                    X = DefaultLocation.X,
+                    Y = DefaultLocation.Y - 20
+                });
+            }
+            if (CurrentLocation.Y < DefaultLocation.Y + 20)
+            {
+                directions.Add(new Location
+                {
+                    WorldsectionId = DefaultLocation.WorldsectionId,
+                    X = DefaultLocation.X,
+                    Y = DefaultLocation.Y + 20
+                });
+            }
+
+            var direction = directions[rnd.Next(directions.Count)];
+            MoveTowardsLocation(direction);
+
         }
 
         protected void MoveTowardsLocation(Location location)

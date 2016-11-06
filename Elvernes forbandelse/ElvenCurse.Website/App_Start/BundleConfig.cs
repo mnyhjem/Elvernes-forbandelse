@@ -29,7 +29,8 @@ namespace ElvenCurse.Website
                 "~/Sitescriptes/ElvenCurse/Worldsectionnameplate.js",
                 "~/Sitescriptes/ElvenCurse/Npcs/NpcBase.js",
                 "~/Sitescriptes/ElvenCurse/Npcs/Wolf.js",
-                "~/Sitescriptes/ElvenCurse/Npcs/Elfhunter.js"
+                "~/Sitescriptes/ElvenCurse/Npcs/Elfhunter.js",
+                "~/Sitescriptes/ElvenCurse/Npcs/Bunny.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

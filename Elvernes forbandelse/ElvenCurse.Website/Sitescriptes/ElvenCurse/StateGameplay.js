@@ -191,6 +191,9 @@ var ElvenCurse;
                 if (npc.type === 1) {
                     newnpc = new ElvenCurse.Wolf(self.game, npc);
                 }
+                else if (npc.type === 2) {
+                    newnpc = new ElvenCurse.Bunny(self.game, npc);
+                }
                 else {
                     newnpc = new ElvenCurse.ElfHunter(self.game, npc);
                 }
@@ -344,4 +347,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

@@ -14,6 +14,8 @@ namespace ElvenCurse.Core.Engines
 {
     public class GameEngine : IGameEngine
     {
+        private Random _rnd = new Random();
+
         private readonly IHubConnectionContext<dynamic> _clients;
         private readonly ICharacterService _characterService;
         private readonly IWorldService _worldService;

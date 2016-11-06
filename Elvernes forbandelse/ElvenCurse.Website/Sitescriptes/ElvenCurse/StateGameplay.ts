@@ -264,6 +264,8 @@
                 var newnpc;
                 if (npc.type === 1) {
                     newnpc = new Wolf(self.game, npc);
+                } else if (npc.type === 2) {
+                    newnpc = new Bunny(self.game, npc);
                 } else {
                     newnpc = new ElfHunter(self.game, npc);
                 }

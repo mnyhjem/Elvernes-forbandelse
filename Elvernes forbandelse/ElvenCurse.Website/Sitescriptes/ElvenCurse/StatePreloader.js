@@ -34,6 +34,7 @@ var ElvenCurse;
             this.createLoadingbox();
             this.game.load.spritesheet("playertest", "/content/assets/graphics/playertest.png", 64, 64);
             this.game.load.spritesheet("wolf1", "/content/assets/graphics/npcs/wolf/wolf.png", 64, 64);
+            this.game.load.spritesheet("bunny", "/content/assets/graphics/npcs/whtdragons_MVanimals_ALL/animals/bunny2.png", 32, 32);
             // ui
             this.game.load.image("EntityPortraitplate", "/content/assets/graphics/EntityPortraitplate.png");
             this.game.load.image("Actionbar", "/content/assets/graphics/Actionbar.png");
@@ -73,4 +74,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StatePreloader = StatePreloader;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StatePreloader.js.map
