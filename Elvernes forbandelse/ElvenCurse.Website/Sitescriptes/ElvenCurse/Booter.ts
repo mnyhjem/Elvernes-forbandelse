@@ -8,7 +8,7 @@
 
         preload() {
             // loading background
-            this.game.load.image("loadingbackground", "/content/assets/graphics/backgrounds/mjfMHfm.jpg");
+            this.game.load.image("loadingbackground", "/content/assets/graphics/backgrounds/4.jpg");
         }
         
         create() {

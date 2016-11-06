@@ -121,6 +121,9 @@
     <Content Include="Maps\object-layer.png" />
     <Content Include="Maps\portal.png" />
     <Content Include="Maps\terrain.png" />
+    <Content Include="Maps\togskinder.png" />
+    <Content Include="Maps\togskinder_blue.png" />
+    <Content Include="Maps\togskinder_green.png" />
     <Content Include="Maps\treesv6_0.png" />
   </ItemGroup>
   <ItemGroup />

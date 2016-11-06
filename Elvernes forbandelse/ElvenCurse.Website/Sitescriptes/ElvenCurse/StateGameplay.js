@@ -127,7 +127,7 @@ var ElvenCurse;
                 this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
-            this.backgroundimage.destroy();
+            this.backgroundimage.destroy(true);
             this.backgroundimage = null;
         };
         StateGameplay.prototype.wireupSignalR = function () {
@@ -256,9 +256,9 @@ var ElvenCurse;
             if (!this.map) {
                 return;
             }
-            //for (var i = 0; i < this.map.tilesets.length; i++) {
-            //    this.map.tilesets[i].
-            //}
+            for (var i = 0; i < this.map.tilesets.length; i++) {
+                this.map.tilesets[i] = null;
+            }
             for (var layerindex = 0; layerindex < this.map.layers.length; layerindex++) {
                 for (var tileindex = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
                     for (var j = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
@@ -270,6 +270,10 @@ var ElvenCurse;
             this.collisionLayer.destroy();
             this.background.destroy();
             this.map.destroy();
+            //this.backgroundGroup.destroy(true);
+            //this.middelgroundGroup.destroy(true);
+            //this.aboveMiddelgroup.destroy(true);
+            //this.uiGroup.destroy(true);
         };
         StateGameplay.prototype.destroySounds = function () {
             if (this.backgroundMusic) {
@@ -330,3 +334,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

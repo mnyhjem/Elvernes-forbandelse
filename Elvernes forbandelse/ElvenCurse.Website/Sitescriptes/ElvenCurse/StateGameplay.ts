@@ -12,7 +12,6 @@
         map: Phaser.Tilemap;
         background: Phaser.TilemapLayer;
         collisionLayer: Phaser.TilemapLayer;
-        tileLayers:Phaser.TilemapLayer[];
 
         // groups
         backgroundGroup: Phaser.Group;
@@ -193,7 +192,7 @@
             }
             this.initializing = false;
 
-            this.backgroundimage.destroy();
+            this.backgroundimage.destroy(true);
             this.backgroundimage = null;
         }
 
@@ -352,9 +351,10 @@
                 return;
             }
             
-            //for (var i = 0; i < this.map.tilesets.length; i++) {
-            //    this.map.tilesets[i].
-            //}
+            for (var i = 0; i < this.map.tilesets.length; i++) {
+                this.map.tilesets[i] = null;
+            }
+
             for (var layerindex = 0; layerindex < this.map.layers.length; layerindex++) {
                 for (var tileindex = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
                     for (var j = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
@@ -368,6 +368,11 @@
             this.collisionLayer.destroy();
             this.background.destroy();
             this.map.destroy();
+
+            //this.backgroundGroup.destroy(true);
+            //this.middelgroundGroup.destroy(true);
+            //this.aboveMiddelgroup.destroy(true);
+            //this.uiGroup.destroy(true);
         }
 
         private destroySounds() {

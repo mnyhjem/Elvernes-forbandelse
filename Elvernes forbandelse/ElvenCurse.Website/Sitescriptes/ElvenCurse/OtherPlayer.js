@@ -38,6 +38,7 @@ var ElvenCurse;
         };
         OtherPlayer.prototype.destroy = function () {
             //this.playerGroup.removeAll(true);
+            this.playerSprite.animations.destroy();
             this.playerGroup.destroy(true);
         };
         OtherPlayer.prototype.createPlayerspriteAndAnimations = function () {
@@ -85,3 +86,4 @@ var ElvenCurse;
     }());
     ElvenCurse.OtherPlayer = OtherPlayer;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=OtherPlayer.js.map

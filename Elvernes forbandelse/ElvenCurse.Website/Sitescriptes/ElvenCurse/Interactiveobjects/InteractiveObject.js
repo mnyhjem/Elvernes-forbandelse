@@ -37,9 +37,11 @@ var ElvenCurse;
             }
         };
         InteractiveObject.prototype.destroy = function () {
+            this.sprite.animations.destroy();
             this.group.destroy(true);
         };
         return InteractiveObject;
     }());
     ElvenCurse.InteractiveObject = InteractiveObject;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=InteractiveObject.js.map

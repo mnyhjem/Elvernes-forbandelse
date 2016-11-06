@@ -55,6 +55,7 @@
         }
 
         public destroy() {
+            this.sprite.animations.destroy();
             this.group.destroy(true);
         }
     }

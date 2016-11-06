@@ -52,6 +52,7 @@
 
         public destroy() {
             //this.playerGroup.removeAll(true);
+            this.playerSprite.animations.destroy();
             this.playerGroup.destroy(true);
         }
 

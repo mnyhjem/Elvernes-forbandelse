@@ -12,7 +12,7 @@ var ElvenCurse;
         }
         Booter.prototype.preload = function () {
             // loading background
-            this.game.load.image("loadingbackground", "/content/assets/graphics/backgrounds/mjfMHfm.jpg");
+            this.game.load.image("loadingbackground", "/content/assets/graphics/backgrounds/4.jpg");
         };
         Booter.prototype.create = function () {
             this.game.state.start("Preloader");
@@ -21,3 +21,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.Booter = Booter;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Booter.js.map
