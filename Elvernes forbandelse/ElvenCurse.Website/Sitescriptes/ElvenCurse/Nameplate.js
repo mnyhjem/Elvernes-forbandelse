@@ -24,3 +24,4 @@ var ElvenCurse;
     }());
     ElvenCurse.Nameplate = Nameplate;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Nameplate.js.map
