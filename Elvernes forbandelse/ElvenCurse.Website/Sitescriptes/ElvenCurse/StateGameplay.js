@@ -122,7 +122,9 @@ var ElvenCurse;
                 }
             }
             this.background.resizeWorld();
-            this.map.setCollision(collisionTileId, true, this.collisionLayer);
+            if (this.collisionLayer !== undefined && collisionTileId > -1) {
+                this.map.setCollision(collisionTileId, true, this.collisionLayer);
+            }
             if (this.player) {
                 this.placeOtherPlayersAndObjects();
             }
@@ -162,12 +164,12 @@ var ElvenCurse;
                     }
                 }
                 var newplayer = new ElvenCurse.OtherPlayer(self.game, player);
-                self.middelgroundGroup.add(newplayer.playerGroup);
+                self.middelgroundGroup.add(newplayer.group);
                 self.players.push(newplayer);
             };
             this.gameHub.client.updateNpc = function (npc) {
                 for (var i = 0; i < self.npcs.length; i++) {
-                    if (self.npcs[i].player.id === npc.id) {
+                    if (self.npcs[i].npc.id === npc.id) {
                         //self.players[i].location.x = player.location.x;
                         //self.players[i].location.y = player.location.y;
                         //self.players[i].location.worldsectionId = player.location.worldsectionId;
@@ -185,8 +187,14 @@ var ElvenCurse;
                         return;
                     }
                 }
-                var newnpc = new ElvenCurse.OtherPlayer(self.game, npc);
-                self.middelgroundGroup.add(newnpc.playerGroup);
+                var newnpc;
+                if (npc.type === 1) {
+                    newnpc = new ElvenCurse.Wolf(self.game, npc);
+                }
+                else {
+                    newnpc = new ElvenCurse.ElfHunter(self.game, npc);
+                }
+                self.middelgroundGroup.add(newnpc.group);
                 self.npcs.push(newnpc);
             };
             this.gameHub.client.updateInteractiveObjects = function (ios) {
@@ -267,7 +275,9 @@ var ElvenCurse;
                     }
                 }
             }
-            this.collisionLayer.destroy();
+            if (this.collisionLayer !== undefined) {
+                this.collisionLayer.destroy();
+            }
             this.background.destroy();
             this.map.destroy();
             //this.backgroundGroup.destroy(true);
@@ -313,7 +323,7 @@ var ElvenCurse;
             // npcs
             for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
-                if (npc.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                if (npc.npc.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }
                 npc.placeGroup();

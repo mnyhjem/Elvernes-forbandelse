@@ -13,6 +13,7 @@ namespace ElvenCurse.Core.Model.Npcs
         public Location CurrentLocation { get; set; }
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public Npcstatus Status { get; set; }
+        public Npctype Type { get; set; }
 
         private readonly int _viewDistace;
         private readonly int _attackDistance;
@@ -32,15 +33,16 @@ namespace ElvenCurse.Core.Model.Npcs
 
         private bool _updateNeeded;
 
-        protected Npc(int viewDistance, int attackDistance)
+        protected Npc(int viewDistance, int attackDistance, Npctype type)
         {
             _viewDistace = viewDistance;
             _attackDistance = attackDistance;
+            Type = type;
         }
 
         public abstract void Attack(Character characterToAttack);
 
-        public void CalculateNextMove(List<Character> characters)
+        public virtual void CalculateNextMove(List<Character> characters)
         {
             // Se om vi er for langt væk fra vores "hjem"
             if (Action == NpcAction.ReturnToDefaultLocation ||
@@ -63,7 +65,7 @@ namespace ElvenCurse.Core.Model.Npcs
             }
         }
 
-        private void MoveTowardsLocation(Location location)
+        protected void MoveTowardsLocation(Location location)
         {
             if (location.X < CurrentLocation.X)
             {
@@ -92,7 +94,7 @@ namespace ElvenCurse.Core.Model.Npcs
             }
         }
 
-        private Character CollidesViewPlayer(List<Character> characters)
+        protected Character CollidesViewPlayer(List<Character> characters)
         {
             return characters.FirstOrDefault(a => (a.Location.WorldsectionId == CurrentLocation.WorldsectionId) &&
                 a.Location.X >= CurrentLocation.X - _viewDistace &&
@@ -108,7 +110,8 @@ namespace ElvenCurse.Core.Model.Npcs
             {
                 Id,
                 Name,
-                Location = CurrentLocation
+                Location = CurrentLocation,
+                Type = Type
             };
         }
     }

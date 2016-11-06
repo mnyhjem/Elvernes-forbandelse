@@ -62,15 +62,16 @@ namespace ElvenCurse.Server
                         case "refresh":
                         case "reload":
                             int worldsection = 1;
-                            var position = parameters.IndexOf(" ", StringComparison.Ordinal);
-                            if (position > -1)
+                            //var position = parameters.IndexOf(" ", StringComparison.Ordinal);
+                            var spl = parameters.Split(' ');
+                            if (spl.Length > 1)
                             {
-                                if (!int.TryParse(parameters.Substring(position).Trim(), out worldsection))
+                                if (!int.TryParse(spl[0].Trim(), out worldsection))
                                 {
                                     Console.WriteLine("> Invalid worldsection");
                                     break;
                                 }
-                                parameters = parameters.Substring(0, position);
+                                parameters = spl[1];
                             }
                             else
                             {
@@ -82,6 +83,7 @@ namespace ElvenCurse.Server
 
                             switch (parameters.ToLower())
                             {
+                                case "npc":
                                 case "npcs":
                                     gameengine.SendToClientsNpcs(worldsection, loadFromDatabase: true);
                                     Console.WriteLine("Refreshed Npcs");

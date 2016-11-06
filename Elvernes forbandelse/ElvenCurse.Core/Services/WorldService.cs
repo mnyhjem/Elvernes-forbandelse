@@ -179,6 +179,10 @@ namespace ElvenCurse.Core.Services
                                     npc = new HunterNpc();
                                     break;
 
+                                case Npctype.Wolf:
+                                    npc = new Wolf();
+                                    break;
+
                                 default:
                                     continue;
                             }

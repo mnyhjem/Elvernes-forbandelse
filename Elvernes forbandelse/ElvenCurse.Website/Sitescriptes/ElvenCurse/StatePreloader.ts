@@ -40,6 +40,7 @@
             this.createLoadingbox();
 
             this.game.load.spritesheet("playertest", "/content/assets/graphics/playertest.png", 64, 64);
+            this.game.load.spritesheet("wolf1", "/content/assets/graphics/npcs/wolf/wolf.png", 64, 64);
 
             // ui
             this.game.load.image("EntityPortraitplate", "/content/assets/graphics/EntityPortraitplate.png");

@@ -6,9 +6,9 @@ var ElvenCurse;
             this.player = player;
             this.createPlayerspriteAndAnimations();
             this.nameplate = new ElvenCurse.Nameplate(this.game, player.name);
-            this.playerGroup = this.game.add.group();
-            this.playerGroup.add(this.playerSprite);
-            this.playerGroup.add(this.nameplate.group);
+            this.group = this.game.add.group();
+            this.group.add(this.playerSprite);
+            this.group.add(this.nameplate.group);
         }
         //public bringToTop() {
         //    //this.playerSprite.bringToTop();
@@ -39,7 +39,7 @@ var ElvenCurse;
         OtherPlayer.prototype.destroy = function () {
             //this.playerGroup.removeAll(true);
             this.playerSprite.animations.destroy();
-            this.playerGroup.destroy(true);
+            this.group.destroy(true);
         };
         OtherPlayer.prototype.createPlayerspriteAndAnimations = function () {
             this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");

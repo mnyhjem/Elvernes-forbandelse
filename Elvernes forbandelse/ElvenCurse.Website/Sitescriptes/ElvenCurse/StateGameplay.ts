@@ -21,7 +21,7 @@
 
         player: Player;
         players: OtherPlayer[];
-        npcs: OtherPlayer[];
+        npcs: NpcBase[];
         interactiveObjects: InteractiveObject[];
 
         cursors: Phaser.CursorKeys;
@@ -57,7 +57,7 @@
             this.game.world.bringToTop(this.uiGroup);
 
             this.players = new Array<OtherPlayer>();
-            this.npcs = new Array<OtherPlayer>();
+            this.npcs = new Array<NpcBase>();
             this.interactiveObjects = new Array<InteractiveObject>();
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -184,8 +184,10 @@
             }
             
             this.background.resizeWorld();
-
-            this.map.setCollision(collisionTileId, true, this.collisionLayer);
+            if (this.collisionLayer !== undefined && collisionTileId > -1) {
+                this.map.setCollision(collisionTileId, true, this.collisionLayer);
+            }
+            
 
             if (this.player) {
                 this.placeOtherPlayersAndObjects();
@@ -234,13 +236,13 @@
                 }
 
                 var newplayer = new OtherPlayer(self.game, player);
-                self.middelgroundGroup.add(newplayer.playerGroup);
+                self.middelgroundGroup.add(newplayer.group);
                 self.players.push(newplayer);
             };
 
             this.gameHub.client.updateNpc = function (npc: IPlayer) {
                 for (var i = 0; i < self.npcs.length; i++) {
-                    if (self.npcs[i].player.id === npc.id) {
+                    if (self.npcs[i].npc.id === npc.id) {
                         //self.players[i].location.x = player.location.x;
                         //self.players[i].location.y = player.location.y;
                         //self.players[i].location.worldsectionId = player.location.worldsectionId;
@@ -259,8 +261,14 @@
                     }
                 }
 
-                var newnpc = new OtherPlayer(self.game, npc);
-                self.middelgroundGroup.add(newnpc.playerGroup);
+                var newnpc;
+                if (npc.type === 1) {
+                    newnpc = new Wolf(self.game, npc);
+                } else {
+                    newnpc = new ElfHunter(self.game, npc);
+                }
+                
+                self.middelgroundGroup.add(newnpc.group);
                 self.npcs.push(newnpc);
             };
 
@@ -365,7 +373,10 @@
                 }
             }
 
-            this.collisionLayer.destroy();
+            if (this.collisionLayer !== undefined) {
+                this.collisionLayer.destroy();
+            }
+            
             this.background.destroy();
             this.map.destroy();
 
@@ -395,7 +406,7 @@
                 var npc = this.npcs[i];
                 npc.destroy();
             }
-            this.npcs = new Array<OtherPlayer>();
+            this.npcs = new Array<NpcBase>();
 
             for (i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
@@ -419,7 +430,7 @@
             // npcs
             for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
-                if (npc.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                if (npc.npc.location.worldsectionId !== this.player.location.worldsectionId) {
                     continue;
                 }
 

@@ -260,6 +260,7 @@
     <Content Include="Content\Assets\Graphics\EntityPortraitplate.png" />
     <Content Include="Content\Assets\Graphics\Npcs\spr_Bunny_strip15.png" />
     <Content Include="Content\Assets\Graphics\Npcs\Wolf\howl_0.png" />
+    <Content Include="Content\Assets\Graphics\Npcs\Wolf\wolf.png" />
     <Content Include="Content\Assets\Graphics\Npcs\Wolf\wolfsheet1_0.png" />
     <Content Include="Content\Assets\Graphics\Npcs\Wolf\wolfsheet2_0.png" />
     <Content Include="Content\Assets\Graphics\Npcs\Wolf\wolfsheet3_0.png" />
@@ -1219,7 +1220,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Sitescriptes\ElvenCurse\Npcs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -1236,6 +1236,9 @@
     <TypeScriptCompile Include="Scripts\typings\phaser.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Booter.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Npcs\NpcBase.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Npcs\ElfHunter.ts" />
+    <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Npcs\Wolf.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Worldsectionnameplate.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Actionbar.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\EntityPortraitplate.ts" />

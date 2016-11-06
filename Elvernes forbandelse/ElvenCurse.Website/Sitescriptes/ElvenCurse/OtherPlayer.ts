@@ -3,7 +3,7 @@
         game: Phaser.Game;
         player:IPlayer;
         nameplate: Nameplate;
-        playerGroup: Phaser.Group;
+        group: Phaser.Group;
         playerSprite:Phaser.Sprite;
 
         constructor(game: Phaser.Game, player: IPlayer) {
@@ -14,9 +14,9 @@
 
             this.nameplate = new Nameplate(this.game, player.name);
 
-            this.playerGroup = this.game.add.group();
-            this.playerGroup.add(this.playerSprite);
-            this.playerGroup.add(this.nameplate.group);
+            this.group = this.game.add.group();
+            this.group.add(this.playerSprite);
+            this.group.add(this.nameplate.group);
         }
 
         //public bringToTop() {
@@ -53,7 +53,7 @@
         public destroy() {
             //this.playerGroup.removeAll(true);
             this.playerSprite.animations.destroy();
-            this.playerGroup.destroy(true);
+            this.group.destroy(true);
         }
 
         private createPlayerspriteAndAnimations() {

@@ -13,6 +13,7 @@
 
         playerGroup: Phaser.Group;
         connectionstatus: number;
+        type: number;
         
         
         constructor(game:Phaser.Game) {
@@ -147,6 +148,7 @@
                 this.playerSprite.animations.play(animationName, 10, false);
             }
         }
+
         
     }
 }
