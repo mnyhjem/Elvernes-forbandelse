@@ -62,6 +62,30 @@ var ElvenCurse;
             }
             this.placeOtherPlayersAndObjects();
             this.worldsectionnameplate.setPlayerPosition(this.player);
+            this.updateNightshadow();
+        };
+        StateGameplay.prototype.updateNightshadow = function () {
+            if (this.initializing) {
+                return;
+            }
+            // sæt vejr.. test
+            if (this.shadowTexture === undefined) {
+                this.shadowTexture = this.game.add.bitmapData(this.game.width, this.game.height);
+                var lightSprite = this.game.add.image(0, 0, this.shadowTexture);
+                lightSprite.blendMode = PIXI.blendModes.MULTIPLY;
+                lightSprite.smoothed = true;
+                this.uiGroup.add(lightSprite);
+            }
+            // Draw shadow
+            this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+            this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
+            // Draw circle of light
+            this.shadowTexture.context.beginPath();
+            this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
+            this.shadowTexture.context.arc(this.player.playerSprite.worldTransform.tx, this.player.playerSprite.worldTransform.ty, 100, 0, Math.PI * 2);
+            this.shadowTexture.context.fill();
+            // This just tells the engine it should update the texture cache
+            this.shadowTexture.dirty = true;
         };
         StateGameplay.prototype.render = function () {
             if (this.initializing) {
@@ -347,4 +371,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

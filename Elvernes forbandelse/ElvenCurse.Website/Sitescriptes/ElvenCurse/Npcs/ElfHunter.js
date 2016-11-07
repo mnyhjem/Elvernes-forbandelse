@@ -93,4 +93,3 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.ElfHunter = ElfHunter;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=ElfHunter.js.map
