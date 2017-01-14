@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ElvenCurse.Core.Model.Npcs
+namespace ElvenCurse.Core.Model.Creatures
 {
-    public abstract class Npc
+    public abstract class Creature
     {
+        protected Random Rnd { get; set; }
+
         public int Id { get; set; }
-        // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public Npcrace Race { get; set; }
+        
         public string Name { get; set; }
+
         public Location DefaultLocation { get; set; }
+
         public Location CurrentLocation { get; set; }
+
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public Npcstatus Status { get; set; }
-        public Npctype Type { get; set; }
+        public Creaturestatus Status { get; set; }
+
+        public Creaturemode Mode { get; set; }
 
         private readonly int _viewDistace;
-        private readonly int _attackDistance;
+        protected readonly int AttackDistance;
         private readonly int _maxDistanceFromDefault = 25;
 
-        public NpcAction Action { get; set; }
+        public CreatureAction Action { get; set; }
 
         public bool UpdateNeeded
         {
@@ -31,37 +36,69 @@ namespace ElvenCurse.Core.Model.Npcs
                 return r;
             }
         }
-
         private bool _updateNeeded;
 
-        protected Npc(int viewDistance, int attackDistance, Npctype type)
+        public Character LastCharacterAttacked { get; set; }
+
+        protected Creature(int viewDistance, int attackDistance)
         {
             _viewDistace = viewDistance;
-            _attackDistance = attackDistance;
-            Type = type;
+            AttackDistance = attackDistance;
         }
 
-        public abstract void Attack(Character characterToAttack);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="characterToAttack"></param>
+        /// <returns>True if we did attack someone</returns>
+        public abstract bool Attack(Character characterToAttack);
 
-        public virtual void CalculateNextMove(List<Character> characters)
+        public bool IsWithinDistance(Location location1, Location location2, int distance)
+        {
+            return !(CurrentLocation.X > DefaultLocation.X + _maxDistanceFromDefault ||
+                    CurrentLocation.X < DefaultLocation.X - _maxDistanceFromDefault ||
+                    CurrentLocation.Y > DefaultLocation.Y + _maxDistanceFromDefault ||
+                    CurrentLocation.Y < DefaultLocation.Y - _maxDistanceFromDefault);
+        }
+
+        public virtual void CalculateNextMove(List<Character> characters, CreatureMovetype movetype)
         {
             // Se om vi er for langt væk fra vores "hjem"
-            if (Action == NpcAction.ReturnToDefaultLocation ||
-                (CurrentLocation.X > DefaultLocation.X + _maxDistanceFromDefault ||
-                CurrentLocation.X < DefaultLocation.X - _maxDistanceFromDefault ||
-                CurrentLocation.Y > DefaultLocation.Y + _maxDistanceFromDefault ||
-                CurrentLocation.Y < DefaultLocation.Y - _maxDistanceFromDefault))
+            if (Action == CreatureAction.ReturnToDefaultLocation || !IsWithinDistance(CurrentLocation, DefaultLocation, _maxDistanceFromDefault))
             {
-                Action = NpcAction.ReturnToDefaultLocation;
+                Action = CreatureAction.ReturnToDefaultLocation;
                 MoveTowardsLocation(DefaultLocation);
                 return;
             }
 
+            var collidesWith = CollidesViewPlayer(characters);
+            if (collidesWith != null || Action == CreatureAction.Attacking)
+            {
+                if (Attack(collidesWith))
+                {
+                    return;
+                }
+            }
+
+            switch (movetype)
+            {
+                case CreatureMovetype.FollowCharactor:
+                    FollowCharactor(characters);
+                    break;
+
+                case CreatureMovetype.Random:
+                    MoveRandomly(Rnd);
+                    break;
+            }
+        }
+
+        private void FollowCharactor(List<Character> characters)
+        {
             // Se om vi skal løbe efter en spiller
             var collisionWithPlayer = CollidesViewPlayer(characters);
             if (collisionWithPlayer != null)
             {
-                Action = NpcAction.FollowPlayer;
+                Action = CreatureAction.FollowPlayer;
                 MoveTowardsLocation(collisionWithPlayer.Location);
             }
         }
@@ -138,7 +175,7 @@ namespace ElvenCurse.Core.Model.Npcs
 
             if (!_updateNeeded)
             {
-                Action = NpcAction.Idle;
+                Action = CreatureAction.Idle;
             }
         }
 
@@ -149,18 +186,6 @@ namespace ElvenCurse.Core.Model.Npcs
                 a.Location.X <= CurrentLocation.X + _viewDistace &&
                 a.Location.Y >= CurrentLocation.Y - _viewDistace &&
                 a.Location.Y <= CurrentLocation.Y + _viewDistace);
-        }
-
-
-        public dynamic ToIPlayer()
-        {
-            return new
-            {
-                Id,
-                Name,
-                Location = CurrentLocation,
-                Type = Type
-            };
         }
     }
 }

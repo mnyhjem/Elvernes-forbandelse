@@ -1,6 +1,6 @@
-﻿namespace ElvenCurse.Core.Model.Npcs
+﻿namespace ElvenCurse.Core.Model.Creatures
 {
-    public enum Npcmode
+    public enum Creaturemode
     {
         Friendly = 0,
         Hostile = 1,

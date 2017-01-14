@@ -1,4 +1,4 @@
-﻿namespace ElvenCurse.Core.Model.Npcs
+﻿namespace ElvenCurse.Core.Model.Creatures.Npcs
 {
     public enum Npctype
     {

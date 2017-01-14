@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.Creatures.Npcs;
 using ElvenCurse.Core.Model.InteractiveObjects;
-using ElvenCurse.Core.Model.Npcs;
 using ElvenCurse.Core.Utilities;
 using Microsoft.AspNet.SignalR.Hubs;
 
@@ -21,7 +21,7 @@ namespace ElvenCurse.Core.Engines
         private readonly IWorldService _worldService;
         private List<Character> _characters;
         private List<Worldsection> _worldsections;
-        private List<Npc> _npcs;
+        private List<NpcBase> _npcs;
         private List<InteractiveObject> _interactiveObjects;
 
         private Timer _timer;
@@ -385,7 +385,7 @@ namespace ElvenCurse.Core.Engines
                     // update
                     foreach (var npc in _npcs)
                     {
-                        npc.CalculateNextMove(_characters);
+                        npc.Move(_characters);
                         if (npc.UpdateNeeded)
                         {
                             AllInWorldSection(npc.CurrentLocation.WorldsectionId).updateNpc(npc.ToIPlayer());

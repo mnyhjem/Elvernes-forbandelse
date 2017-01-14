@@ -7,8 +7,9 @@ using System.Xml;
 using System.Xml.Serialization;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.Creatures;
+using ElvenCurse.Core.Model.Creatures.Npcs;
 using ElvenCurse.Core.Model.InteractiveObjects;
-using ElvenCurse.Core.Model.Npcs;
 using ElvenCurse.Core.Model.Tilemap;
 using ElvenCurse.Core.Utilities;
 
@@ -160,9 +161,9 @@ namespace ElvenCurse.Core.Services
             }
         }
 
-        public List<Npc> GetAllNpcs()
+        public List<NpcBase> GetAllNpcs()
         {
-            var list = new List<Npc>();
+            var list = new List<NpcBase>();
             using (var con = new SqlConnection(_connectionstring))
             {
                 con.Open();
@@ -174,7 +175,7 @@ namespace ElvenCurse.Core.Services
                     {
                         while (dr.Read())
                         {
-                            Npc npc;
+                            NpcBase npc;
                             switch ((Npctype) dr["type"])
                             {
                                 case Npctype.Hunter:
@@ -197,7 +198,7 @@ namespace ElvenCurse.Core.Services
                             npc.Id = (int) dr["id"];
                             npc.Name = (string) dr["name"];
                             npc.Race = (Npcrace) dr["race"];
-                            npc.Status = (Npcstatus) dr["status"];
+                            npc.Status = (Creaturestatus) dr["status"];
                             npc.CurrentLocation = new Location
                             {
                                 WorldsectionId = (int) dr["CurrentWorldsectionId"],
