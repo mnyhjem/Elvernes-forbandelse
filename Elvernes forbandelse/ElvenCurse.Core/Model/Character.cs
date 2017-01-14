@@ -9,6 +9,13 @@
         public string ConnectionId { get; set; }
 
         public Connectionstatus Connectionstatus { get; set; }
+
+        public int AccumulatedExperience { get; set; }
+
+        public int Level
+        {
+            get { return Utilities.ExperienceCalculations.CurrentlevelFromAccumulatedXp(AccumulatedExperience); }
+        }
     }
 
     public enum Connectionstatus

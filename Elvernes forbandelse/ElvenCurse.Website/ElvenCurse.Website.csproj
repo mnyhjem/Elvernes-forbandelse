@@ -1433,6 +1433,7 @@
     <Content Include="Views\Character\Edit.cshtml" />
     <Content Include="Views\World\Index.cshtml" />
     <Content Include="Views\Chat\Index.cshtml" />
+    <Content Include="Views\World\Gameserverdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

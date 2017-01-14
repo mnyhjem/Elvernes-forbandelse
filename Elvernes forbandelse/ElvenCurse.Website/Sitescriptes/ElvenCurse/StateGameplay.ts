@@ -113,7 +113,7 @@
 
             this.worldsectionnameplate.setPlayerPosition(this.player);
 
-            this.updateNightshadow();
+            //this.updateNightshadow();
         }
 
         private updateNightshadow() {
@@ -240,6 +240,11 @@
 
             $.connection.hub.url = $("#serverpath").text() +"/signalr";
             this.gameHub = $.connection.gameHub;
+
+            if (this.gameHub == undefined) {
+                location.href = '/world/gameserverdown';
+                return;
+            }
 
             //this.gameHub.client.hello = function (text) {
             //    var t = 0;

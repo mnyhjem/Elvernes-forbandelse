@@ -7,7 +7,9 @@ c.Id,
 c.Name, 
 WorldsectionId, 
 X, 
-Y
+Y,
+ws.Name as worldsectionname,
+c.Experience as AccumulatedExperience
 from 
 Characters c 
 left outer join Characterlocations loc on c.Id = loc.characterId 

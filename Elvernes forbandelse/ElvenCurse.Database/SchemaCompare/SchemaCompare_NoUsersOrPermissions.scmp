@@ -9,7 +9,7 @@
   </SourceModelProvider>
   <TargetModelProvider>
     <ConnectionBasedModelProvider>
-      <ConnectionString>Data Source=dev.bookhus.dk;Initial Catalog=ElvenCurse;Persist Security Info=False;User ID=ElvenCurse;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</ConnectionString>
+      <ConnectionString>Data Source=dev.bookhus.dk;Initial Catalog=ElvenCurse;Persist Security Info=True;User ID=ElvenCurse;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</ConnectionString>
     </ConnectionBasedModelProvider>
   </TargetModelProvider>
   <SchemaCompareSettingsService>
@@ -239,6 +239,10 @@
       <PropertyElementName>
         <Name>IgnoreFileSize</Name>
         <Value>True</Value>
+      </PropertyElementName>
+      <PropertyElementName>
+        <Name>AllowUnsafeRowLevelSecurityDataMovement</Name>
+        <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>IncludeCompositeObjects</Name>

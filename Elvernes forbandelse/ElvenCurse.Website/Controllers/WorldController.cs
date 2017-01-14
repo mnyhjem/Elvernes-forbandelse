@@ -30,6 +30,12 @@ namespace ElvenCurse.Website.Controllers
             };
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult Gameserverdown()
+        {
+            return View();
+        }
     }
 
     public class WorldViewmodel

@@ -86,3 +86,4 @@ var ElvenCurse;
     }());
     ElvenCurse.OtherPlayer = OtherPlayer;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=OtherPlayer.js.map

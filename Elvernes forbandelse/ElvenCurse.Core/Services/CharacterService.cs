@@ -27,11 +27,7 @@ namespace ElvenCurse.Core.Services
                     {
                         while (dr.Read())
                         {
-                            characters.Add(new Character
-                            {
-                                Id = (int)dr["id"],
-                                Name = (string)dr["name"]
-                            });
+                            characters.Add(MapCharacter(dr));
                         }
                     }
                 }
@@ -73,25 +69,7 @@ namespace ElvenCurse.Core.Services
                     {
                         while (dr.Read())
                         {
-                            var character = new Character
-                            {
-                                Id = (int) dr["id"],
-                                Name = (string) dr["name"]
-                            };
-
-                            if (dr["Worldsectionid"] == DBNull.Value)
-                            {
-                                character.Location = GetDefaultLocation(character);
-                            }
-                            else
-                            {
-                                character.Location = new Location
-                                {
-                                    WorldsectionId = (int)dr["worldsectionid"],
-                                    X = (int)dr["x"],
-                                    Y = (int)dr["y"]
-                                };
-                            }
+                            var character = MapCharacter(dr);
 
                             return character;
                         }
@@ -132,25 +110,7 @@ namespace ElvenCurse.Core.Services
                     {
                         while (dr.Read())
                         {
-                            var character = new Character
-                            {
-                                Id = (int)dr["id"],
-                                Name = (string)dr["name"]
-                            };
-
-                            if (dr["Worldsectionid"] == DBNull.Value)
-                            {
-                                character.Location = GetDefaultLocation(character);
-                            }
-                            else
-                            {
-                                character.Location = new Location
-                                {
-                                    WorldsectionId = (int)dr["worldsectionid"],
-                                    X = (int)dr["x"],
-                                    Y = (int)dr["y"]
-                                };
-                            }
+                            var character = MapCharacter(dr);
 
                             return character;
                         }
@@ -182,13 +142,41 @@ namespace ElvenCurse.Core.Services
             // Save inventory and so on...
         }
 
+        private Character MapCharacter(IDataRecord dr)
+        {
+            var character = new Character
+            {
+                Id = (int)dr["id"],
+                Name = (string)dr["name"],
+                AccumulatedExperience = (int)dr["AccumulatedExperience"]
+            };
+
+            if (dr["Worldsectionid"] == DBNull.Value)
+            {
+                character.Location = GetDefaultLocation(character);
+            }
+            else
+            {
+                character.Location = new Location
+                {
+                    WorldsectionId = (int)dr["worldsectionid"],
+                    X = (int)dr["x"],
+                    Y = (int)dr["y"],
+                    Name = (string)dr["worldsectionname"]
+                };
+            }
+
+            return character;
+        }
+
         private Location GetDefaultLocation(Character character)
         {
             return new Location
             {
                 X = 80,
                 Y = 30,
-                WorldsectionId = 3
+                WorldsectionId = 3,
+                Name = "Igtegator"
             };
         }
     }

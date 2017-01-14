@@ -95,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CharacterService.cs" />
     <Compile Include="Services\WorldService.cs" />
+    <Compile Include="Utilities\ExperienceCalculations.cs" />
     <Compile Include="Utilities\ExtensionsAndUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
