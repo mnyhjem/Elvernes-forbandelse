@@ -8,7 +8,7 @@
 <div class="row" style="font-family: verdana;">
     <div class="col-md-2">
         
-        <p>@Html.ActionLink("Ny figur", "Create", "Character", new { @class = "btn btn-default" })</p>
+        <p>@Html.ActionLink("Ny figur", "Create", null, new { @class = "btn btn-default" })</p>
 
         <ul id="characterlist">
             @foreach (var character in Model.Characters)

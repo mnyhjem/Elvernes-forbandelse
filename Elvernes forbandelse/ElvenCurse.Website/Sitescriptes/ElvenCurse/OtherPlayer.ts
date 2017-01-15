@@ -4,7 +4,9 @@
         player:IPlayer;
         nameplate: Nameplate;
         group: Phaser.Group;
-        playerSprite:Phaser.Sprite;
+        playerSprite: Phaser.Sprite;
+
+        shownAsDead:boolean;
 
         constructor(game: Phaser.Game, player: IPlayer) {
             this.game = game;
@@ -25,7 +27,7 @@
         //    this.game.world.bringToTop(this.playerGroup);
         //}
         
-        public updatePosition(player: IPlayer) {
+        public updatePlayer(player: IPlayer) {
             this.player = player;
         }
 
@@ -48,6 +50,15 @@
             this.playerSprite.x = x;
             this.playerSprite.y = y;
             this.nameplate.setPosition(x, y);
+
+            this.checkDead();
+        }
+
+        public checkDead() {
+            if (!this.shownAsDead && !this.player.isAlive) {
+                this.playAnimation("hurtBack");
+                this.shownAsDead = true;
+            }
         }
 
         public destroy() {
@@ -92,10 +103,10 @@
             this.playerSprite.animations.add("shootRight", Phaser.ArrayUtils.numberArray(19 * imagesPerRow, 19 * imagesPerRow + 6));
 
             // hurt
-            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 6));
+            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
 
             //this.playerSprite.animations.play("shootRight", 10, false);
         }

@@ -1,5 +1,7 @@
 ﻿module ElvenCurse {
     export class Player implements IPlayer {
+        health: number;
+        isAlive: boolean;
         //rotationSpeed = 50;
         moveSpeed = 80;
 
@@ -28,6 +30,21 @@
             this.playerGroup = this.game.add.group();
             this.playerGroup.add(this.playerSprite);
             this.playerGroup.add(this.nameplate.group);
+
+            
+        }
+
+        public updatePlayer(player: IPlayer) {
+            this.location.x = player.location.x;
+            this.location.y = player.location.y;
+            this.location.worldsectionId = player.location.worldsectionId;
+
+            this.health = player.health;
+            this.isAlive = player.isAlive;
+
+            if (!this.isAlive) {
+                this.playAnimation("hurtBack");
+            }
         }
 
         //public bringToTop() {
@@ -41,6 +58,10 @@
             this.playerSprite.body.velocity.y = 0;
             this.playerSprite.body.angularVelocity = 0;
 
+            if (this.isAlive === false) {
+                return;
+            }
+            
             var angleToMove = -1;
             
             if ((cursors.right.isDown && cursors.down.isDown) || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
@@ -135,12 +156,12 @@
             this.playerSprite.animations.add("shootRight", Phaser.ArrayUtils.numberArray(19 * imagesPerRow, 19 * imagesPerRow + 6));
 
             // hurt
-            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 6));
+            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
 
-            //this.playerSprite.animations.play("shootRight", 10, false);
+            
         }
 
         private playAnimation(animationName: string) {

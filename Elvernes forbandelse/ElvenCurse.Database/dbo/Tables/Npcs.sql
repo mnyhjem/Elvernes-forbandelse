@@ -5,5 +5,7 @@
     [Name] NVARCHAR(20) NOT NULL, 
     [Status] INT NOT NULL, 
     [Mode] INT NOT NULL DEFAULT 0, 
-    [Race] INT NOT NULL DEFAULT 0
+    [Race] INT NOT NULL DEFAULT 0, 
+    [Level] INT NOT NULL DEFAULT 1, 
+    [Basehealth] INT NOT NULL DEFAULT 70
 )

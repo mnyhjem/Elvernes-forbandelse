@@ -22,13 +22,32 @@ namespace ElvenCurse.Core.Utilities
 
         public static bool IsWithinReachOf(this Location fromLocation, Location targetLocation, int maxDistance)
         {
-            if (Math.Abs(targetLocation.X - fromLocation.X) <= maxDistance &&
-                Math.Abs(targetLocation.Y - fromLocation.Y) <= maxDistance)
-            {
-                return true;
-            }
-            
-            return false;
+            var res = GetSquaredDistance(fromLocation, targetLocation);
+
+            return res < maxDistance * maxDistance;
+
+
+            //    if (Math.Abs(targetLocation.X - fromLocation.X) <= maxDistance &&
+            //        Math.Abs(targetLocation.Y - fromLocation.Y) <= maxDistance)
+            //    {
+            //        return true;
+            //    }
+
+            //    return false;
+        }
+
+        public static int GetDistanceBetweenLocations(this Location fromLocation, Location targetLocation)
+        {
+            var res = GetSquaredDistance(fromLocation, targetLocation);
+
+            return (int)Math.Sqrt(res);
+        }
+
+        private static int GetSquaredDistance(Location fromLocation, Location targetLocation)
+        {
+            var res = ((fromLocation.X - targetLocation.X) * (fromLocation.X - targetLocation.X) + (fromLocation.Y - targetLocation.Y) * (fromLocation.Y - targetLocation.Y));
+
+            return res;
         }
 
         public static T ParseXML<T>(this string @this) where T : class

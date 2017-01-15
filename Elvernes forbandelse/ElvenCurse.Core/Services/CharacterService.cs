@@ -37,6 +37,11 @@ namespace ElvenCurse.Core.Services
 
         public bool CreateNewCharacter(string userId, Character model)
         {
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                return false;
+            }
+
             using (var con = new SqlConnection(_connectionstring))
             {
                 con.Open();
@@ -137,6 +142,17 @@ namespace ElvenCurse.Core.Services
 
                     cmd.ExecuteNonQuery();
                 }
+
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SetCharacterStatus";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("characterId", character.Id));
+                    cmd.Parameters.Add(new SqlParameter("isAlive", character.IsAlive));
+
+
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             // Save inventory and so on...
@@ -148,8 +164,13 @@ namespace ElvenCurse.Core.Services
             {
                 Id = (int)dr["id"],
                 Name = (string)dr["name"],
-                AccumulatedExperience = (int)dr["AccumulatedExperience"]
+                AccumulatedExperience = (int)dr["AccumulatedExperience"],
+                Basehealth = (int)dr["BaseHealth"]
             };
+            if (!(bool) dr["IsAlive"])
+            {
+                character.SetHealth(0);
+            }
 
             if (dr["Worldsectionid"] == DBNull.Value)
             {

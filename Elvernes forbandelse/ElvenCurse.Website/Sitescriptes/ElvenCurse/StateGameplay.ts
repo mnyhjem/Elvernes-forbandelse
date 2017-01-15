@@ -272,7 +272,7 @@
                             self.players.splice(i, 1);
                             return;
                         }
-                        self.players[i].updatePosition(player);
+                        self.players[i].updatePlayer(player);
                         return;
                     }
                 }
@@ -298,7 +298,7 @@
                             self.npcs.splice(i, 1);
                             return;
                         }
-                        self.npcs[i].updatePosition(npc);
+                        self.npcs[i].updatePlayer(npc);
                         return;
                     }
                 }
@@ -337,9 +337,7 @@
 
             this.gameHub.client.updateOwnPlayer = function (player: IPlayer) {
                 self.log("updateOwnPlayer callback");
-                self.player.location.x = player.location.x;
-                self.player.location.y = player.location.y;
-                self.player.location.worldsectionId = player.location.worldsectionId;
+                self.player.updatePlayer(player);
                 self.placeplayer(player.location.x, player.location.y);
             }
 

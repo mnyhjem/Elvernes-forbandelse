@@ -198,7 +198,9 @@ namespace ElvenCurse.Core.Services
                             npc.Id = (int) dr["id"];
                             npc.Name = (string) dr["name"];
                             npc.Race = (Npcrace) dr["race"];
-                            npc.Status = (Creaturestatus) dr["status"];
+                            npc.Level = (int) dr["Level"];
+                            //npc.Status = (Creaturestatus) dr["status"];
+                            npc.Basehealth = (int) dr["BaseHealth"];
                             npc.CurrentLocation = new Location
                             {
                                 WorldsectionId = (int) dr["CurrentWorldsectionId"],

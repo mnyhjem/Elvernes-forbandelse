@@ -5,5 +5,7 @@
     [Name] NVARCHAR(20) NOT NULL, 
     [IsOnline] BIT NOT NULL DEFAULT 0, 
     [Experience] INT NOT NULL DEFAULT 0, 
+    [BaseHealth] INT NOT NULL DEFAULT 125, 
+    [IsAlive] BIT NOT NULL DEFAULT 1, 
     CONSTRAINT [FK_Characters_AspNetUsers] FOREIGN KEY (UserId) REFERENCES [AspNetUsers]([Id])
 )

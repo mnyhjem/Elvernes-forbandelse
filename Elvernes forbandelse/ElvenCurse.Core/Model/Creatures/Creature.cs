@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using ElvenCurse.Core.Utilities;
 
 namespace ElvenCurse.Core.Model.Creatures
 {
@@ -17,9 +19,39 @@ namespace ElvenCurse.Core.Model.Creatures
         public Location CurrentLocation { get; set; }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public Creaturestatus Status { get; set; }
+        public bool IsAlive
+        {
+            get { return _health > 0; }
+        }
 
         public Creaturemode Mode { get; set; }
+
+        public int Level { get; set; }
+
+        public int Basehealth
+        {
+            get
+            {
+                return _baseHealth;
+            }
+            set
+            {
+                _baseHealth = value;
+                ResetHealth();
+            }
+        }
+
+        private int _baseHealth;
+
+        public virtual int Health
+        {
+            get { return _health; }
+        }
+
+        private int _health;
+
+        public List<CreatureAbility> Abilities { get; set; }
+        public Stack<AffectedByAbility> AffectedByAbilities { get; set; }
 
         private readonly int _viewDistace;
         protected readonly int AttackDistance;
@@ -44,6 +76,18 @@ namespace ElvenCurse.Core.Model.Creatures
         {
             _viewDistace = viewDistance;
             AttackDistance = attackDistance;
+            Abilities = new List<CreatureAbility>();
+            AffectedByAbilities = new Stack<AffectedByAbility>();
+        }
+
+        public void ResetHealth()
+        {
+            _health = _baseHealth + (15 * Level) - 15;
+        }
+
+        public void SetHealth(int health)
+        {
+            _health = health;
         }
 
         /// <summary>
@@ -53,18 +97,39 @@ namespace ElvenCurse.Core.Model.Creatures
         /// <returns>True if we did attack someone</returns>
         public abstract bool Attack(Character characterToAttack);
 
-        public bool IsWithinDistance(Location location1, Location location2, int distance)
+        //public bool IsWithinDistance(Location location1, Location location2, int distance)
+        //{
+
+
+        //    //return !(CurrentLocation.X > DefaultLocation.X + _maxDistanceFromDefault ||
+        //    //        CurrentLocation.X < DefaultLocation.X - _maxDistanceFromDefault ||
+        //    //        CurrentLocation.Y > DefaultLocation.Y + _maxDistanceFromDefault ||
+        //    //        CurrentLocation.Y < DefaultLocation.Y - _maxDistanceFromDefault);
+        //}
+
+        public void ProcessAffectedby()
         {
-            return !(CurrentLocation.X > DefaultLocation.X + _maxDistanceFromDefault ||
-                    CurrentLocation.X < DefaultLocation.X - _maxDistanceFromDefault ||
-                    CurrentLocation.Y > DefaultLocation.Y + _maxDistanceFromDefault ||
-                    CurrentLocation.Y < DefaultLocation.Y - _maxDistanceFromDefault);
+            if (AffectedByAbilities.Count > 0)
+            {
+                _updateNeeded = true;
+            }
+
+            while (AffectedByAbilities.Count > 0)
+            {
+                var a = AffectedByAbilities.Pop();
+                _health += a.Healtheffect;
+
+                if (_health <= 0)
+                {
+                    Trace.WriteLine(string.Format("{0} døede", Name));
+                }
+            }
         }
 
         public virtual void CalculateNextMove(List<Character> characters, CreatureMovetype movetype)
         {
             // Se om vi er for langt væk fra vores "hjem"
-            if (Action == CreatureAction.ReturnToDefaultLocation || !IsWithinDistance(CurrentLocation, DefaultLocation, _maxDistanceFromDefault))
+            if (Action == CreatureAction.ReturnToDefaultLocation || !CurrentLocation.IsWithinReachOf(DefaultLocation, _maxDistanceFromDefault))
             {
                 Action = CreatureAction.ReturnToDefaultLocation;
                 MoveTowardsLocation(DefaultLocation);
@@ -181,11 +246,12 @@ namespace ElvenCurse.Core.Model.Creatures
 
         protected Character CollidesViewPlayer(List<Character> characters)
         {
-            return characters.FirstOrDefault(a => (a.Location.WorldsectionId == CurrentLocation.WorldsectionId) &&
-                a.Location.X >= CurrentLocation.X - _viewDistace &&
-                a.Location.X <= CurrentLocation.X + _viewDistace &&
-                a.Location.Y >= CurrentLocation.Y - _viewDistace &&
-                a.Location.Y <= CurrentLocation.Y + _viewDistace);
+            return characters.FirstOrDefault(a => (a.Location.WorldsectionId == CurrentLocation.WorldsectionId) && a.IsAlive && a.Location.IsWithinReachOf(CurrentLocation, _viewDistace));
+            //return characters.FirstOrDefault(a => (a.Location.WorldsectionId == CurrentLocation.WorldsectionId) &&
+            //    a.Location.X >= CurrentLocation.X - _viewDistace &&
+            //    a.Location.X <= CurrentLocation.X + _viewDistace &&
+            //    a.Location.Y >= CurrentLocation.Y - _viewDistace &&
+            //    a.Location.Y <= CurrentLocation.Y + _viewDistace);
         }
     }
 }

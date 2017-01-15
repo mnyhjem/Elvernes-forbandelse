@@ -15,7 +15,7 @@ var ElvenCurse;
                 this.npcSprite.animations.play(animationName, 10, false);
             }
         };
-        NpcBase.prototype.updatePosition = function (npc) {
+        NpcBase.prototype.updatePlayer = function (npc) {
             this.npc = npc;
         };
         NpcBase.prototype.placeGroup = function () {
@@ -53,4 +53,3 @@ var ElvenCurse;
     }());
     ElvenCurse.NpcBase = NpcBase;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=NpcBase.js.map

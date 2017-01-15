@@ -13,5 +13,7 @@
         playerSprite: Phaser.Sprite;
         connectionstatus: number;
         type: number;
+        health: number;
+        isAlive:boolean;
     }
 }

@@ -24,7 +24,7 @@
             }
         }
 
-        public updatePosition(npc: IPlayer) {
+        public updatePlayer(npc: IPlayer) {
             this.npc = npc;
         }
 

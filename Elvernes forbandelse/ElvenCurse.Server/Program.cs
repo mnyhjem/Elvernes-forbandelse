@@ -13,7 +13,7 @@ namespace ElvenCurse.Server
         static void Main()
         {
             Trace.Listeners.RemoveAt(0);
-            Trace.Listeners.Add(new ConsoleTraceListener());
+            //Trace.Listeners.Add(new ConsoleTraceListener());
 
             var url = ConfigurationManager.AppSettings["serverPath"];
             using (WebApp.Start(url))

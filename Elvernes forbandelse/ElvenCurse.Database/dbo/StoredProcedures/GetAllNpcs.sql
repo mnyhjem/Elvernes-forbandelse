@@ -14,7 +14,9 @@ loc.DefaultX,
 loc.DefaultY,
 loc.CurrentWorldsectionId, 
 loc.CurrentX, 
-loc.CurrentY
+loc.CurrentY,
+npc.Level,
+npc.Basehealth
 from 
 Npcs npc 
 left outer join NpcLocations loc on npc.Id = loc.NpcId

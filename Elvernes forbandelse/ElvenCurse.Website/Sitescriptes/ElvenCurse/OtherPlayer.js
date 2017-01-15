@@ -14,7 +14,7 @@ var ElvenCurse;
         //    //this.playerSprite.bringToTop();
         //    this.game.world.bringToTop(this.playerGroup);
         //}
-        OtherPlayer.prototype.updatePosition = function (player) {
+        OtherPlayer.prototype.updatePlayer = function (player) {
             this.player = player;
         };
         OtherPlayer.prototype.placeGroup = function () {
@@ -35,6 +35,13 @@ var ElvenCurse;
             this.playerSprite.x = x;
             this.playerSprite.y = y;
             this.nameplate.setPosition(x, y);
+            this.checkDead();
+        };
+        OtherPlayer.prototype.checkDead = function () {
+            if (!this.shownAsDead && !this.player.isAlive) {
+                this.playAnimation("hurtBack");
+                this.shownAsDead = true;
+            }
         };
         OtherPlayer.prototype.destroy = function () {
             //this.playerGroup.removeAll(true);
@@ -71,10 +78,10 @@ var ElvenCurse;
             this.playerSprite.animations.add("shootFront", Phaser.ArrayUtils.numberArray(18 * imagesPerRow, 18 * imagesPerRow + 6));
             this.playerSprite.animations.add("shootRight", Phaser.ArrayUtils.numberArray(19 * imagesPerRow, 19 * imagesPerRow + 6));
             // hurt
-            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 6));
+            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
             //this.playerSprite.animations.play("shootRight", 10, false);
         };
         OtherPlayer.prototype.playAnimation = function (animationName) {
@@ -86,4 +93,3 @@ var ElvenCurse;
     }());
     ElvenCurse.OtherPlayer = OtherPlayer;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=OtherPlayer.js.map

@@ -1,9 +1,20 @@
-﻿namespace ElvenCurse.Core.Model
+﻿using ElvenCurse.Core.Model.Creatures;
+
+namespace ElvenCurse.Core.Model
 {
-    public class Character
+    public class Character : Creature
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public Character() : base(0, 0)
+        {
+        }
+
+        public override bool Attack(Character characterToAttack)
+        {
+            return false;
+        }
+
+        //public int Id { get; set; }
+        //public string Name { get; set; }
         public Location Location { get; set; }
 
         public string ConnectionId { get; set; }

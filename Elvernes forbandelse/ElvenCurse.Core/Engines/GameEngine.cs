@@ -104,12 +104,12 @@ namespace ElvenCurse.Core.Engines
             {
                 foundPlayer = c;
                 _characters.Add(c);
-                //Trace.WriteLine($"{foundPlayer.Name} entered the world");
+                Trace.WriteLine($"{foundPlayer.Name} entered the world");
             }
             else
             {
                 foundPlayer.ConnectionId = connectionId;
-                //Trace.WriteLine($"{foundPlayer.Name} reconnected to the world");
+                Trace.WriteLine($"{foundPlayer.Name} reconnected to the world");
             }
 
             foundPlayer.Connectionstatus = Connectionstatus.Online;
@@ -127,7 +127,7 @@ namespace ElvenCurse.Core.Engines
 
                 _characterService.SavePlayerinformation(c);
 
-                //Trace.WriteLine($"{c.Name} left the world");
+                Trace.WriteLine($"{c.Name} left the world");
             }
         }
 
@@ -386,9 +386,32 @@ namespace ElvenCurse.Core.Engines
                     foreach (var npc in _npcs)
                     {
                         npc.Move(_characters);
+
+                        npc.ProcessAffectedby();
+
                         if (npc.UpdateNeeded)
                         {
                             AllInWorldSection(npc.CurrentLocation.WorldsectionId).updateNpc(npc.ToIPlayer());
+                        }
+                    }
+
+                    // kør affected by for alle characters
+                    foreach (var c in _characters)
+                    {
+                        c.ProcessAffectedby();
+
+                        if (c.UpdateNeeded)
+                        {
+                            //AllInWorldSection(c.Location.WorldsectionId).updatePlayer(c);
+                            // opdater vores egen spiller på kortet
+                            var ownPlayer = _characters.FirstOrDefault(a => a.Id == c.Id);
+                            if (ownPlayer != null)
+                            {
+                                _clients.Client(ownPlayer.ConnectionId).updateOwnPlayer(c);
+                            }
+                            
+                            // fortæl de andre spillere at vi er kommet
+                            AllInWorldSectionExceptCurrent(c).updatePlayer(c);
                         }
                     }
 

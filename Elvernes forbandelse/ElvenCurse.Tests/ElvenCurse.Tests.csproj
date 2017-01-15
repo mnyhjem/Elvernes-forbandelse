@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Core\CreatureTests.cs" />
     <Compile Include="Core\ExtensionsAndUtilityTests.cs" />
     <Compile Include="Core\XpCalculations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

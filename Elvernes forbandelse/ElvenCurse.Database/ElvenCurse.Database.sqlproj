@@ -95,6 +95,7 @@
     <Build Include="dbo\StoredProcedures\SaveTerrain.sql" />
     <Build Include="dbo\StoredProcedures\GetAllTerrains.sql" />
     <Build Include="dbo\StoredProcedures\GetTerrain.sql" />
+    <Build Include="dbo\StoredProcedures\SetCharacterStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

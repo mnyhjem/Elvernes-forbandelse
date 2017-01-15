@@ -12,6 +12,16 @@ var ElvenCurse;
             this.playerGroup.add(this.playerSprite);
             this.playerGroup.add(this.nameplate.group);
         }
+        Player.prototype.updatePlayer = function (player) {
+            this.location.x = player.location.x;
+            this.location.y = player.location.y;
+            this.location.worldsectionId = player.location.worldsectionId;
+            this.health = player.health;
+            this.isAlive = player.isAlive;
+            if (!this.isAlive) {
+                this.playAnimation("hurtBack");
+            }
+        };
         //public bringToTop() {
         //    //this.playerSprite.bringToTop();
         //    this.game.world.bringToTop(this.playerGroup);
@@ -20,6 +30,9 @@ var ElvenCurse;
             this.playerSprite.body.velocity.x = 0;
             this.playerSprite.body.velocity.y = 0;
             this.playerSprite.body.angularVelocity = 0;
+            if (this.isAlive === false) {
+                return;
+            }
             var angleToMove = -1;
             if ((cursors.right.isDown && cursors.down.isDown) || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
                 angleToMove = 45;
@@ -103,11 +116,10 @@ var ElvenCurse;
             this.playerSprite.animations.add("shootFront", Phaser.ArrayUtils.numberArray(18 * imagesPerRow, 18 * imagesPerRow + 6));
             this.playerSprite.animations.add("shootRight", Phaser.ArrayUtils.numberArray(19 * imagesPerRow, 19 * imagesPerRow + 6));
             // hurt
-            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 6));
-            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 6));
-            //this.playerSprite.animations.play("shootRight", 10, false);
+            this.playerSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
+            this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
         };
         Player.prototype.playAnimation = function (animationName) {
             if (!this.playerSprite.animations.getAnimation(animationName).isPlaying) {
@@ -118,4 +130,3 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Player.js.map

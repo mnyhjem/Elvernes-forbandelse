@@ -37,10 +37,10 @@ namespace ElvenCurse.Website.Controllers
         [HttpPost]
         public ActionResult Create(Character model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Edit");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View("Edit");
+            //}
 
             if (!_characterService.CreateNewCharacter(User.Identity.GetUserId(), model))
             {
