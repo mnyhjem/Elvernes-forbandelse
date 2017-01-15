@@ -20,12 +20,7 @@ namespace ElvenCurse.Core.Services
         private Random _rnd = new Random();
 
         private readonly string _connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-        public IEnumerable<Character> GetOnlineCharacters()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public void EnterWorld(string getUserId)
         {
             throw new NotImplementedException();

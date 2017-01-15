@@ -40,7 +40,7 @@
             }
             if (this.playerSprite.x > x) {
                 this.playAnimation("walkLeft");
-            }
+            } 
             if (this.playerSprite.y > y) {
                 this.playAnimation("walkBack");
             }

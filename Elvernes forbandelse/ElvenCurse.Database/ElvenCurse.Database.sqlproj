@@ -96,6 +96,10 @@
     <Build Include="dbo\StoredProcedures\GetAllTerrains.sql" />
     <Build Include="dbo\StoredProcedures\GetTerrain.sql" />
     <Build Include="dbo\StoredProcedures\SetCharacterStatus.sql" />
+    <Build Include="dbo\Tables\MessageQueue.sql" />
+    <Build Include="dbo\StoredProcedures\GetOnlineCharacters.sql" />
+    <Build Include="dbo\StoredProcedures\GetMessageQueue.sql" />
+    <Build Include="dbo\StoredProcedures\QueueMessagequeueElement.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

@@ -35,6 +35,28 @@ namespace ElvenCurse.Core.Services
             return characters;
         }
 
+        public List<Character> GetOnlineCharacters()
+        {
+            var characters = new List<Character>();
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetOnlineCharacters";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            characters.Add(MapCharacter(dr));
+                        }
+                    }
+                }
+            }
+            return characters;
+        }
+
         public bool CreateNewCharacter(string userId, Character model)
         {
             if (string.IsNullOrWhiteSpace(model.Name))

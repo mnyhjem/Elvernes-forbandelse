@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
@@ -9,6 +12,42 @@ namespace ElvenCurse.Core.Utilities
 {
     public static class ExtensionsAndUtilities
     {
+        public static string GetDisplayname(this Enum enumValue)
+        {
+            try
+            {
+                var attr = enumValue.GetType().GetMember(enumValue.ToString()).First().GetCustomAttribute<DisplayAttribute>();
+
+                //Der checkes på om resourceType er null, da getproperty fejlede i situationer, hvor dette var null
+                var resourname = "";
+                if (attr.ResourceType != null)
+                {
+                    resourname = attr.ResourceType.GetProperty(attr.Name).GetValue(null, null) as string;
+                }
+
+                if (!string.IsNullOrWhiteSpace(resourname))
+                {
+                    return resourname;
+                }
+                return attr.Name;
+            }
+            catch (TypeLoadException)
+            {
+            }
+            catch (InvalidOperationException)
+            {// denne kommer hvis enumværdien mangler
+            }
+            catch (AmbiguousMatchException)
+            {
+            }
+            catch (NullReferenceException)
+            {
+                // Denne kommer hvis der ikke er en [Display] halløj på vores enum.. vi returnere vi bare værdien uændret :)
+                return enumValue.ToString();
+            }
+            return "Intet navn";
+        }
+
         public static T DeepCopy<T>(T obj)
         {
             using (var stream = new MemoryStream())

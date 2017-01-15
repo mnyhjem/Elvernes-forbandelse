@@ -30,3 +30,4 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.Bunny = Bunny;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Bunny.js.map

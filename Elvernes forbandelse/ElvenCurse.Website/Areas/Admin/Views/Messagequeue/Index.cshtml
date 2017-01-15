@@ -1,0 +1,93 @@
+﻿@model ElvenCurse.Website.Areas.Admin.Controllers.MessagequeueViewmodel
+
+@{
+    ViewBag.Title = "title";
+    //Layout = "_Layout";
+}
+
+<h2>Message queue</h2>
+<div class="row" style="font-family: verdana;">
+    @using (Html.BeginForm("Queue", "MessageQueue", FormMethod.Post))
+    {
+        <div class="col-md-2"><br/>
+            Teleport
+            @*@Html.LabelFor(a=>a.Type)
+                @Html.EditorFor(a=>a.Type, "EnumDropDown")*@
+            @Html.HiddenFor(a => a.Type, new { value = "0" })
+        </div>
+
+        <div class="col-md-2 form-group">
+            @Html.LabelFor(a => a.CharacterId)
+            @Html.DropDownListFor(a => a.CharacterId, new SelectList(Model.Characters.OrderBy(x => x.Key), "Value", "Key", Model.CharacterId), new { @class = "form-control", style = "width:auto;display:inline-block" })
+        </div>
+
+        <div class="col-md-2 form-group">
+            @Html.LabelFor(a => a.WorldsectionId)
+            @Html.DropDownListFor(a => a.WorldsectionId, new SelectList(Model.Worldsections.OrderBy(x => x.Key), "Value", "Key", Model.WorldsectionId), new { @class = "form-control", style = "width:auto;display:inline-block" })
+        </div>
+
+        <div class="col-md-2 form-group">
+            @Html.LabelFor(a => a.DestinationX)
+            @Html.TextBoxFor(a=>a.DestinationX, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2 form-group">
+            @Html.LabelFor(a=>a.DestinationY)
+            @Html.TextBoxFor(a => a.DestinationY, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2"><br/>
+            <input type="submit" value="Udfør" class="btn btn-default"/>
+        </div>
+    }
+</div>
+
+<div class="row" style="font-family: verdana;">
+    @using (Html.BeginForm("Queue", "MessageQueue", FormMethod.Post))
+    {
+        <div class="col-md-2">
+            <br />
+            Revieve
+            @*@Html.LabelFor(a=>a.Type)
+                @Html.EditorFor(a=>a.Type, "EnumDropDown")*@
+            @Html.HiddenFor(a => a.Type, new { value = "1" })
+        </div>
+
+        <div class="col-md-2 form-group">
+            @Html.LabelFor(a => a.CharacterId)
+            @Html.DropDownListFor(a => a.CharacterId, new SelectList(Model.Characters.OrderBy(x => x.Key), "Value", "Key", Model.CharacterId), new { @class = "form-control", style = "width:auto;display:inline-block" })
+        </div>
+        
+        <div class="col-md-2">
+            <br />
+            <input type="submit" value="Udfør" class="btn btn-default" />
+        </div>
+    }
+</div>
+
+
+<div class="row" style="font-family: verdana;">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <head>
+                <tr>
+                    <th>Type</th>
+                    <th>Parameters</th>
+                    <th>Queuetime</th>
+                </tr>
+            </head>
+            <tbody>
+                @foreach (var qe in Model.Queuemessages)
+                {
+                    <tr>
+                        <td>@qe.Type</td>
+                        <td>@qe.Parameters</td>
+                        <td>@qe.Queuetime</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+    

@@ -229,6 +229,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\MessagequeueController.cs" />
     <Compile Include="Areas\Admin\Controllers\WorldconfigurationController.cs" />
     <Compile Include="Areas\Admin\Models\WorldconfigurationViewmodel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -1362,6 +1363,8 @@
     <Content Include="Content\Assets\Graphics\Npcs\whtdragons_MVanimals_ALL\animals\bunny.psd" />
     <Content Include="Content\Assets\Graphics\Npcs\whtdragons_MVanimals_ALL\animals\pspbrwse.jbf" />
     <Content Include="Content\Assets\Graphics\Npcs\whtdragons_MVanimals_ALL\dragons and wyverns\pspbrwse.jbf" />
+    <Content Include="Areas\Admin\Views\Messagequeue\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\EditorTemplates\EnumDropDown.cshtml" />
     <None Include="Properties\PublishProfiles\Filepublish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

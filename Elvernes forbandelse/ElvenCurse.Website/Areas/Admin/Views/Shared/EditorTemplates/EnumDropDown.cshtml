@@ -1,0 +1,25 @@
+﻿@using ElvenCurse.Core.Utilities
+@model Enum
+
+@{
+    
+    var dropDownItems = new List<SelectListItem>();
+    foreach (var value in Enum.GetValues(Model.GetType()))
+    {
+        var text = string.Empty;
+        var enumValue = value as Enum;
+        if (enumValue != null)
+        {
+            text = enumValue.GetDisplayname();
+        }
+        dropDownItems.Add(new SelectListItem
+        {
+            Value = ((int)value).ToString(),
+            Text = text,
+            Selected = value.Equals(Model)
+        });
+    }
+
+    @Html.DropDownListFor(a => a, dropDownItems, null, new { @class = "form-control" })
+
+}
