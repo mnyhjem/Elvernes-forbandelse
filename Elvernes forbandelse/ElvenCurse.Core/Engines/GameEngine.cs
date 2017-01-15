@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using ElvenCurse.Core.Engines.Messagequeue;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.Creatures.Npcs;
@@ -19,6 +20,7 @@ namespace ElvenCurse.Core.Engines
         private readonly IHubConnectionContext<dynamic> _clients;
         private readonly ICharacterService _characterService;
         private readonly IWorldService _worldService;
+        private readonly IMessagequeueService _messagequeueService;
         private List<Character> _characters;
         private List<Worldsection> _worldsections;
         private List<NpcBase> _npcs;
@@ -29,6 +31,11 @@ namespace ElvenCurse.Core.Engines
         private readonly object _timerUpdateLock = new object();
         private volatile bool _updatingTimer;
 
+        private Timer _messageQueueTimer;
+        private readonly TimeSpan _messageQueueUpdateInterval = TimeSpan.FromMilliseconds(5000);
+        private readonly object _messageQueueUpdateLock = new object();
+        private volatile bool _messageQueueUpdatingTimer;
+        
         private readonly DateTime _serverBoottime;
 
         public int Onlinecount
@@ -57,7 +64,8 @@ namespace ElvenCurse.Core.Engines
         public GameEngine(
             IHubConnectionContext<dynamic> clients, 
             ICharacterService characterService,
-            IWorldService worldService)
+            IWorldService worldService,
+            IMessagequeueService messagequeueService)
         {
             _serverBoottime = DateTime.Now;
             Trace.WriteLine($"Server bootup at {_serverBoottime}");
@@ -65,12 +73,14 @@ namespace ElvenCurse.Core.Engines
             _clients = clients;
             _characterService = characterService;
             _worldService = worldService;
+            _messagequeueService = messagequeueService;
             _characters = new List<Character>();
             _worldsections = new List<Worldsection>();
             _npcs = _worldService.GetAllNpcs();
             _interactiveObjects = _worldService.GetAllInteractiveObjects();
 
             _timer = new Timer(TimerTick, null, _timerUpdateInterval, _timerUpdateInterval);
+            _messageQueueTimer = new Timer(MessageQueueTimerTick, null, _messageQueueUpdateInterval, _messageQueueUpdateInterval);
         }
 
         private Worldsection GetWorldsection(int sectionId, bool getReferenceObject = false)
@@ -257,18 +267,23 @@ namespace ElvenCurse.Core.Engines
                     break;
             }
             
+            TeleportUser(c, mapToLoad, newPlayerlocationSuccess, oldPlayerLocation);
+        }
+
+        private void TeleportUser(Character character, int mapToLoad, Location newPlayerlocationSuccess, Location oldPlayerLocation)
+        {
             var map = GetWorldsection(mapToLoad);
             if (map != null)
             {
-                c.Location = newPlayerlocationSuccess;
-                c.Location.WorldsectionId = mapToLoad;
+                character.Location = newPlayerlocationSuccess;
+                character.Location.WorldsectionId = mapToLoad;
                 for (var i = 0; i < map.Tilemap.Layers.Length; i++)
                 {
                     map.Tilemap.Layers[i].Data = null;
                 }
 
                 // fortæl spillerne i den section vi forlader, at vi er taget afsted
-                AllInWorldSection(oldPlayerLocation.WorldsectionId).updatePlayer(c);
+                AllInWorldSection(oldPlayerLocation.WorldsectionId).updatePlayer(character);
 
                 if (map.Tilemap.HasTerrainreferences)
                 {
@@ -293,32 +308,32 @@ namespace ElvenCurse.Core.Engines
             }
             else
             {
-                c.Location = oldPlayerLocation;
+                character.Location = oldPlayerLocation;
             }
 
             // indlæs kort mm.
-            _clients.Client(connectionId).changeMap(map);
-            
+            _clients.Client(character.ConnectionId).changeMap(map);
+
             // placer vores egen spiller på kortet
-            _clients.Client(connectionId).updateOwnPlayer(c);
+            _clients.Client(character.ConnectionId).updateOwnPlayer(character);
 
             // fortæl de andre spillere at vi er kommet
-            AllInWorldSectionExceptCurrent(c).updatePlayer(c);
+            AllInWorldSectionExceptCurrent(character).updatePlayer(character);
 
             // placer de andre spillere på kortet
-            foreach (var otherplacer in _characters.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId && a.ConnectionId != connectionId))
+            foreach (var otherplacer in _characters.Where(a => a.Location.WorldsectionId == character.Location.WorldsectionId && a.ConnectionId != character.ConnectionId))
             {
-                _clients.Client(connectionId).updatePlayer(otherplacer);
+                _clients.Client(character.ConnectionId).updatePlayer(otherplacer);
             }
 
             // placer npcere på kortet
-            foreach (var npc in _npcs.Where(a => a.CurrentLocation.WorldsectionId == c.Location.WorldsectionId))
+            foreach (var npc in _npcs.Where(a => a.CurrentLocation.WorldsectionId == character.Location.WorldsectionId))
             {
-                _clients.Client(connectionId).updateNpc(npc.ToIPlayer());
+                _clients.Client(character.ConnectionId).updateNpc(npc.ToIPlayer());
             }
 
             // placer interactiveobjects på kortet
-            _clients.Client(connectionId).updateInteractiveObjects(_interactiveObjects.Where(a => a.Location.WorldsectionId == c.Location.WorldsectionId));
+            _clients.Client(character.ConnectionId).updateInteractiveObjects(_interactiveObjects.Where(a => a.Location.WorldsectionId == character.Location.WorldsectionId));
         }
 
         public void ClickOnInteractiveObject(string connectionId, string getUserId, int ioId)
@@ -374,6 +389,15 @@ namespace ElvenCurse.Core.Engines
             }
         }
 
+        public void UpdatePlayer(Character character)
+        {
+            // opdater os selv
+            _clients.Client(character.ConnectionId).updateOwnPlayer(character);
+            
+            // fortæl de andre spillere at vi er opdateret
+            AllInWorldSectionExceptCurrent(character).updatePlayer(character);
+        }
+
         private void TimerTick(object state)
         {
             lock (_timerUpdateLock)
@@ -416,6 +440,78 @@ namespace ElvenCurse.Core.Engines
                     }
 
                     _updatingTimer = false;
+                }
+            }
+        }
+
+        private void MessageQueueTimerTick(object state)
+        {
+            lock (_messageQueueUpdateLock)
+            {
+                if (!_messageQueueUpdatingTimer)
+                {
+                    Trace.WriteLine("Running messagequeue");
+
+                    _messageQueueUpdatingTimer = true;
+                    var deadlockCounter = 5;
+
+                    var msgs = _messagequeueService.GetMessagequeue();
+                    foreach (var msg in msgs)
+                    {
+                        var errorMessage = "";
+                        Character user = null;
+
+                        try
+                        {
+                            switch (msg.Type)
+                            {
+                                case Messagetype.Tele:
+                                    var parameters = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(msg.Parameters);
+
+                                    Trace.WriteLine($"Messagequeue: {msg.Type} for bruger id {parameters.CharacterId}");
+                                    user = _characters.FirstOrDefault(a => a.Id == (int)parameters.CharacterId);
+                                    if (user == null)
+                                    {
+                                        errorMessage = "User not found in world";
+                                    }
+                                    else
+                                    {
+                                        TeleportUser(user, (int)parameters.WorldsectionId, new Location {WorldsectionId = (int)parameters.WorldsectionId , X = (int)parameters.X, Y = (int)parameters.Y }, user.Location);
+                                    }
+                                    break;
+
+                                case Messagetype.Revieve:
+                                    Trace.WriteLine($"Messagequeue: {msg.Type} for bruger id {msg.Parameters}");
+                                    user = _characters.FirstOrDefault(a => a.Id == int.Parse(msg.Parameters));
+                                    if (user == null)
+                                    {
+                                        errorMessage = "User not found in world";
+                                    }
+                                    else
+                                    {
+                                        user.ResetHealth();
+                                        UpdatePlayer(user);
+                                    }
+                                    break;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine($"Messagequeue: {ex.Message}");
+                            errorMessage = ex.ToString();
+                        }
+
+                        _messagequeueService.SetMessageAsDone(msg, errorMessage);
+
+                        deadlockCounter--;
+                        if (deadlockCounter <= 0)
+                        {
+                            break;
+                        }
+                    }
+
+
+                    _messageQueueUpdatingTimer = false;
                 }
             }
         }

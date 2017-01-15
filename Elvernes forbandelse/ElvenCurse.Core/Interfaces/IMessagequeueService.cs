@@ -7,5 +7,6 @@ namespace ElvenCurse.Core.Interfaces
     {
         List<Queueelement> GetMessagequeue();
         void Push(Queueelement element);
+        void SetMessageAsDone(Queueelement msg, string errorMessage);
     }
 }

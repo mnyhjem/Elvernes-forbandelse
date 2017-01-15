@@ -75,6 +75,8 @@ namespace ElvenCurse.Server.App_Start
             kernel.Bind<IWorldService>().To<WorldService>();
 
             kernel.Bind<IGameEngine>().To<GameEngine>().InSingletonScope();
+
+            kernel.Bind<IMessagequeueService>().To<MessagequeueService>().InSingletonScope();
         }        
     }
 }

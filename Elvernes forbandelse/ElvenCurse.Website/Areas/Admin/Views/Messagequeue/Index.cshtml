@@ -1,4 +1,5 @@
-﻿@model ElvenCurse.Website.Areas.Admin.Controllers.MessagequeueViewmodel
+﻿@using ElvenCurse.Core.Engines.Messagequeue
+@model ElvenCurse.Website.Areas.Admin.Controllers.MessagequeueViewmodel
 
 @{
     ViewBag.Title = "title";
@@ -50,7 +51,8 @@
             Revieve
             @*@Html.LabelFor(a=>a.Type)
                 @Html.EditorFor(a=>a.Type, "EnumDropDown")*@
-            @Html.HiddenFor(a => a.Type, new { value = "1" })
+            @*@Html.HiddenFor(a => a.Type, new { value = "1" })*@
+            <input name="Type" id="Type" type="hidden" value="@Messagetype.Revieve" data-val-required="The Type field is required." data-val="true">
         </div>
 
         <div class="col-md-2 form-group">

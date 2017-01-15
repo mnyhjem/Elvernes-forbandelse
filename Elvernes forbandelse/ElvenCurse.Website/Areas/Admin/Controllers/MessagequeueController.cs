@@ -68,6 +68,14 @@ namespace ElvenCurse.Website.Areas.Admin.Controllers
 
                     _messagequeueService.Push(element);
                     break;
+
+                case Messagetype.Revieve:
+                    _messagequeueService.Push(new Queueelement
+                    {
+                        Type = Messagetype.Revieve,
+                        Parameters = model.CharacterId.ToString()
+                    });
+                    break;
             }
             return RedirectToAction("Index");
         }

@@ -28,6 +28,10 @@
         //}
         
         public updatePlayer(player: IPlayer) {
+            if (this.shownAsDead && player.isAlive) {
+                this.shownAsDead = false;
+                this.playAnimation("spellcastFront");
+            }
             this.player = player;
         }
 

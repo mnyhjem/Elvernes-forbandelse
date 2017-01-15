@@ -1,16 +1,11 @@
-﻿using System;
-using ElvenCurse.Core.Interfaces;
+﻿using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Server.App_Start;
 using ElvenCurse.Server.Hubs;
 using ElvenCurse.Server.Infrastructure;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Microsoft.Owin;
 using Microsoft.Owin.Cors;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 

@@ -39,11 +39,17 @@
             this.location.y = player.location.y;
             this.location.worldsectionId = player.location.worldsectionId;
 
+            var revieve = this.isAlive === false && player.isAlive === true;
+
             this.health = player.health;
             this.isAlive = player.isAlive;
 
             if (!this.isAlive) {
                 this.playAnimation("hurtBack");
+            }
+
+            if (revieve) {
+                this.playAnimation("spellcastFront");
             }
         }
 

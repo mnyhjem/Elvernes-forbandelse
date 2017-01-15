@@ -15,6 +15,10 @@ var ElvenCurse;
         //    this.game.world.bringToTop(this.playerGroup);
         //}
         OtherPlayer.prototype.updatePlayer = function (player) {
+            if (this.shownAsDead && player.isAlive) {
+                this.shownAsDead = false;
+                this.playAnimation("spellcastFront");
+            }
             this.player = player;
         };
         OtherPlayer.prototype.placeGroup = function () {

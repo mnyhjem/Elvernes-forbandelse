@@ -58,5 +58,22 @@ namespace ElvenCurse.Core.Services
                 }
             }
         }
+
+        public void SetMessageAsDone(Queueelement msg, string errorMessage)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SetQueuemessageAsDone";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("id", msg.Id));
+                    cmd.Parameters.Add(new SqlParameter("errorMessage", errorMessage));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

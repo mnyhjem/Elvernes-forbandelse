@@ -100,6 +100,7 @@
     <Build Include="dbo\StoredProcedures\GetOnlineCharacters.sql" />
     <Build Include="dbo\StoredProcedures\GetMessageQueue.sql" />
     <Build Include="dbo\StoredProcedures\QueueMessagequeueElement.sql" />
+    <Build Include="dbo\StoredProcedures\SetQueuemessageAsDone.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />
