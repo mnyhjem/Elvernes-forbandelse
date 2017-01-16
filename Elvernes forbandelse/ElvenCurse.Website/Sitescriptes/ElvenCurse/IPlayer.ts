@@ -14,6 +14,7 @@
         connectionstatus: number;
         type: number;
         health: number;
-        isAlive:boolean;
+        isAlive: boolean;
+        maxHealth:number;
     }
 }

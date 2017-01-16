@@ -45,10 +45,18 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public virtual int Health
         {
-            get { return _health; }
+            get { return _health < 0 ? 0 : _health; }
         }
 
         private int _health;
+
+        public int MaxHealth
+        {
+            get
+            {
+                return GetMaxHealth();
+            }
+        }
 
         public List<CreatureAbility> Abilities { get; set; }
         public Stack<AffectedByAbility> AffectedByAbilities { get; set; }
@@ -80,9 +88,14 @@ namespace ElvenCurse.Core.Model.Creatures
             AffectedByAbilities = new Stack<AffectedByAbility>();
         }
 
+        protected int GetMaxHealth()
+        {
+            return _baseHealth + (15 * Level) - 15;
+        }
+
         public void ResetHealth()
         {
-            _health = _baseHealth + (15 * Level) - 15;
+            _health = GetMaxHealth();
         }
 
         public void SetHealth(int health)

@@ -33,7 +33,10 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
                 Id,
                 Name,
                 Location = CurrentLocation,
-                Type = Type
+                Type = Type,
+                MaxHealth = GetMaxHealth(),
+                Health = Health,
+                IsAlive = IsAlive
             };
         }
     }

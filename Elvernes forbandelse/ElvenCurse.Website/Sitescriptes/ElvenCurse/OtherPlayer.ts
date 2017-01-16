@@ -14,7 +14,7 @@
 
             this.createPlayerspriteAndAnimations();
 
-            this.nameplate = new Nameplate(this.game, player.name);
+            this.nameplate = new Nameplate(this.game, player.name, this.player);
 
             this.group = this.game.add.group();
             this.group.add(this.playerSprite);
@@ -33,6 +33,7 @@
                 this.playAnimation("spellcastFront");
             }
             this.player = player;
+            this.nameplate.update(this.player);
         }
 
         public placeGroup() {

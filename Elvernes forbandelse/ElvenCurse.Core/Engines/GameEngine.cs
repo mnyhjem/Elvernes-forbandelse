@@ -450,7 +450,7 @@ namespace ElvenCurse.Core.Engines
             {
                 if (!_messageQueueUpdatingTimer)
                 {
-                    Trace.WriteLine("Running messagequeue");
+                    //Trace.WriteLine("Running messagequeue");
 
                     _messageQueueUpdatingTimer = true;
                     var deadlockCounter = 5;

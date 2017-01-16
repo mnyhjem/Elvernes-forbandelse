@@ -2,29 +2,29 @@ var ElvenCurse;
 (function (ElvenCurse) {
     var Player = (function () {
         function Player(game) {
+            //maxHealth: number;
+            //health: number;
+            //isAlive: boolean;
             //rotationSpeed = 50;
             this.moveSpeed = 80;
             this.game = game;
             this.loadPlayer();
             this.createPlayerspriteAndAnimations();
-            this.nameplate = new ElvenCurse.Nameplate(this.game, this.name);
+            this.nameplate = new ElvenCurse.Nameplate(this.game, this.creature.name, this.creature);
             this.playerGroup = this.game.add.group();
             this.playerGroup.add(this.playerSprite);
             this.playerGroup.add(this.nameplate.group);
         }
         Player.prototype.updatePlayer = function (player) {
-            this.location.x = player.location.x;
-            this.location.y = player.location.y;
-            this.location.worldsectionId = player.location.worldsectionId;
-            var revieve = this.isAlive === false && player.isAlive === true;
-            this.health = player.health;
-            this.isAlive = player.isAlive;
-            if (!this.isAlive) {
+            this.creature = player;
+            var revieve = this.creature.isAlive === false && player.isAlive === true;
+            if (!this.creature.isAlive) {
                 this.playAnimation("hurtBack");
             }
             if (revieve) {
                 this.playAnimation("spellcastFront");
             }
+            this.nameplate.update(this.creature);
         };
         //public bringToTop() {
         //    //this.playerSprite.bringToTop();
@@ -34,7 +34,7 @@ var ElvenCurse;
             this.playerSprite.body.velocity.x = 0;
             this.playerSprite.body.velocity.y = 0;
             this.playerSprite.body.angularVelocity = 0;
-            if (this.isAlive === false) {
+            if (this.creature.isAlive === false) {
                 return;
             }
             var angleToMove = -1;
@@ -84,14 +84,15 @@ var ElvenCurse;
                 url: "/api/character/getactive",
                 success: function (result) {
                     //var hej = "vi skal sætte vores data her";
-                    self.name = result.name;
-                    self.location = result.location;
+                    //self.creature.name = result.name;
+                    //self.creature.location = result.location;
+                    self.creature = result;
                 },
                 async: false // <-- vi er ikke async.. er med vilje...
             });
         };
         Player.prototype.createPlayerspriteAndAnimations = function () {
-            this.playerSprite = this.game.add.sprite(2560, 900, "playertest");
+            this.playerSprite = this.game.add.sprite(0, 0, "playertest");
             this.playerSprite.anchor.setTo(0.5, 0.5);
             var imagesPerRow = 13;
             // spellcast
@@ -134,4 +135,3 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Player.js.map

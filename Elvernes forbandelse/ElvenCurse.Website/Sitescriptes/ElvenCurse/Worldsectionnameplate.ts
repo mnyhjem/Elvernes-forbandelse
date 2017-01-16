@@ -45,7 +45,7 @@
                 var style = { font: "16px verdana", fill: "#fffec3" };
                 this.playerpositiontext = this.game.add.text(this.plateSprite.x + 20, 60, "", style, this.group);
             }
-            this.playerpositiontext.text = `[${player.location.x}, ${player.location.y}]`;
+            this.playerpositiontext.text = `[${player.creature.location.x}, ${player.creature.location.y}]`;
         }
     }
 }

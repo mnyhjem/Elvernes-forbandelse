@@ -5,7 +5,7 @@ var ElvenCurse;
             this.game = game;
             this.player = player;
             this.createPlayerspriteAndAnimations();
-            this.nameplate = new ElvenCurse.Nameplate(this.game, player.name);
+            this.nameplate = new ElvenCurse.Nameplate(this.game, player.name, this.player);
             this.group = this.game.add.group();
             this.group.add(this.playerSprite);
             this.group.add(this.nameplate.group);
@@ -20,6 +20,7 @@ var ElvenCurse;
                 this.playAnimation("spellcastFront");
             }
             this.player = player;
+            this.nameplate.update(this.player);
         };
         OtherPlayer.prototype.placeGroup = function () {
             var x = this.player.location.x * 32;
@@ -97,4 +98,3 @@ var ElvenCurse;
     }());
     ElvenCurse.OtherPlayer = OtherPlayer;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=OtherPlayer.js.map

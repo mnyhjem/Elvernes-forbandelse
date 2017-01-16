@@ -19,4 +19,3 @@ var ElvenCurse;
     }());
     ElvenCurse.EntityPortraitplate = EntityPortraitplate;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=EntityPortraitplate.js.map

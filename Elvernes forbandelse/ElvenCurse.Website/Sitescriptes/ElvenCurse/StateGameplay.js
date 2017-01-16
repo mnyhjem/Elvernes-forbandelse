@@ -30,9 +30,9 @@ var ElvenCurse;
             this.player = new ElvenCurse.Player(this.game);
             this.middelgroundGroup.add(this.player.playerGroup);
             // ui
-            this.playerPortraitplate = new ElvenCurse.EntityPortraitplate(this.game, this.player);
+            this.playerPortraitplate = new ElvenCurse.EntityPortraitplate(this.game, this.player.creature);
             this.uiGroup.add(this.playerPortraitplate.group);
-            this.actionbar = new ElvenCurse.Actionbar(this.game, this.player);
+            this.actionbar = new ElvenCurse.Actionbar(this.game, this.player.creature);
             this.uiGroup.add(this.actionbar.group);
             this.worldsectionnameplate = new ElvenCurse.Worldsectionnameplate(this.game, this.currentMap);
             this.uiGroup.add(this.worldsectionnameplate.group);
@@ -53,12 +53,12 @@ var ElvenCurse;
             if (this.signalRInitializing) {
                 return;
             }
-            var oldX = this.player.location.x, oldY = this.player.location.y;
+            var oldX = this.player.creature.location.x, oldY = this.player.creature.location.y;
             this.player.move(this.cursors);
-            this.player.location.x = this.background.getTileX(this.player.playerSprite.x);
-            this.player.location.y = this.background.getTileX(this.player.playerSprite.y);
-            if (this.player.location.x !== oldX || this.player.location.y !== oldY) {
-                this.gameHub.server.movePlayer(this.player.location.worldsectionId, this.player.location.x, this.player.location.y);
+            this.player.creature.location.x = this.background.getTileX(this.player.playerSprite.x);
+            this.player.creature.location.y = this.background.getTileX(this.player.playerSprite.y);
+            if (this.player.creature.location.x !== oldX || this.player.creature.location.y !== oldY) {
+                this.gameHub.server.movePlayer(this.player.creature.location.worldsectionId, this.player.creature.location.x, this.player.creature.location.y);
             }
             this.placeOtherPlayersAndObjects();
             this.worldsectionnameplate.setPlayerPosition(this.player);
@@ -182,7 +182,7 @@ var ElvenCurse;
                             self.players.splice(i, 1);
                             return;
                         }
-                        else if (player.location.worldsectionId !== self.player.location.worldsectionId) {
+                        else if (player.location.worldsectionId !== self.player.creature.location.worldsectionId) {
                             self.players[i].destroy();
                             self.players.splice(i, 1);
                             return;
@@ -206,7 +206,7 @@ var ElvenCurse;
                             self.npcs.splice(i, 1);
                             return;
                         }
-                        else if (npc.location.worldsectionId !== self.player.location.worldsectionId) {
+                        else if (npc.location.worldsectionId !== self.player.creature.location.worldsectionId) {
                             self.npcs[i].destroy();
                             self.npcs.splice(i, 1);
                             return;
@@ -278,7 +278,7 @@ var ElvenCurse;
                 // map sende events up
                 //self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
                 self.gameHub.server.test();
-                self.gameHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
+                self.gameHub.server.enterWorldsection(self.player.creature.location.worldsectionId, self.player.creature.location.x, self.player.creature.location.y);
                 self.signalRInitializing = false;
                 self.gameHub.server.changeMap("playerposition");
             });
@@ -344,7 +344,7 @@ var ElvenCurse;
             var i;
             for (i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
-                if (p.player.location.worldsectionId !== this.player.location.worldsectionId) {
+                if (p.player.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
                 p.placeGroup();
@@ -352,7 +352,7 @@ var ElvenCurse;
             // npcs
             for (i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
-                if (npc.npc.location.worldsectionId !== this.player.location.worldsectionId) {
+                if (npc.npc.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
                 npc.placeGroup();
@@ -360,7 +360,7 @@ var ElvenCurse;
             // objects
             for (i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
-                if (io.interactiveObject.location.worldsectionId !== this.player.location.worldsectionId) {
+                if (io.interactiveObject.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
                 io.placeGroup();
@@ -373,4 +373,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

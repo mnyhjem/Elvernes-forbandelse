@@ -10,7 +10,7 @@ var ElvenCurse;
         function Bunny(game, npc) {
             _super.call(this, game, npc);
             this.createSpriteAndAnimations();
-            this.nameplate = new ElvenCurse.Nameplate(this.game, npc.name);
+            this.nameplate = new ElvenCurse.Nameplate(this.game, npc.name, npc);
             this.group = this.game.add.group();
             this.group.add(this.npcSprite);
             this.group.add(this.nameplate.group);
@@ -30,4 +30,3 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.Bunny = Bunny;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Bunny.js.map

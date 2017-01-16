@@ -5,7 +5,7 @@
 
             this.createSpriteAndAnimations();
 
-            this.nameplate = new Nameplate(this.game, npc.name);
+            this.nameplate = new Nameplate(this.game, npc.name, npc);
 
             this.group = this.game.add.group();
             this.group.add(this.npcSprite);
