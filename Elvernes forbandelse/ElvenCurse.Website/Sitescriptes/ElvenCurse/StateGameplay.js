@@ -96,20 +96,6 @@ var ElvenCurse;
             //this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
             this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
         };
-        StateGameplay.prototype.placeplayer = function (x, y) {
-            this.log("placeplayer");
-            if (!y || y < 0) {
-                y = this.background == undefined ? this.player.playerSprite.position.y / 32 : this.background.getTileY(this.player.playerSprite.position.y);
-            }
-            if (!x || x < 0) {
-                x = this.background == undefined ? this.player.playerSprite.position.x / 32 : this.background.getTileX(this.player.playerSprite.position.x);
-            }
-            var height = this.map == undefined ? 32 : this.map.tileHeight;
-            var width = this.map == undefined ? 32 : this.map.tileWidth;
-            this.player.playerSprite.position.x = x * width;
-            this.player.playerSprite.position.y = y * height;
-            //this.player.location
-        };
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
             this.backgroundMusic = this.game.add.audio("medieval");
@@ -164,6 +150,14 @@ var ElvenCurse;
                 location.href = '/world/gameserverdown';
                 return;
             }
+            $.connection.hub.stateChanged(function (change) {
+                console.log(change);
+                // vi understøtter ikke reconnect.. så bare send folk til startsiden hvis vi ryger af..
+                if (change.newState === $.connection.connectionState.disconnected ||
+                    change.newState === $.connection.connectionState.reconnecting) {
+                    location.href = '/Character';
+                }
+            });
             //this.gameHub.client.hello = function (text) {
             //    var t = 0;
             //}
@@ -247,8 +241,19 @@ var ElvenCurse;
             };
             this.gameHub.client.updateOwnPlayer = function (player) {
                 self.log("updateOwnPlayer callback");
+                var x = player.location.x;
+                var y = player.location.y;
+                if (!y || y < 0) {
+                    y = self.background == undefined ? self.player.playerSprite.position.y / 32 : self.background.getTileY(self.player.playerSprite.position.y);
+                }
+                if (!x || x < 0) {
+                    x = self.background == undefined ? self.player.playerSprite.position.x / 32 : self.background.getTileX(self.player.playerSprite.position.x);
+                }
+                var height = self.map == undefined ? 32 : self.map.tileHeight;
+                var width = self.map == undefined ? 32 : self.map.tileWidth;
+                self.player.playerSprite.position.x = x * width;
+                self.player.playerSprite.position.y = y * height;
                 self.player.updatePlayer(player);
-                self.placeplayer(player.location.x, player.location.y);
             };
             this.gameHub.client.changeMap = function (mapToLoad) {
                 self.log("Changemap callback");

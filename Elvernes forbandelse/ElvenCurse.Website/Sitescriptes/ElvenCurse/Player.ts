@@ -38,9 +38,9 @@
         }
 
         public updatePlayer(player: IPlayer) {
-            this.creature = player;
-
             var revieve = this.creature.isAlive === false && player.isAlive === true;
+
+            this.creature = player;
 
             if (!this.creature.isAlive) {
                 this.playAnimation("hurtBack");
@@ -50,6 +50,8 @@
                 this.playAnimation("spellcastFront");
             }
 
+            //this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);
+            this.nameplate.setPosition(this.playerSprite.x, this.playerSprite.y);
             this.nameplate.update(this.creature);
         }
 
