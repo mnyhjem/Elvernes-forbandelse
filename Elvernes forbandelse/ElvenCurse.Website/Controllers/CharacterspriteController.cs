@@ -1,19 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using ElvenCurse.Core.Interfaces;
+using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.Creatures;
 
 namespace ElvenCurse.Website.Controllers
 {
     public class CharacterspriteController : Controller
     {
+        private readonly IWorldService _worldService;
+        private readonly ICharacterService _characterService;
+
+        public CharacterspriteController(IWorldService worldService, ICharacterService characterService)
+        {
+            _worldService = worldService;
+            _characterService = characterService;
+        }
+
+        public ActionResult Index(int id = 0, bool isNpc = false)
+        {
+            Creature creature;
+            if (isNpc)
+            {
+                creature = _worldService.GetNpc(id);
+            }
+            else
+            {
+                creature = _characterService.GetCharacterNoUsercheck(id);
+            }
+
+            if (id == 0)
+            {
+                creature = GetTestAppearance();
+            }
+
+            if (creature == null)
+            {
+                return HttpNotFound();
+            }
+
+            var sprite = GetBody(creature.CharacterAppearance);
+            sprite = Merge(sprite, GetImage("torso/dress_female/tightdress_black"));
+
+            return File(sprite, "image/png");
+        }
+
         // GET: Charactersprite
-        public ActionResult Index()
+        private Creature GetTestAppearance()
         {
             var c = new CharacterAppearance
             {
@@ -28,14 +64,17 @@ namespace ElvenCurse.Website.Controllers
             c.Hair.Type = Hair.HairType.Ponytail;
             c.Hair.Color = HairColor.Brunette;
 
-            var character = GetBody(c);
+            var creature = new Character();
+            creature.CharacterAppearance = c;
 
-            var image2 = GetImage("torso/dress_female/tightdress_black");
+            return creature;
 
-            var result = Merge(character, image2);
+            //var character = GetBody(c);
 
-            return File(result, "image/png");
-            //return View();
+            //var image2 = GetImage("torso/dress_female/tightdress_black");
+            //var result = Merge(character, image2);
+
+            //return File(result, "image/png");
         }
 
         private byte[] GetBody(CharacterAppearance ca)
@@ -94,8 +133,9 @@ namespace ElvenCurse.Website.Controllers
         {
             var rootPath = Server.MapPath("~/Content/Assets/Graphics/Universal-LPC-spritesheet-master/");
             using (var img = Image.FromFile(rootPath + path + ".png"))
+            using(var bmp = new Bitmap(img))
             {
-                return ImageToByteArray(img);
+                return ImageToByteArray(bmp);
             }
         }
 
@@ -115,157 +155,7 @@ namespace ElvenCurse.Website.Controllers
         }
     }
 
-    public class CharacterAppearance
-    {
-        public Sex Sex { get; set; }
-        public Body Body { get; set; }
-        public Eyecolor Eyecolor { get; set; }
-        public Nose Nose { get; set; }
-        public Ears Ears { get; set; }
+    
 
-        public Facial Facial { get; set; }
-        public Hair Hair { get; set; }
-
-        public CharacterAppearance()
-        {
-            Facial = new Facial();
-            Hair = new Hair();
-        }
-    }
-
-    public class Hair
-    {
-        public HairType Type { get; set; }
-        public HairColor Color { get; set; }
-
-        public enum HairType
-        {
-            None = 0,
-            Bangs = 1,
-            Bangslong = 2,
-            Bangslong2 = 3,
-            Bangsshort = 4,
-            Bedhead = 5,
-            Bunches = 6,
-            Jewfro = 7,
-            Long = 8,
-            Longhawk = 9,
-            Longknot = 10,
-            Loose = 11,
-            Messy1 = 12,
-            Messy2 = 13,
-            Mohawk = 14,
-            Page = 15,
-            Page2 = 16,
-            Parted = 17,
-            Pixie = 18,
-            Plain = 19,
-            Ponytail = 20,
-            Ponytail2 = 21,
-            Princess = 22,
-            ShortHawk = 23,
-            ShortKnot = 24,
-            Shoulderl = 25,
-            Shoulderr = 26,
-            Swoop = 27,
-            Unkempt = 28,
-            Xlong = 29,
-            Xlongknot = 30
-        }
-    }
-
-    public class Facial
-    {
-        public FacialType Type { get; set; }
-        public HairColor Color { get; set; }
-
-        public enum FacialType
-        {
-            None = 0,
-            Beard = 1,
-            Bigstache = 2,
-            Fiveoclock = 3,
-            Frenchstache = 4,
-            Mustache = 5
-        }
-    }
-
-    public enum HairColor
-    {
-        Black,
-        Blonde,
-        Blonde2,
-        Blue,
-        Blue2,
-        Brown,
-        Brown2,
-        Brunette,
-        Brunette2,
-        Dark_blonde,
-        Gold,
-        Gray,
-        Gray2,
-        Green,
-        Green2,
-        Light_blonde,
-        Light_blonde2,
-        Pink,
-        Pink2,
-        Purple,
-        Raven,
-        Raven2,
-        Redhead,
-        Redhead2,
-        Ruby_red,
-        White,
-        White_blonde,
-        White_blonde2,
-        White_Cyan
-    }
-
-    public enum Ears
-    {
-        Default = 0,
-        Bigears = 1,
-        Elvenears = 2
-    }
-
-    public enum Nose
-    {
-        Default = 0,
-        Bignose = 1,
-        Buttonnose = 2,
-        Straightnose = 3
-    }
-
-    public enum Eyecolor
-    {
-        Blue = 0,
-        Brown = 1,
-        Gray = 2,
-        Green = 3,
-        Orange = 4,
-        Purple = 5,
-        Red = 6,
-        Yellow = 7
-    }
-
-    public enum Sex
-    {
-        Male = 0,
-        Female = 1
-    }
-
-    public enum Body
-    {
-        Dark = 0,
-        Dark2 = 1,
-        Darkelf = 2,
-        Darkelf2 = 3,
-        Light = 4,
-        Orc = 5,
-        Red_orc = 6,
-        Tanned = 7,
-        tanned2 = 8
-    }
+    
 }

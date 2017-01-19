@@ -4243,6 +4243,7 @@
     <TypeScriptCompile Include="Scripts\typings\phaser-input.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\phaser.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
+    <TypeScriptCompile Include="Sitescriptes\Charactermodel\Charactermodel.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Booter.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Npcs\NpcBase.ts" />
     <TypeScriptCompile Include="Sitescriptes\ElvenCurse\Npcs\ElfHunter.ts" />

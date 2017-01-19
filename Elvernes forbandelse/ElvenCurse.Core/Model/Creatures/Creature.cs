@@ -79,6 +79,7 @@ namespace ElvenCurse.Core.Model.Creatures
         private bool _updateNeeded;
 
         public Character LastCharacterAttacked { get; set; }
+        public CharacterAppearance CharacterAppearance { get; set; }
 
         protected Creature(int viewDistance, int attackDistance)
         {

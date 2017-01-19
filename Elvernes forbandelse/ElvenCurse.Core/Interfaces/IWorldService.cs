@@ -13,6 +13,7 @@ namespace ElvenCurse.Core.Interfaces
         List<Worldsection> GetMaps();
         bool SaveMap(Worldsection modelWorldsection, string mapdata);
         List<NpcBase> GetAllNpcs();
+        NpcBase GetNpc(int id);
         List<InteractiveObject> GetAllInteractiveObjects();
         List<Terrainfile> GetTerrains();
         Terrainfile GetTerrain(int id);

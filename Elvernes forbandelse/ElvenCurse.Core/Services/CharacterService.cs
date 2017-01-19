@@ -5,6 +5,7 @@ using ElvenCurse.Core.Interfaces;
 using System.Configuration;
 using System.Data;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.Creatures;
 
 namespace ElvenCurse.Core.Services
 {
@@ -79,6 +80,30 @@ namespace ElvenCurse.Core.Services
                     return r != null && (decimal) r > 0;
                 }
             }
+        }
+
+        public Character GetCharacterNoUsercheck(int characterId)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetCharacterNoUsercheck";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("characterId", characterId));
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            var character = MapCharacter(dr);
+
+                            return character;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         public Character GetCharacter(string userId, int characterId)
@@ -208,6 +233,7 @@ namespace ElvenCurse.Core.Services
                     Name = (string)dr["worldsectionname"]
                 };
             }
+            character.CharacterAppearance = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterAppearance>((string)dr["appearance"]);
 
             return character;
         }

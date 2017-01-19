@@ -71,6 +71,7 @@
     <Compile Include="Interfaces\IWorldService.cs" />
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\Creatures\AffectedByAbility.cs" />
+    <Compile Include="Model\Creatures\CharacterAppearance.cs" />
     <Compile Include="Model\Creatures\CreatureAbility.cs" />
     <Compile Include="Model\Creatures\Npcs\HunterNpc.cs" />
     <Compile Include="Model\Creatures\Npcs\NpcBase.cs" />

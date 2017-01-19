@@ -12,5 +12,6 @@ namespace ElvenCurse.Core.Interfaces
         Character GetOnlineCharacter(string getUserId);
         void SavePlayerinformation(Character character);
         List<Character> GetOnlineCharacters();
+        Character GetCharacterNoUsercheck(int characterId);
     }
 }

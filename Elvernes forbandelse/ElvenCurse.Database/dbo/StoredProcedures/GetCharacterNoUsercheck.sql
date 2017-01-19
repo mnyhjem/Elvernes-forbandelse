@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[GetCharactersForUser]
-	@userId nvarchar(50) = ''
+﻿CREATE PROCEDURE [dbo].[GetCharacterNoUsercheck]
+	@characterId int
 AS
 select 
 c.Id, 
@@ -17,5 +17,5 @@ Characters c
 left outer join Characterlocations loc on c.Id = loc.characterId 
 left outer join Worldsections ws on ws.Id = loc.WorldsectionId
 where 
-c.userid = @userId
+c.id = @characterId;
 

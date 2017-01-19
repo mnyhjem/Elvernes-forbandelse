@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[GetAllNpcs]
-	
+﻿CREATE PROCEDURE [dbo].[GetNpc]
+	@id int
 AS
 
 select 
@@ -21,3 +21,4 @@ npc.Appearance
 from 
 Npcs npc 
 left outer join NpcLocations loc on npc.Id = loc.NpcId
+where id = id

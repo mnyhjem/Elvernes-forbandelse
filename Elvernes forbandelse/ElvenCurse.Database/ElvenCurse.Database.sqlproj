@@ -101,6 +101,8 @@
     <Build Include="dbo\StoredProcedures\GetMessageQueue.sql" />
     <Build Include="dbo\StoredProcedures\QueueMessagequeueElement.sql" />
     <Build Include="dbo\StoredProcedures\SetQueuemessageAsDone.sql" />
+    <Build Include="dbo\StoredProcedures\GetNpc.sql" />
+    <Build Include="dbo\StoredProcedures\GetCharacterNoUsercheck.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

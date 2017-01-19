@@ -156,6 +156,31 @@ namespace ElvenCurse.Core.Services
             }
         }
 
+        public NpcBase GetNpc(int id)
+        {
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetNpc";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("id", id));
+
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            NpcBase npc = MapNpc(dr);
+
+                            return npc;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public List<NpcBase> GetAllNpcs()
         {
             var list = new List<NpcBase>();
@@ -170,50 +195,60 @@ namespace ElvenCurse.Core.Services
                     {
                         while (dr.Read())
                         {
-                            NpcBase npc;
-                            switch ((Npctype) dr["type"])
-                            {
-                                case Npctype.Hunter:
-                                    npc = new HunterNpc();
-                                    break;
-
-                                case Npctype.Wolf:
-                                    npc = new Wolf(_rnd);
-                                    break;
-
-                                case Npctype.Bunny:
-                                    npc = new Bunny(_rnd);
-                                    break;
-
-                                default:
-                                    continue;
-                            }
-
-                            // standard items
-                            npc.Id = (int) dr["id"];
-                            npc.Name = (string) dr["name"];
-                            npc.Race = (Npcrace) dr["race"];
-                            npc.Level = (int) dr["Level"];
-                            //npc.Status = (Creaturestatus) dr["status"];
-                            npc.Basehealth = (int) dr["BaseHealth"];
-                            npc.CurrentLocation = new Location
-                            {
-                                WorldsectionId = (int) dr["CurrentWorldsectionId"],
-                                X = (int) dr["CurrentX"],
-                                Y = (int) dr["CurrentY"]
-                            };
-                            npc.DefaultLocation = new Location
-                            {
-                                WorldsectionId = (int) dr["DefaultWorldsectionId"],
-                                X = (int) dr["DefaultX"],
-                                Y = (int) dr["DefaultY"]
-                            };
+                            NpcBase npc = MapNpc(dr);
+                            
                             list.Add(npc);
                         }
                     }
                 }
             }
             return list;
+        }
+
+        private NpcBase MapNpc(SqlDataReader dr)
+        {
+            NpcBase npc;
+
+            switch ((Npctype)dr["type"])
+            {
+                case Npctype.Hunter:
+                    npc = new HunterNpc();
+                    break;
+
+                case Npctype.Wolf:
+                    npc = new Wolf(_rnd);
+                    break;
+
+                case Npctype.Bunny:
+                    npc = new Bunny(_rnd);
+                    break;
+
+                default:
+                    return null;
+            }
+
+            // standard items
+            npc.Id = (int)dr["id"];
+            npc.Name = (string)dr["name"];
+            npc.Race = (Npcrace)dr["race"];
+            npc.Level = (int)dr["Level"];
+            //npc.Status = (Creaturestatus) dr["status"];
+            npc.Basehealth = (int)dr["BaseHealth"];
+            npc.CurrentLocation = new Location
+            {
+                WorldsectionId = (int)dr["CurrentWorldsectionId"],
+                X = (int)dr["CurrentX"],
+                Y = (int)dr["CurrentY"]
+            };
+            npc.DefaultLocation = new Location
+            {
+                WorldsectionId = (int)dr["DefaultWorldsectionId"],
+                X = (int)dr["DefaultX"],
+                Y = (int)dr["DefaultY"]
+            };
+            npc.CharacterAppearance = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterAppearance>((string) dr["appearance"]);
+
+            return npc;
         }
 
         public List<InteractiveObject> GetAllInteractiveObjects()
