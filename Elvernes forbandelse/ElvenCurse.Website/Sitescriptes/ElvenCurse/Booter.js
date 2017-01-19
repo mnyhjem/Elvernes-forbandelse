@@ -21,3 +21,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.Booter = Booter;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Booter.js.map
