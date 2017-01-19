@@ -4,16 +4,26 @@ var ElvenCurse;
         function OtherPlayer(game, player) {
             this.game = game;
             this.player = player;
-            this.createPlayerspriteAndAnimations();
+            this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.player.id);
+            this.playerSprite.anchor.setTo(0.5, 0.5);
+            this.loadPlayersprite();
             this.nameplate = new ElvenCurse.Nameplate(this.game, player.name, this.player);
             this.group = this.game.add.group();
             this.group.add(this.playerSprite);
             this.group.add(this.nameplate.group);
         }
-        //public bringToTop() {
-        //    //this.playerSprite.bringToTop();
-        //    this.game.world.bringToTop(this.playerGroup);
-        //}
+        OtherPlayer.prototype.loadPlayersprite = function () {
+            if (!this.game.cache.checkImageKey("playersprite_" + this.player.id)) {
+                this.game.load.spritesheet("playersprite_" + this.player.id, "/charactersprite/?id=" + this.player.id + "&isnpc=false", 64, 64);
+            }
+            this.game.load.onLoadComplete.add(this.spriteLoaded, this);
+            this.game.load.start();
+        };
+        OtherPlayer.prototype.spriteLoaded = function () {
+            this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
+            this.playerSprite.loadTexture("playersprite_" + this.player.id);
+            this.createPlayerspriteAndAnimations();
+        };
         OtherPlayer.prototype.updatePlayer = function (player) {
             if (this.shownAsDead && player.isAlive) {
                 this.shownAsDead = false;
@@ -49,13 +59,12 @@ var ElvenCurse;
             }
         };
         OtherPlayer.prototype.destroy = function () {
-            //this.playerGroup.removeAll(true);
             this.playerSprite.animations.destroy();
             this.group.destroy(true);
         };
         OtherPlayer.prototype.createPlayerspriteAndAnimations = function () {
-            this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");
-            this.playerSprite.anchor.setTo(0.5, 0.5);
+            //this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");
+            //this.playerSprite.anchor.setTo(0.5, 0.5);
             var imagesPerRow = 13;
             // spellcast
             this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6)); //0,6
@@ -90,6 +99,9 @@ var ElvenCurse;
             //this.playerSprite.animations.play("shootRight", 10, false);
         };
         OtherPlayer.prototype.playAnimation = function (animationName) {
+            if (this.playerSprite.animations.getAnimation(animationName) == null) {
+                return;
+            }
             if (!this.playerSprite.animations.getAnimation(animationName).isPlaying) {
                 this.playerSprite.animations.play(animationName, 10, false);
             }
@@ -98,4 +110,3 @@ var ElvenCurse;
     }());
     ElvenCurse.OtherPlayer = OtherPlayer;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=OtherPlayer.js.map

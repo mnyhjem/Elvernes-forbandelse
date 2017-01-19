@@ -159,6 +159,7 @@
 
         private createMap() {
             this.log("CreateMap");
+            this.game.load.onLoadComplete.remove(this.createMap, this);
 
             this.backgroundMusic = this.game.add.audio("medieval");
             //this.backgroundMusic.play();
@@ -210,11 +211,11 @@
                 this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
-            
-            this.backgroundimage.destroy(true);
-            this.backgroundimage = null;
 
-            
+            if (this.backgroundimage != null) {
+                this.backgroundimage.destroy(true);
+                this.backgroundimage = null;
+            }
         }
 
         private wireupSignalR() {

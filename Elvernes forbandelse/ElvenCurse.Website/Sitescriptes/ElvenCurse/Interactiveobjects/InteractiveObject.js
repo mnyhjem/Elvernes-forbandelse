@@ -44,4 +44,3 @@ var ElvenCurse;
     }());
     ElvenCurse.InteractiveObject = InteractiveObject;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=InteractiveObject.js.map

@@ -52,6 +52,15 @@ namespace ElvenCurse.Core.Engines
                         .ToList());
         }
 
+        private dynamic AllInWorldSectionExceptCurrent(int sectionId, Character c)
+        {
+            return
+                _clients.Clients(
+                    _characters.Where(a => a.Location.WorldsectionId == sectionId && a.Id != c.Id)
+                        .Select(a => a.ConnectionId)
+                        .ToList());
+        }
+
         private dynamic AllInWorldSection(int sectionId)
         {
             return
@@ -283,7 +292,7 @@ namespace ElvenCurse.Core.Engines
                 }
 
                 // fortæl spillerne i den section vi forlader, at vi er taget afsted
-                AllInWorldSection(oldPlayerLocation.WorldsectionId).updatePlayer(character);
+                AllInWorldSectionExceptCurrent(oldPlayerLocation.WorldsectionId, character).updatePlayer(character);
 
                 if (map.Tilemap.HasTerrainreferences)
                 {

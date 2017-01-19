@@ -98,6 +98,7 @@ var ElvenCurse;
         };
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
+            this.game.load.onLoadComplete.remove(this.createMap, this);
             this.backgroundMusic = this.game.add.audio("medieval");
             //this.backgroundMusic.play();
             this.map = this.game.add.tilemap("world");
@@ -139,8 +140,10 @@ var ElvenCurse;
                 this.placeOtherPlayersAndObjects();
             }
             this.initializing = false;
-            this.backgroundimage.destroy(true);
-            this.backgroundimage = null;
+            if (this.backgroundimage != null) {
+                this.backgroundimage.destroy(true);
+                this.backgroundimage = null;
+            }
         };
         StateGameplay.prototype.wireupSignalR = function () {
             var self = this;
@@ -378,4 +381,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

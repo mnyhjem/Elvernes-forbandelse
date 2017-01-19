@@ -9,7 +9,9 @@ var ElvenCurse;
             this.moveSpeed = 80;
             this.game = game;
             this.loadPlayer();
-            this.createPlayerspriteAndAnimations();
+            this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
+            this.playerSprite.anchor.setTo(0.5, 0.5);
+            this.loadPlayersprite();
             this.nameplate = new ElvenCurse.Nameplate(this.game, this.creature.name, this.creature);
             this.playerGroup = this.game.add.group();
             this.playerGroup.add(this.playerSprite);
@@ -93,9 +95,22 @@ var ElvenCurse;
                 async: false // <-- vi er ikke async.. er med vilje...
             });
         };
+        Player.prototype.loadPlayersprite = function () {
+            if (!this.game.cache.checkImageKey("playersprite_" + this.creature.id)) {
+                this.game.load.spritesheet("playersprite_" + this.creature.id, "/charactersprite/?id=" + this.creature.id + "&isnpc=false", 64, 64);
+            }
+            this.game.load.onLoadComplete.add(this.spriteLoaded, this);
+            this.game.load.start();
+        };
+        Player.prototype.spriteLoaded = function () {
+            this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
+            this.playerSprite.loadTexture("playersprite_" + this.creature.id);
+            this.createPlayerspriteAndAnimations();
+        };
         Player.prototype.createPlayerspriteAndAnimations = function () {
-            this.playerSprite = this.game.add.sprite(0, 0, "playertest");
-            this.playerSprite.anchor.setTo(0.5, 0.5);
+            //this.playerSprite = this.game.add.sprite(0, 0, "playertest");
+            //this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
+            //this.playerSprite.anchor.setTo(0.5, 0.5);
             var imagesPerRow = 13;
             // spellcast
             this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6)); //0,6
@@ -130,11 +145,13 @@ var ElvenCurse;
         };
         Player.prototype.playAnimation = function (animationName) {
             if (!this.playerSprite.animations.getAnimation(animationName).isPlaying) {
-                this.playerSprite.animations.play(animationName, 10, false);
+                try {
+                    this.playerSprite.animations.play(animationName, 10, false);
+                }
+                catch (e) { }
             }
         };
         return Player;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Player.js.map

@@ -7,55 +7,33 @@ var ElvenCurse;
 (function (ElvenCurse) {
     var ElfHunter = (function (_super) {
         __extends(ElfHunter, _super);
-        //game: Phaser.Game;
-        //player:IPlayer;
-        //nameplate: Nameplate;
-        //group: Phaser.Group;
-        //playerSprite:Phaser.Sprite;
         function ElfHunter(game, npc) {
             //this.game = game;
             //this.player = player;
             _super.call(this, game, npc);
-            this.createPlayerspriteAndAnimations();
+            this.npcSprite = this.game.add.sprite(0, 0, "playersprite_" + this.npc.id);
+            this.npcSprite.anchor.setTo(0.5, 0.5);
+            this.loadPlayersprite();
             this.nameplate = new ElvenCurse.Nameplate(this.game, npc.name, npc);
             this.group = this.game.add.group();
             this.group.add(this.npcSprite);
             this.group.add(this.nameplate.group);
         }
-        //public bringToTop() {
-        //    //this.playerSprite.bringToTop();
-        //    this.game.world.bringToTop(this.playerGroup);
-        //}
-        //public updatePosition(player: IPlayer) {
-        //    this.player = player;
-        //}
-        //public placeGroup() {
-        //    var x = this.player.location.x * 32;
-        //    var y = this.player.location.y * 32;
-        //    if (this.playerSprite.x < x) {
-        //        this.playAnimation("walkRight");
-        //    }
-        //    if (this.playerSprite.x > x) {
-        //        this.playAnimation("walkLeft");
-        //    }
-        //    if (this.playerSprite.y > y) {
-        //        this.playAnimation("walkBack");
-        //    }
-        //    if (this.playerSprite.y < y) {
-        //        this.playAnimation("walkFront");
-        //    }
-        //    this.playerSprite.x = x;
-        //    this.playerSprite.y = y;
-        //    this.nameplate.setPosition(x, y);
-        //}
-        //public destroy() {
-        //    //this.playerGroup.removeAll(true);
-        //    this.playerSprite.animations.destroy();
-        //    this.group.destroy(true);
-        //}
+        ElfHunter.prototype.loadPlayersprite = function () {
+            if (!this.game.cache.checkImageKey("playersprite_" + this.npc.id)) {
+                this.game.load.spritesheet("playersprite_" + this.npc.id, "/charactersprite/?id=" + this.npc.id + "&isnpc=true", 64, 64);
+            }
+            this.game.load.onLoadComplete.add(this.spriteLoaded, this);
+            this.game.load.start();
+        };
+        ElfHunter.prototype.spriteLoaded = function () {
+            this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
+            this.npcSprite.loadTexture("playersprite_" + this.npc.id);
+            this.createPlayerspriteAndAnimations();
+        };
         ElfHunter.prototype.createPlayerspriteAndAnimations = function () {
-            this.npcSprite = this.game.add.sprite(this.npc.location.x, this.npc.location.y, "playertest");
-            this.npcSprite.anchor.setTo(0.5, 0.5);
+            //this.npcSprite = this.game.add.sprite(this.npc.location.x, this.npc.location.y, "playertest");
+            //this.npcSprite.anchor.setTo(0.5, 0.5);
             var imagesPerRow = 13;
             // spellcast
             this.npcSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6)); //0,6
@@ -93,4 +71,3 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.ElfHunter = ElfHunter;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=ElfHunter.js.map

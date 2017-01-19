@@ -12,7 +12,9 @@
             this.game = game;
             this.player = player;
 
-            this.createPlayerspriteAndAnimations();
+            this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.player.id);
+            this.playerSprite.anchor.setTo(0.5, 0.5);
+            this.loadPlayersprite();
 
             this.nameplate = new Nameplate(this.game, player.name, this.player);
 
@@ -21,11 +23,20 @@
             this.group.add(this.nameplate.group);
         }
 
-        //public bringToTop() {
-        //    //this.playerSprite.bringToTop();
+        private loadPlayersprite() {
+            if (!this.game.cache.checkImageKey("playersprite_" + this.player.id)) {
+                this.game.load.spritesheet("playersprite_" + this.player.id, "/charactersprite/?id=" + this.player.id + "&isnpc=false", 64, 64);
+            }
+            this.game.load.onLoadComplete.add(this.spriteLoaded, this);
+            this.game.load.start();
+        }
 
-        //    this.game.world.bringToTop(this.playerGroup);
-        //}
+        private spriteLoaded() {
+            this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
+
+            this.playerSprite.loadTexture("playersprite_" + this.player.id);
+            this.createPlayerspriteAndAnimations();
+        }
         
         public updatePlayer(player: IPlayer) {
             if (this.shownAsDead && player.isAlive) {
@@ -67,14 +78,13 @@
         }
 
         public destroy() {
-            //this.playerGroup.removeAll(true);
             this.playerSprite.animations.destroy();
             this.group.destroy(true);
         }
 
         private createPlayerspriteAndAnimations() {
-            this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");
-            this.playerSprite.anchor.setTo(0.5, 0.5);
+            //this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");
+            //this.playerSprite.anchor.setTo(0.5, 0.5);
 
             var imagesPerRow = 13;
             // spellcast
@@ -117,6 +127,10 @@
         }
 
         private playAnimation(animationName: string) {
+            if (this.playerSprite.animations.getAnimation(animationName) == null) {
+                return;
+            }
+
             if (!this.playerSprite.animations.getAnimation(animationName).isPlaying) {
                 this.playerSprite.animations.play(animationName, 10, false);
             }
