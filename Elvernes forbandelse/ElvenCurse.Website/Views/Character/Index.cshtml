@@ -13,28 +13,30 @@
         <ul id="characterlist">
             @foreach (var character in Model.Characters)
             {
-                <li>
-                    @Html.ActionLink(character.Name, "Index", new {id = character.Id})<br />
+                <li onclick="location.href='@Url.Action("Index", new {id = character.Id})'">
+                    @character.Name<br />
                     <span style="font-size:8pt">Level @character.Level</span><br/>
                     <span style="font-size:8pt">@character.Location.Name</span>
                 </li>
             }
         </ul>
     </div>
-    <div class="col-md-8">
-        billede af figuren
-        <br/>
+    <div class="col-md-3" style="text-align: center;">
         @{
             var selChar = Model.Characters.FirstOrDefault(a => a.Id == Model.SelectedCharacterId);
         }
         @if (selChar != null)
         {
             <span>@selChar.Name</span>
+            <div id="characterpreview" data-url="/charactersprite?id=@Model.SelectedCharacterId&@DateTime.Now.Ticks" style="display: none;"></div>
+            <div id="game"></div>
+
+            
 
             using (Html.BeginForm("EnterWorld", "Character", FormMethod.Post))
             {
                 @Html.HiddenFor(a=>a.SelectedCharacterId)
-                <input type="submit" value="Enter world" class="btn btn-primary" />
+                <input type="submit" value="Hop ind i verdenen" class="btn btn-primary" />
             }
 
         }
@@ -44,6 +46,29 @@
         }
     </div>
 </div>
+
+
+
+@section scripts
+{
+    <script src="~/Sitescriptes/Phaser2.6.1/phaser.js"></script>
+    <script src="~/Sitescriptes/Charactermodel/Charactermodel.js"></script>
+
+    <script>
+        var imgPath = '/charactersprite?t=@DateTime.Now.Ticks';
+
+        $(function () {
+            if ($("#game").length !== 0) {
+                var game = new Phaser.Game(300, 300, Phaser.CANVAS, "game");
+                game.state.add("ShowCharacter", Charactermodel.ShowCharacter);
+                game.state.start("ShowCharacter");
+            }
+        });
+
+
+    </script>}
+}
+
 
 @section header{
     <style>

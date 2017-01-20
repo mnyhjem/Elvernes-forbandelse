@@ -25,7 +25,7 @@
 
         private loadPlayersprite() {
             if (!this.game.cache.checkImageKey("playersprite_" + this.player.id)) {
-                this.game.load.spritesheet("playersprite_" + this.player.id, "/charactersprite/?id=" + this.player.id + "&isnpc=false", 64, 64);
+                this.game.load.spritesheet("playersprite_" + this.player.id, "/charactersprite/?id=" + this.player.id + "&isnpc=false&t=" + new Date().getTime(), 64, 64);
             }
             this.game.load.onLoadComplete.add(this.spriteLoaded, this);
             this.game.load.start();
@@ -35,6 +35,8 @@
             this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
 
             this.playerSprite.loadTexture("playersprite_" + this.player.id);
+            this.playerSprite.frame = 26; // <-- kig mod kameraet til at starte med
+
             this.createPlayerspriteAndAnimations();
         }
         
