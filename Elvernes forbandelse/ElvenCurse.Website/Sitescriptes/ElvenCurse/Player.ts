@@ -19,7 +19,8 @@
         playerGroup: Phaser.Group;
         connectionstatus: number;
         type: number;
-        
+
+        oldHealth: number;
         
         constructor(game:Phaser.Game) {
             this.game = game;
@@ -29,7 +30,8 @@
             this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
             this.playerSprite.anchor.setTo(0.5, 0.5);
             this.loadPlayersprite();
-            
+
+            this.oldHealth = this.creature.health;
 
             this.nameplate = new Nameplate(this.game, this.creature.name, this.creature);
 
@@ -51,6 +53,16 @@
 
             if (revieve) {
                 this.playAnimation("spellcastFront");
+            }
+            var self = this;
+            if (this.oldHealth > this.creature.health) {
+                this.playerSprite.tint = 0xff0000;
+                this.oldHealth = this.creature.health;
+                this.game.time.events.add(Phaser.Timer.SECOND,
+                    function() {
+                        self.playerSprite.tint = 0xffffff;
+                    },
+                    this);
             }
 
             //this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);

@@ -26,7 +26,7 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public Creaturemode Mode { get; set; }
 
-        public int Level { get; set; }
+        public virtual int Level { get; set; }
 
         public int Basehealth
         {

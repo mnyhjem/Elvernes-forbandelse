@@ -32,6 +32,14 @@ var ElvenCurse;
             }
             this.player = player;
             this.nameplate.update(this.player);
+            var self = this;
+            if (this.oldHealth > this.player.health) {
+                this.playerSprite.tint = 0xff0000;
+                this.oldHealth = this.player.health;
+                this.game.time.events.add(Phaser.Timer.SECOND, function () {
+                    self.playerSprite.tint = 0xffffff;
+                }, this);
+            }
         };
         OtherPlayer.prototype.placeGroup = function () {
             var x = this.player.location.x * 32;
@@ -48,8 +56,13 @@ var ElvenCurse;
             if (this.playerSprite.y < y) {
                 this.playAnimation("walkFront");
             }
-            this.playerSprite.x = x;
-            this.playerSprite.y = y;
+            if (this.playerSprite.x === 0 || this.playerSprite.y === 0) {
+                this.playerSprite.x = x;
+                this.playerSprite.y = y;
+            }
+            else {
+                this.game.add.tween(this.playerSprite).to({ x: x, y: y }, 50, Phaser.Easing.Linear.None, true).start();
+            }
             this.nameplate.setPosition(x, y);
             this.checkDead();
         };

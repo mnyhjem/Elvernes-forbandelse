@@ -250,7 +250,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootwatch-theme.css" />
     <Content Include="Content\Assets\Graphics\Actionbar.png" />
+    <Content Include="Content\Assets\Graphics\Artis_dock.png" />
     <Content Include="Content\Assets\Graphics\backgrounds\1.jpg" />
     <Content Include="Content\Assets\Graphics\backgrounds\2.jpg" />
     <Content Include="Content\Assets\Graphics\backgrounds\3.jpg" />
@@ -261,6 +263,10 @@
     <Content Include="Content\Assets\Graphics\Cliff_tileset.png" />
     <Content Include="Content\Assets\Graphics\Collision.png" />
     <Content Include="Content\Assets\Graphics\EntityPortraitplate.png" />
+    <Content Include="Content\Assets\Graphics\House_32x32.png" />
+    <Content Include="Content\Assets\Graphics\latern_pole_32x128.png" />
+    <Content Include="Content\Assets\Graphics\limestone-tileset.png" />
+    <Content Include="Content\Assets\Graphics\magecity.png" />
     <Content Include="Content\Assets\Graphics\Npcs\spr_Bunny_strip15.png" />
     <Content Include="Content\Assets\Graphics\Npcs\whtdragons_MVanimals_ALL\animals\!%24overheadseagull.png" />
     <Content Include="Content\Assets\Graphics\Npcs\whtdragons_MVanimals_ALL\animals\!birds_ small flying.png" />
@@ -1170,6 +1176,7 @@
     <Content Include="Content\Assets\Graphics\player.png" />
     <Content Include="Content\Assets\Graphics\portal-animation.png" />
     <Content Include="Content\Assets\Graphics\portal.png" />
+    <Content Include="Content\Assets\Graphics\stone_fence_01_spritesheet.png" />
     <Content Include="Content\Assets\Graphics\terrain.png" />
     <Content Include="Content\Assets\Graphics\togskinder.png" />
     <Content Include="Content\Assets\Graphics\togskinder_blue.png" />
@@ -3943,6 +3950,8 @@
     <Content Include="Content\Assets\Graphics\Universal-LPC-spritesheet-master\_build\_base\female\s-hurt5.png" />
     <Content Include="Content\Assets\Graphics\Universal-LPC-spritesheet-master\_build\_base\female\s.png" />
     <Content Include="Content\Assets\Graphics\Universal-LPC-spritesheet-master\_build\_base\female\w.png" />
+    <Content Include="Content\Assets\Graphics\woodencastle.png" />
+    <Content Include="Content\Assets\Graphics\wood_tileset.png" />
     <Content Include="Content\Assets\Graphics\Worldsectionnameplate.png" />
     <Content Include="Content\Assets\Music\abeth.mp3" />
     <Content Include="Content\Assets\Music\airship.mp3" />

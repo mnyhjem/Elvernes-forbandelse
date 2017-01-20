@@ -20,7 +20,15 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public int DamageCalculation(int characterLevel)
         {
-            return Owner.Level - characterLevel + 1 * BaseDamage * Owner.Level;
+            //var damage = Owner.Level - characterLevel + 1 * BaseDamage * Owner.Level;
+            var damage = Owner.Level * BaseDamage + ((Owner.Level - characterLevel) * BaseDamage) * 2;
+            
+            // hvis damage er negativ, ville vi heale.. og det skal vi ikke. i stedet giver vi ingen skade..
+            if (damage < 0)
+            {
+                damage = 0;
+            }
+            return damage;
         }
 
         public void Use(Character characterToAttack)
@@ -34,7 +42,7 @@ namespace ElvenCurse.Core.Model.Creatures
 
             var damageToDeal = DamageCalculation(characterToAttack.Level);
 
-            Trace.WriteLine(string.Format("{0} bruger {1} på {2} for {3} skade", Owner.Name, Name, characterToAttack.Name, damageToDeal));
+            Trace.WriteLine(string.Format("{0} bruger {1} på {2} for {3} skade [liv {4}/{5}]", Owner.Name, Name, characterToAttack.Name, damageToDeal, characterToAttack.Health, characterToAttack.MaxHealth));
 
             characterToAttack.AffectedByAbilities.Push(new AffectedByAbility
             {

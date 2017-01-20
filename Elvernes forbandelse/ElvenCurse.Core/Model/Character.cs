@@ -23,7 +23,7 @@ namespace ElvenCurse.Core.Model
 
         public int AccumulatedExperience { get; set; }
 
-        public int Level
+        public override int Level
         {
             get { return Utilities.ExperienceCalculations.CurrentlevelFromAccumulatedXp(AccumulatedExperience); }
         }

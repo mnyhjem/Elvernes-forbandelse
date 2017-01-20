@@ -123,12 +123,12 @@ namespace ElvenCurse.Core.Engines
             {
                 foundPlayer = c;
                 _characters.Add(c);
-                Trace.WriteLine($"{foundPlayer.Name} entered the world");
+                Trace.WriteLine($"{foundPlayer.Name} entered the world [lvl {foundPlayer.Level} health {foundPlayer.Health}]");
             }
             else
             {
                 foundPlayer.ConnectionId = connectionId;
-                Trace.WriteLine($"{foundPlayer.Name} reconnected to the world");
+                Trace.WriteLine($"{foundPlayer.Name} reconnected to the world [lvl {foundPlayer.Level} health {foundPlayer.Health}]");
             }
 
             foundPlayer.Connectionstatus = Connectionstatus.Online;
@@ -233,13 +233,18 @@ namespace ElvenCurse.Core.Engines
             };
 
             var mapToLoad = 0;
+            Worldsection newMap;
             switch (direction)
             {
                 case "left":
                     mapToLoad = currentMap.MapchangeLeft;
-                    newPlayerlocationSuccess.X = 99;
-                    newPlayerlocationSuccess.Y = -1;
-
+                    newMap = GetWorldsection(mapToLoad);
+                    if (newMap != null)
+                    {
+                        newPlayerlocationSuccess.X = newMap.Tilemap.Width - 1;
+                        newPlayerlocationSuccess.Y = -1;
+                    }
+                    
                     oldPlayerLocation.X -= 1;
                     oldPlayerLocation.Y = -1;
                     break;
@@ -249,14 +254,18 @@ namespace ElvenCurse.Core.Engines
                     newPlayerlocationSuccess.X = 1;
                     newPlayerlocationSuccess.Y = -1;
 
-                    oldPlayerLocation.X = 99;
+                    oldPlayerLocation.X = currentMap.Tilemap.Width - 1;
                     oldPlayerLocation.Y = -1;
                     break;
 
                 case "up":
                     mapToLoad = currentMap.MapchangeUp;
-                    newPlayerlocationSuccess.X = -1;
-                    newPlayerlocationSuccess.Y = 99;
+                    newMap = GetWorldsection(mapToLoad);
+                    if (newMap != null)
+                    {
+                        newPlayerlocationSuccess.X = -1;
+                        newPlayerlocationSuccess.Y = newMap.Tilemap.Height - 1;
+                    }
 
                     oldPlayerLocation.X = -1;
                     oldPlayerLocation.Y -= 1;
@@ -268,7 +277,7 @@ namespace ElvenCurse.Core.Engines
                     newPlayerlocationSuccess.Y = 1;
 
                     oldPlayerLocation.X = -1;
-                    oldPlayerLocation.Y = 99;
+                    oldPlayerLocation.Y = currentMap.Tilemap.Height - 1;
                     break;
 
                 case "playerposition":

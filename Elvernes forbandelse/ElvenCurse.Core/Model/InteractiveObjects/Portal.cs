@@ -45,8 +45,8 @@ namespace ElvenCurse.Core.Model.InteractiveObjects
 
         public override InteractiveobjectResult Interact(Character character)
         {
-            // man må maks være én tile fra portalen for den kan virke..
-            if (!character.Location.IsWithinReachOf(Location, 1))
+            // man må maks være to tile fra portalen for den kan virke..
+            if (!character.Location.IsWithinReachOf(Location, 2))
             {
                 return InteractiveobjectResult.NoChange;
             }

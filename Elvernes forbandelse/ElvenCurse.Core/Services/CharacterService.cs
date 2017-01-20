@@ -214,6 +214,9 @@ namespace ElvenCurse.Core.Services
                 AccumulatedExperience = (int)dr["AccumulatedExperience"],
                 Basehealth = (int)dr["BaseHealth"]
             };
+
+
+
             if (!(bool) dr["IsAlive"])
             {
                 character.SetHealth(0);

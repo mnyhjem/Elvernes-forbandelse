@@ -109,7 +109,7 @@
                 
             }
 
-            this.placeOtherPlayersAndObjects();
+            //this.placeOtherPlayersAndObjects();
 
             this.worldsectionnameplate.setPlayerPosition(this.player);
 
@@ -172,7 +172,7 @@
                 var tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 
-                if (tileset.name === "Collision") {
+                if (tileset.name.toLowerCase() === "collision") {
                     collisionTileId = tileset.firstgid;
                 }
             }
@@ -183,8 +183,8 @@
                 var l = this.map.createLayer(layer.name);
                 
                 if (layer.properties.displayGroup !== undefined) {
-                    switch (layer.properties.displayGroup) {
-                        case "aboveMiddelgroup":
+                    switch (layer.properties.displayGroup.toLowerCase()) {
+                        case "abovemiddelgroup":
                             this.aboveMiddelgroup.add(l);
                             break;
                     }
@@ -192,10 +192,10 @@
                     this.backgroundGroup.add(l);
                 }
 
-                if (layer.name === "background") {
+                if (layer.name.toLowerCase() === "background") {
                     this.background = l;
                 }
-                else if (layer.name === "collision" || layer.name === "collisionLayer") {
+                else if (layer.name.toLowerCase() === "collision" || layer.name.toLowerCase() === "collisionlayer") {
                     l.visible = false;
                     this.collisionLayer = l;
                 }
@@ -258,13 +258,16 @@
                         if (player.connectionstatus === 0) {
                             self.players[i].destroy();
                             self.players.splice(i, 1);
+                            self.placeOtherPlayersAndObjects();
                             return;
                         } else if (player.location.worldsectionId !== self.player.creature.location.worldsectionId) {
                             self.players[i].destroy();
                             self.players.splice(i, 1);
+                            self.placeOtherPlayersAndObjects();
                             return;
                         }
                         self.players[i].updatePlayer(player);
+                        self.placeOtherPlayersAndObjects();
                         return;
                     }
                 }
@@ -272,6 +275,7 @@
                 var newplayer = new OtherPlayer(self.game, player);
                 self.middelgroundGroup.add(newplayer.group);
                 self.players.push(newplayer);
+                self.placeOtherPlayersAndObjects();
             };
 
             this.gameHub.client.updateNpc = function (npc: IPlayer) {
@@ -284,13 +288,16 @@
                         if (npc.connectionstatus === 0) {
                             self.npcs[i].destroy();
                             self.npcs.splice(i, 1);
+                            self.placeOtherPlayersAndObjects();
                             return;
                         } else if (npc.location.worldsectionId !== self.player.creature.location.worldsectionId) {
                             self.npcs[i].destroy();
                             self.npcs.splice(i, 1);
+                            self.placeOtherPlayersAndObjects();
                             return;
                         }
                         self.npcs[i].updatePlayer(npc);
+                        self.placeOtherPlayersAndObjects();
                         return;
                     }
                 }
@@ -306,6 +313,7 @@
                 
                 self.middelgroundGroup.add(newnpc.group);
                 self.npcs.push(newnpc);
+                self.placeOtherPlayersAndObjects();
             };
 
             this.gameHub.client.updateInteractiveObjects = function (ios: IInteractiveObject[]) {
@@ -325,6 +333,8 @@
                         self.interactiveObjects.push(newio);
                     }
                 }
+
+                self.placeOtherPlayersAndObjects();
             };
 
             this.gameHub.client.updateOwnPlayer = function (player: IPlayer) {

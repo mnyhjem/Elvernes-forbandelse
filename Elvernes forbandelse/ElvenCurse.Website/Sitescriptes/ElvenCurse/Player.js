@@ -12,6 +12,7 @@ var ElvenCurse;
             this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
             this.playerSprite.anchor.setTo(0.5, 0.5);
             this.loadPlayersprite();
+            this.oldHealth = this.creature.health;
             this.nameplate = new ElvenCurse.Nameplate(this.game, this.creature.name, this.creature);
             this.playerGroup = this.game.add.group();
             this.playerGroup.add(this.playerSprite);
@@ -25,6 +26,14 @@ var ElvenCurse;
             }
             if (revieve) {
                 this.playAnimation("spellcastFront");
+            }
+            var self = this;
+            if (this.oldHealth > this.creature.health) {
+                this.playerSprite.tint = 0xff0000;
+                this.oldHealth = this.creature.health;
+                this.game.time.events.add(Phaser.Timer.SECOND, function () {
+                    self.playerSprite.tint = 0xffffff;
+                }, this);
             }
             //this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);
             this.nameplate.setPosition(this.playerSprite.x, this.playerSprite.y);

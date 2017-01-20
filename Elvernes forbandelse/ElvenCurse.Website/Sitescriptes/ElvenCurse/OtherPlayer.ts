@@ -6,7 +6,8 @@
         group: Phaser.Group;
         playerSprite: Phaser.Sprite;
 
-        shownAsDead:boolean;
+        shownAsDead: boolean;
+        oldHealth:number;
 
         constructor(game: Phaser.Game, player: IPlayer) {
             this.game = game;
@@ -47,6 +48,17 @@
             }
             this.player = player;
             this.nameplate.update(this.player);
+
+            var self = this;
+            if (this.oldHealth > this.player.health) {
+                this.playerSprite.tint = 0xff0000;
+                this.oldHealth = this.player.health;
+                this.game.time.events.add(Phaser.Timer.SECOND,
+                    function () {
+                        self.playerSprite.tint = 0xffffff;
+                    },
+                    this);
+            }
         }
 
         public placeGroup() {
@@ -65,8 +77,13 @@
             if (this.playerSprite.y < y) {
                 this.playAnimation("walkFront");
             }
-            this.playerSprite.x = x;
-            this.playerSprite.y = y;
+            
+            if (this.playerSprite.x === 0 || this.playerSprite.y === 0) {
+                this.playerSprite.x = x;
+                this.playerSprite.y = y;
+            } else {
+                this.game.add.tween(this.playerSprite).to({ x, y }, 50, Phaser.Easing.Linear.None, true).start();
+            }
             this.nameplate.setPosition(x, y);
 
             this.checkDead();

@@ -13,9 +13,10 @@
         <ul id="characterlist">
             @foreach (var character in Model.Characters)
             {
-                <li onclick="location.href='@Url.Action("Index", new {id = character.Id})'">
+                <li onclick="location.href='@Url.Action("Index", new {id = character.Id})'" style="@(character.IsAlive ? Html.Raw("") : Html.Raw("font-style: Italic;"))">
                     @character.Name<br />
-                    <span style="font-size:8pt">Level @character.Level</span><br/>
+                    <span style="font-size:8pt">@(character.IsAlive ? Html.Raw("") : Html.Raw("Død<br>"))</span>
+                    <span style="font-size:8pt">Level @character.Level</span><br />
                     <span style="font-size:8pt">@character.Location.Name</span>
                 </li>
             }
@@ -81,10 +82,11 @@
             text-align: center;
             margin-bottom: 10px;
             cursor: pointer;
+            background-color: #272b30;
         }
 
         #characterlist li:hover {
-            background-color: lightblue;
+            background-color: #3e444c;
         }
         #characterlist
         {

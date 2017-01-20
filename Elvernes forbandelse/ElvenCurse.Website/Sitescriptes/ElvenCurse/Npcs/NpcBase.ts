@@ -5,6 +5,7 @@
         npcSprite: Phaser.Sprite;
         npc: IPlayer;
         nameplate: Nameplate;
+        oldHealth:number;
 
         constructor(game: Phaser.Game, npc: IPlayer) {
             this.game = game;
@@ -26,6 +27,17 @@
 
         public updatePlayer(npc: IPlayer) {
             this.npc = npc;
+
+            var self = this;
+            if (this.oldHealth > this.npc.health) {
+                this.npcSprite.tint = 0xff0000;
+                this.oldHealth = this.npc.health;
+                this.game.time.events.add(Phaser.Timer.SECOND,
+                    function () {
+                        self.npcSprite.tint = 0xffffff;
+                    },
+                    this);
+            }
         }
 
         public placeGroup() {
@@ -52,15 +64,27 @@
             if (this.npcSprite.y < y) {
                 this.playAnimation("walkFront");
             }
-            this.npcSprite.x = x;
-            this.npcSprite.y = y;
-            this.nameplate.setPosition(x, y);
+
+            this.moveTo(x, y);
         }
 
         public destroy() {
             //this.playerGroup.removeAll(true);
             this.npcSprite.animations.destroy();
             this.group.destroy(true);
+        }
+
+        private moveTo(x: number, y: number) {
+            if (this.npcSprite.x === 0 || this.npcSprite.y === 0) {
+                this.npcSprite.x = x;
+                this.npcSprite.y = y;
+            } else {
+                this.game.add.tween(this.npcSprite).to({ x, y }, 50, Phaser.Easing.Linear.None, true).start();
+            }
+            
+            
+
+            this.nameplate.setPosition(x, y);
         }
     }
 }
