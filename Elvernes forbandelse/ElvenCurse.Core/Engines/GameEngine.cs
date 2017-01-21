@@ -15,7 +15,7 @@ namespace ElvenCurse.Core.Engines
 {
     public class GameEngine : IGameEngine
     {
-        private Random _rnd = new Random();
+        private Random _rnd;
 
         private readonly IHubConnectionContext<dynamic> _clients;
         private readonly ICharacterService _characterService;
@@ -35,8 +35,6 @@ namespace ElvenCurse.Core.Engines
         private readonly TimeSpan _messageQueueUpdateInterval = TimeSpan.FromMilliseconds(5000);
         private readonly object _messageQueueUpdateLock = new object();
         private volatile bool _messageQueueUpdatingTimer;
-        
-        private readonly DateTime _serverBoottime;
 
         public int Onlinecount
         {
@@ -74,15 +72,16 @@ namespace ElvenCurse.Core.Engines
             IHubConnectionContext<dynamic> clients, 
             ICharacterService characterService,
             IWorldService worldService,
-            IMessagequeueService messagequeueService)
+            IMessagequeueService messagequeueService, Random rnd)
         {
-            _serverBoottime = DateTime.Now;
-            Trace.WriteLine($"Server bootup at {_serverBoottime}");
+            var serverBoottime = DateTime.Now;
+            Trace.WriteLine($"Server bootup at {serverBoottime}");
             
             _clients = clients;
             _characterService = characterService;
             _worldService = worldService;
             _messagequeueService = messagequeueService;
+            _rnd = rnd;
             _characters = new List<Character>();
             _worldsections = new List<Worldsection>();
             _npcs = _worldService.GetAllNpcs();
@@ -162,7 +161,7 @@ namespace ElvenCurse.Core.Engines
             //Clients.Caller.javascriptmetode("vi skal vide at alle de andre er der..");
             //_clients.Groups("test");
 
-            var grp = _clients.Group("test");
+            //var grp = _clients.Group("test");
 
             //throw new System.NotImplementedException();
         }
@@ -345,13 +344,34 @@ namespace ElvenCurse.Core.Engines
             }
 
             // placer npcere på kortet
-            foreach (var npc in _npcs.Where(a => a.CurrentLocation.WorldsectionId == character.Location.WorldsectionId))
+            foreach (var npc in _npcs.Where(a => a.Location.WorldsectionId == character.Location.WorldsectionId))
             {
                 _clients.Client(character.ConnectionId).updateNpc(npc.ToIPlayer());
             }
 
             // placer interactiveobjects på kortet
             _clients.Client(character.ConnectionId).updateInteractiveObjects(_interactiveObjects.Where(a => a.Location.WorldsectionId == character.Location.WorldsectionId));
+        }
+
+        public void ActivateAbility(string connectionId, string getUserId, int activatedAbility, int selectedCreatureId)
+        {
+            var c = _characters.FirstOrDefault(a => a.ConnectionId == connectionId);
+            if (c == null)
+            {
+                return;
+            }
+
+            var npc = _npcs.FirstOrDefault(a => a.Id == selectedCreatureId);
+
+            if (!c.Attack(npc, activatedAbility))
+            {
+                // send fejlbesked der vises for brugeren
+                _clients.Client(connectionId).Message(c.LastAttackerror);
+            }
+            else
+            {
+                Trace.WriteLine($"Angreb ok");
+            }
         }
 
         public void ClickOnInteractiveObject(string connectionId, string getUserId, int ioId)
@@ -398,7 +418,7 @@ namespace ElvenCurse.Core.Engines
                 _npcs = _worldService.GetAllNpcs();
             }
 
-            foreach (var npc in _npcs.Where(a => a.CurrentLocation.WorldsectionId == worldsectionId))
+            foreach (var npc in _npcs.Where(a => a.Location.WorldsectionId == worldsectionId))
             {
                 _clients.Clients(_characters
                 .Where(a => a.Location.WorldsectionId == worldsectionId)
@@ -438,7 +458,8 @@ namespace ElvenCurse.Core.Engines
 
                         if (npc.UpdateNeeded)
                         {
-                            AllInWorldSection(npc.CurrentLocation.WorldsectionId).updateNpc(npc.ToIPlayer());
+                            AllInWorldSection(npc.Location.WorldsectionId).updateNpc(npc.ToIPlayer());
+                            npc.UpdateNeeded = false;
                         }
                     }
 
@@ -487,7 +508,7 @@ namespace ElvenCurse.Core.Engines
                     foreach (var msg in msgs)
                     {
                         var errorMessage = "";
-                        Character user = null;
+                        Character user;
 
                         try
                         {

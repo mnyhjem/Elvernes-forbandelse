@@ -58,5 +58,10 @@ namespace ElvenCurse.Server.Hubs
         {
             _gameEngine.ClickOnInteractiveObject(Context.ConnectionId, ((ClaimsPrincipal)Context.User).GetUserId(), ioId);
         }
+
+        public void ActivateAbility(int activatedAbility, int selectedCreatureId)
+        {
+            _gameEngine.ActivateAbility(Context.ConnectionId, ((ClaimsPrincipal)Context.User).GetUserId(), activatedAbility, selectedCreatureId);
+        }
     }
 }

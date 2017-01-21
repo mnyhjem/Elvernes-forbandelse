@@ -7,13 +7,12 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public Npcrace Race { get; set; }
 
-        public Npctype Type { get; set; }
+        
 
         public CreatureMovetype Movetype { get; set; }
 
-        protected NpcBase(int viewDistance, int attackDistance, Npctype type) : base(viewDistance, attackDistance)
+        protected NpcBase(int viewDistance, int attackDistance, Creaturetype type) : base(type, viewDistance, attackDistance)
         {
-            Type = type;
         }
 
         public void Move(List<Character> characters)
@@ -21,7 +20,7 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             CalculateNextMove(characters, Movetype);
         }
 
-        public override bool Attack(Character characterToAttack)
+        public override bool Attack(Creature characterToAttack, int activatedAbility)
         {
             return false;
         }
@@ -32,7 +31,7 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             {
                 Id,
                 Name,
-                Location = CurrentLocation,
+                Location = Location,
                 Type = Type,
                 MaxHealth = GetMaxHealth(),
                 Health = Health,

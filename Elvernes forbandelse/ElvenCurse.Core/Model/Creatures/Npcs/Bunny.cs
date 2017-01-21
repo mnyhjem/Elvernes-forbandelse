@@ -5,7 +5,7 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
 {
     public class Bunny:NpcBase
     {
-        public Bunny(Random rnd) : base(3, 3, Npctype.Bunny)
+        public Bunny(Random rnd) : base(3, 3, Creaturetype.Bunny)
         {
             Rnd = rnd;
 

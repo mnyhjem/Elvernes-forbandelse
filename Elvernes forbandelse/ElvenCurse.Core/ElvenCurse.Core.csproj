@@ -54,6 +54,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,7 +87,7 @@
     <Compile Include="Model\Creatures\CreatureAction.cs" />
     <Compile Include="Model\Creatures\Creaturemode.cs" />
     <Compile Include="Model\Creatures\Npcs\Npcrace.cs" />
-    <Compile Include="Model\Creatures\Npcs\Npctype.cs" />
+    <Compile Include="Model\Creatures\Creaturetype.cs" />
     <Compile Include="Model\Creatures\Npcs\Bunny.cs" />
     <Compile Include="Model\Creatures\Npcs\Wolf.cs" />
     <Compile Include="Model\Terrainfile.cs" />

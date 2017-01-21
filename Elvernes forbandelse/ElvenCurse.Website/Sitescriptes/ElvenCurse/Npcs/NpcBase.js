@@ -4,6 +4,7 @@ var ElvenCurse;
         function NpcBase(game, npc) {
             this.game = game;
             this.creature = npc;
+            this.oldHealth = this.creature.health;
         }
         NpcBase.prototype.playAnimation = function (animationName) {
             var animation = this.npcSprite.animations.getAnimation(animationName);
@@ -16,7 +17,13 @@ var ElvenCurse;
             }
         };
         NpcBase.prototype.updatePlayer = function (npc) {
+            var revieve = this.creature.isAlive === false && npc.isAlive === true;
             this.creature = npc;
+            if (!this.creature.isAlive) {
+                this.playAnimation("hurtBack"); // todo mangler grafik for når man er død der virker for alle npcer..
+            }
+            if (revieve) {
+            }
             var self = this;
             if (this.oldHealth > this.creature.health) {
                 this.npcSprite.tint = 0xff0000;
@@ -25,6 +32,7 @@ var ElvenCurse;
                     self.npcSprite.tint = 0xffffff;
                 }, this);
             }
+            this.nameplate.update(this.creature);
         };
         NpcBase.prototype.placeGroup = function () {
             //var x = this.npc.location.x * 32;

@@ -5,14 +5,15 @@
         npcSprite: Phaser.Sprite;
         creature: IPlayer;
         nameplate: Nameplate;
-        oldHealth:number;
+        oldHealth: number;
 
         constructor(game: Phaser.Game, npc: IPlayer) {
             this.game = game;
             this.creature = npc;
+            this.oldHealth = this.creature.health;
         }
 
-        private playAnimation(animationName: string) {
+        protected playAnimation(animationName: string) {
             var animation = this.npcSprite.animations.getAnimation(animationName);
 
             //this.nameplate.nametext.text = animation.frameTotal.toString();
@@ -26,7 +27,16 @@
         }
 
         public updatePlayer(npc: IPlayer) {
+            var revieve: boolean = this.creature.isAlive === false && npc.isAlive === true;
             this.creature = npc;
+
+            if (!this.creature.isAlive) {
+                this.playAnimation("hurtBack"); // todo mangler grafik for når man er død der virker for alle npcer..
+            }
+
+            if (revieve) {
+                //this.playAnimation("spellcastFront"); // todo mangler reveive grafik
+            }
 
             var self = this;
             if (this.oldHealth > this.creature.health) {
@@ -38,6 +48,8 @@
                     },
                     this);
             }
+
+            this.nameplate.update(this.creature);
         }
 
         public placeGroup() {

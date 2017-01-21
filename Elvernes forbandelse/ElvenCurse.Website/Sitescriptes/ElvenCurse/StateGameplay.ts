@@ -34,6 +34,7 @@
         playerPortraitplate: EntityPortraitplate;
         actionbar: Actionbar;
         worldsectionnameplate: Worldsectionnameplate;
+        messageText:Phaser.Text;
 
         // music
         backgroundMusic: Phaser.Sound;
@@ -77,7 +78,8 @@
             this.uiGroup.add(this.actionbar.group);
             this.worldsectionnameplate = new Worldsectionnameplate(this.game, this.currentMap);
             this.uiGroup.add(this.worldsectionnameplate.group);
-
+            this.messageText = this.game.add.text((this.game.width / 2) - 200, 200, "", { font: "32px Arial", fill: "#669966" }); // , backgroundColor: "#ffffff"
+            this.uiGroup.add(this.messageText);
 
             // signalr
             this.wireupSignalR();
@@ -108,6 +110,15 @@
             this.player.creature.location.y = this.background.getTileX(this.player.playerSprite.y);
             if (this.player.creature.location.x !== oldX || this.player.creature.location.y !== oldY) {
                 this.gameHub.server.movePlayer(this.player.creature.location.worldsectionId, this.player.creature.location.x, this.player.creature.location.y);
+            }
+
+            var activatedAbility = this.actionbar.getActivatedAbility();
+            if (activatedAbility > -1) {
+                var creatureId = -1;
+                if (this.selectedCreature !== undefined) {
+                    creatureId = this.selectedCreature.creature.id;
+                }
+                this.gameHub.server.activateAbility(activatedAbility, creatureId);
             }
 
             // this.placeOtherPlayersAndObjects();
@@ -160,6 +171,8 @@
             if (this.selectedCreature !== undefined) {
                 this.game.debug.text("Selected: " + this.selectedCreature.creature.name, 32, 95, "rgb(0,0,0)");
             }
+
+            //this.game.debug.text("Activated ability: " + this.actionbar.getActivatedAbility(), 32, 110, "rgb(0,0,0)");
         }
 
         private createMap(): void {
@@ -282,6 +295,16 @@
                 self.placeOtherPlayersAndObjects();
             };
 
+            this.gameHub.client.message = function(message: string): void {
+                self.log(message);
+                self.messageText.text = message;
+                self.messageText.visible = true;
+                setTimeout(function() {
+                        self.messageText.visible = false;
+                    },
+                    500);
+            }
+
             this.gameHub.client.updateNpc = function (npc: IPlayer): void {
                 for (var i:number = 0; i < self.npcs.length; i++) {
                     if (self.npcs[i].creature.id === npc.id) {
@@ -292,16 +315,17 @@
                         if (npc.connectionstatus === 0) {
                             self.npcs[i].destroy();
                             self.npcs.splice(i, 1);
-                            self.placeOtherPlayersAndObjects();
+                            //self.placeOtherPlayersAndObjects();
                             return;
                         } else if (npc.location.worldsectionId !== self.player.creature.location.worldsectionId) {
                             self.npcs[i].destroy();
                             self.npcs.splice(i, 1);
-                            self.placeOtherPlayersAndObjects();
+                            //self.placeOtherPlayersAndObjects();
                             return;
                         }
                         self.npcs[i].updatePlayer(npc);
-                        self.placeOtherPlayersAndObjects();
+                        self.npcs[i].placeGroup();
+                        //self.placeOtherPlayersAndObjects();
                         return;
                     }
                 }
@@ -325,7 +349,8 @@
 
                 self.middelgroundGroup.add(newnpc.group);
                 self.npcs.push(newnpc);
-                self.placeOtherPlayersAndObjects();
+                newnpc.placeGroup();
+                //self.placeOtherPlayersAndObjects();
             };
 
             this.gameHub.client.updateInteractiveObjects = function (ios: IInteractiveObject[]): void {

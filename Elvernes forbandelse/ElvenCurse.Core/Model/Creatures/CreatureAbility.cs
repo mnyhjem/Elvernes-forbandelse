@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace ElvenCurse.Core.Model.Creatures
 {
     public class CreatureAbility
     {
+        [IgnoreDataMember]
         public Creature Owner { get; }
 
         public string Name { get; set; }
@@ -13,6 +15,8 @@ namespace ElvenCurse.Core.Model.Creatures
         public int BaseHeal { get; set; }
         public bool Passive { get; set; }
         public bool IsHeal { get; set; }
+        public int AbilityIcon { get; set; }
+        public int AttackDistance { get; set; }
 
         private DateTime _lastUsed;
 

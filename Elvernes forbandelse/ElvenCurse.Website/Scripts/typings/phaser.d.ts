@@ -4613,6 +4613,7 @@ declare module Phaser {
         update(): void;
         updateCrop(): void;
 
+        abilityIndex: number; // Custom attribute
     }
 
     class SpriteBatch extends Phaser.Group {

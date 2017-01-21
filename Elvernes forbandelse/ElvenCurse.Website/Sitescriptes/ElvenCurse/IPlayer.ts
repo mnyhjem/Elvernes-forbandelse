@@ -6,6 +6,16 @@
         x: number;
     }
 
+    export interface IAbility {
+        name: string;
+        cooldown: number;
+        baseDamage: number;
+        baseHeal: number;
+        passive: boolean;
+        isHeal: boolean;
+        abilityIcon: number;
+    }
+
     export interface IPlayer {
         id: number;
         name: string;
@@ -15,6 +25,7 @@
         type: number;
         health: number;
         isAlive: boolean;
-        maxHealth:number;
+        maxHealth: number;
+        abilities : Array<IAbility>;
     }
 }

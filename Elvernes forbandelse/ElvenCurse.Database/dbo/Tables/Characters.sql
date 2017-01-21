@@ -8,5 +8,6 @@
     [BaseHealth] INT NOT NULL DEFAULT 125, 
     [IsAlive] BIT NOT NULL DEFAULT 1, 
     [Appearance] NVARCHAR(500) NOT NULL DEFAULT '{"Sex":1,"Body":4,"Eyecolor":0,"Nose":0,"Ears":2,"Facial":{"Type":0,"Color":0},"Hair":{"Type":20,"Color":7}}', 
+    [Type] INT NOT NULL DEFAULT 0, 
     CONSTRAINT [FK_Characters_AspNetUsers] FOREIGN KEY (UserId) REFERENCES [AspNetUsers]([Id])
 )

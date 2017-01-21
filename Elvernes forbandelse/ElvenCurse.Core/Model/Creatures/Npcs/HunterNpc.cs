@@ -2,17 +2,17 @@
 {
     public class HunterNpc : NpcBase
     {
-        public HunterNpc():base(5, 5, Npctype.Hunter)
+        public HunterNpc():base(5, 5, Creaturetype.Hunter)
         {
             Mode = Creaturemode.FactionDepending;
             Movetype = CreatureMovetype.FollowCharactor;
         }
 
-        public override bool Attack(Character characterToAttack)
+        public override bool Attack(Creature characterToAttack, int activatedAbility)
         {
             if (characterToAttack != null)
             {
-                LastCharacterAttacked = characterToAttack;
+                LastCreatureAttacked = characterToAttack;
             }
 
             // hvis vi er længere væk ens angrebsafstanden, skal vi gå tættere på

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using ElvenCurse.Core.Utilities;
 
@@ -7,7 +6,7 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
 {
     public class Wolf : NpcBase
     {
-        public Wolf(Random rnd) : base(5, 2, Npctype.Wolf)
+        public Wolf(Random rnd) : base(5, 2, Creaturetype.Wolf)
         {
             Rnd = rnd;
             Mode = Creaturemode.Hostile;
@@ -22,17 +21,17 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             });
         }
 
-        public override bool Attack(Character characterToAttack)
+        public override bool Attack(Creature characterToAttack, int activatedAbility)
         {
             if (characterToAttack != null)
             {
-                LastCharacterAttacked = characterToAttack;
+                LastCreatureAttacked = characterToAttack;
             }
 
             // hvis vi er længere væk ens angrebsafstanden, skal vi gå tættere på
-            if (!CurrentLocation.IsWithinReachOf(LastCharacterAttacked.Location, AttackDistance))
+            if (!Location.IsWithinReachOf(LastCreatureAttacked.Location, AttackDistance))
             {
-                MoveTowardsLocation(LastCharacterAttacked.Location);
+                MoveTowardsLocation(LastCreatureAttacked.Location);
                 return true;
             }
 
@@ -42,7 +41,7 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
                 return false;
             }
 
-            if (!LastCharacterAttacked.IsAlive)
+            if (!LastCreatureAttacked.IsAlive)
             {
                 //Trace.WriteLine(string.Format("{0}", LastCharacterAttacked.Health));
                 Action = CreatureAction.ReturnToDefaultLocation;

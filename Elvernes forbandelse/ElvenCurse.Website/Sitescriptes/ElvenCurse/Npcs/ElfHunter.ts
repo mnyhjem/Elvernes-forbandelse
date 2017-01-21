@@ -30,6 +30,10 @@
             this.npcSprite.loadTexture("npcplayersprite_" + this.creature.id);
             this.npcSprite.frame = 26; // <-- kig mod kameraet til at starte med
             this.createPlayerspriteAndAnimations();
+
+            if (!this.creature.isAlive) {
+                super.playAnimation("hurtBack"); // todo mangler grafik for når man er død der virker for alle npcer..
+            }
         }
 
         private createPlayerspriteAndAnimations() {
@@ -68,10 +72,10 @@
             this.npcSprite.animations.add("shootRight", Phaser.ArrayUtils.numberArray(19 * imagesPerRow, 19 * imagesPerRow + 6));
 
             // hurt
-            this.npcSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 6));
-            this.npcSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 6));
-            this.npcSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 6));
-            this.npcSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 6));
+            this.npcSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 5));
+            this.npcSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
+            this.npcSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
+            this.npcSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
 
             //this.playerSprite.animations.play("shootRight", 10, false);
         }

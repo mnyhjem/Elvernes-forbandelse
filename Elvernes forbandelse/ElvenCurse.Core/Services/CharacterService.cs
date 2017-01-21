@@ -207,7 +207,7 @@ namespace ElvenCurse.Core.Services
 
         private Character MapCharacter(IDataRecord dr)
         {
-            var character = new Character
+            var character = new Character((Creaturetype)dr["type"])
             {
                 Id = (int)dr["id"],
                 Name = (string)dr["name"],

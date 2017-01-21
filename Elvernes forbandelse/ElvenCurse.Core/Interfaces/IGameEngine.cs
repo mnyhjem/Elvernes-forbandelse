@@ -13,5 +13,6 @@
 
         void SendToClientsInteractiveObjects(int worldsectionId, bool loadFromDatabase = false);
         void SendToClientsNpcs(int worldsectionId, bool loadFromDatabase = false);
+        void ActivateAbility(string contextConnectionId, string getUserId, int activatedAbility, int selectedCreatureId);
     }
 }

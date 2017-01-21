@@ -31,6 +31,9 @@ var ElvenCurse;
             this.npcSprite.loadTexture("npcplayersprite_" + this.creature.id);
             this.npcSprite.frame = 26; // <-- kig mod kameraet til at starte med
             this.createPlayerspriteAndAnimations();
+            if (!this.creature.isAlive) {
+                _super.prototype.playAnimation.call(this, "hurtBack"); // todo mangler grafik for når man er død der virker for alle npcer..
+            }
         };
         ElfHunter.prototype.createPlayerspriteAndAnimations = function () {
             //this.npcSprite = this.game.add.sprite(this.npc.location.x, this.npc.location.y, "playertest");
@@ -62,10 +65,10 @@ var ElvenCurse;
             this.npcSprite.animations.add("shootFront", Phaser.ArrayUtils.numberArray(18 * imagesPerRow, 18 * imagesPerRow + 6));
             this.npcSprite.animations.add("shootRight", Phaser.ArrayUtils.numberArray(19 * imagesPerRow, 19 * imagesPerRow + 6));
             // hurt
-            this.npcSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 6));
-            this.npcSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 6));
-            this.npcSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 6));
-            this.npcSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 6));
+            this.npcSprite.animations.add("hurtBack", Phaser.ArrayUtils.numberArray(20 * imagesPerRow, 20 * imagesPerRow + 5));
+            this.npcSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
+            this.npcSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
+            this.npcSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
             //this.playerSprite.animations.play("shootRight", 10, false);
         };
         return ElfHunter;

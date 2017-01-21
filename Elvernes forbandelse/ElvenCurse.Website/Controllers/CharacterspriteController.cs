@@ -64,7 +64,7 @@ namespace ElvenCurse.Website.Controllers
             c.Hair.Type = Hair.HairType.Ponytail;
             c.Hair.Color = HairColor.Brunette;
 
-            var creature = new Character();
+            var creature = new Character(Creaturetype.Hunter);
             creature.CharacterAppearance = c;
 
             return creature;

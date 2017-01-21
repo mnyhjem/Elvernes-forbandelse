@@ -1,22 +1,17 @@
-﻿using ElvenCurse.Core.Model.Creatures;
+﻿using System.Linq;
+using ElvenCurse.Core.Model.Creatures;
+using ElvenCurse.Core.Utilities;
 
 namespace ElvenCurse.Core.Model
 {
     public class Character : Creature
     {
-        public Character() : base(0, 0)
+        public Character(Creaturetype type) : base(type, 0, 0)
         {
         }
 
-        public override bool Attack(Character characterToAttack)
-        {
-            return false;
-        }
-
-        //public int Id { get; set; }
-        //public string Name { get; set; }
-        public Location Location { get; set; }
-
+        public string LastAttackerror { get; private set; }
+        
         public string ConnectionId { get; set; }
 
         public Connectionstatus Connectionstatus { get; set; }
@@ -25,7 +20,39 @@ namespace ElvenCurse.Core.Model
 
         public override int Level
         {
-            get { return Utilities.ExperienceCalculations.CurrentlevelFromAccumulatedXp(AccumulatedExperience); }
+            get { return ExperienceCalculations.CurrentlevelFromAccumulatedXp(AccumulatedExperience); }
+        }
+        
+        public override bool Attack(Creature characterToAttack, int activatedAbility)
+        {
+            if (characterToAttack == null)
+            {
+                characterToAttack = this;
+            }
+
+            if (!characterToAttack.IsAlive)
+            {
+                LastAttackerror = "Dit mål er død";
+                return false;
+            }
+
+            var abilityToUse = Abilities[activatedAbility];
+            if (abilityToUse == null)
+            {
+                LastAttackerror = "Du kender ikke dette angreb";
+                return false;
+            }
+
+            // hvis vi er længere væk ens angrebsafstanden, skal vi gå tættere på
+            if (!Location.IsWithinReachOf(characterToAttack.Location, abilityToUse.AttackDistance))
+            {
+                LastAttackerror = "Du er for langt væk";
+                return false;
+            }
+            
+            abilityToUse.Use(characterToAttack);
+
+            return true;
         }
     }
 

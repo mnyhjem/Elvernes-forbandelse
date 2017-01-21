@@ -16,7 +16,11 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public Location DefaultLocation { get; set; }
 
-        public Location CurrentLocation { get; set; }
+        //public Location CurrentLocation { get; set; }
+
+        public Location Location { get; set; }
+
+        public Creaturetype Type { get; private set; }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public bool IsAlive
@@ -67,28 +71,20 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public CreatureAction Action { get; set; }
 
-        public bool UpdateNeeded
-        {
-            get
-            {
-                var r = _updateNeeded;
-                _updateNeeded = false;
-                return r;
-            }
-        }
-        private bool _updateNeeded;
+        public bool UpdateNeeded { get; set; }
 
-        public Character LastCharacterAttacked { get; set; }
+        public Creature LastCreatureAttacked { get; set; }
         public CharacterAppearance CharacterAppearance { get; set; }
 
-        protected Creature(int viewDistance, int attackDistance)
+        protected Creature(Creaturetype type, int viewDistance, int attackDistance)
         {
             _viewDistace = viewDistance;
             AttackDistance = attackDistance;
+            Type = type;
             Abilities = new List<CreatureAbility>();
             AffectedByAbilities = new Stack<AffectedByAbility>();
 
-            Abilities.Add(new CreatureAbility(null)
+            Abilities.Add(new CreatureAbility(this)
             {
                 BaseHeal = 5,
                 Cooldown = 2,
@@ -96,6 +92,25 @@ namespace ElvenCurse.Core.Model.Creatures
                 Passive = true,
                 IsHeal = true
             });
+
+            GetAbilitiesForCreature();
+        }
+
+        private void GetAbilitiesForCreature()
+        {
+            switch (Type)
+            {
+                case Creaturetype.Hunter:
+                    Abilities.Add(new CreatureAbility(this)
+                    {
+                        Cooldown = 2,
+                        Name = "Skyd",
+                        BaseDamage = 10,
+                        AbilityIcon = 72,
+                        AttackDistance = 10
+                    });
+                    break;
+            }
         }
 
         protected int GetMaxHealth()
@@ -117,8 +132,9 @@ namespace ElvenCurse.Core.Model.Creatures
         /// 
         /// </summary>
         /// <param name="characterToAttack"></param>
+        /// <param name="activatedAbility"></param>
         /// <returns>True if we did attack someone</returns>
-        public abstract bool Attack(Character characterToAttack);
+        public abstract bool Attack(Creature characterToAttack, int activatedAbility);
 
         //public bool IsWithinDistance(Location location1, Location location2, int distance)
         //{
@@ -134,7 +150,7 @@ namespace ElvenCurse.Core.Model.Creatures
         {
             if (AffectedByAbilities.Count > 0)
             {
-                _updateNeeded = true;
+                UpdateNeeded = true;
             }
 
             while (AffectedByAbilities.Count > 0)
@@ -156,8 +172,13 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public virtual void CalculateNextMove(List<Character> characters, CreatureMovetype movetype)
         {
+            if (!IsAlive)
+            {
+                return;
+            }
+
             // Se om vi er for langt væk fra vores "hjem"
-            if (Action == CreatureAction.ReturnToDefaultLocation || !CurrentLocation.IsWithinReachOf(DefaultLocation, _maxDistanceFromDefault))
+            if (Action == CreatureAction.ReturnToDefaultLocation || !Location.IsWithinReachOf(DefaultLocation, _maxDistanceFromDefault))
             {
                 Action = CreatureAction.ReturnToDefaultLocation;
                 MoveTowardsLocation(DefaultLocation);
@@ -167,7 +188,7 @@ namespace ElvenCurse.Core.Model.Creatures
             var collidesWith = CollidesViewPlayer(characters);
             if (collidesWith != null || Action == CreatureAction.Attacking)
             {
-                if (Attack(collidesWith))
+                if (Attack(collidesWith, -1))
                 {
                     return;
                 }
@@ -201,7 +222,7 @@ namespace ElvenCurse.Core.Model.Creatures
             var directions = new List<Location>();
             directions.Add(DefaultLocation);
 
-            if (CurrentLocation.X > DefaultLocation.X - 20)
+            if (Location.X > DefaultLocation.X - 20)
             {
                 directions.Add(new Location
                 {
@@ -210,7 +231,7 @@ namespace ElvenCurse.Core.Model.Creatures
                     Y = DefaultLocation.Y
                 });
             }
-            if (CurrentLocation.X < DefaultLocation.X + 20)
+            if (Location.X < DefaultLocation.X + 20)
             {
                 directions.Add(new Location
                 {
@@ -219,7 +240,7 @@ namespace ElvenCurse.Core.Model.Creatures
                     Y = DefaultLocation.Y
                 });
             }
-            if (CurrentLocation.Y > DefaultLocation.Y - 20)
+            if (Location.Y > DefaultLocation.Y - 20)
             {
                 directions.Add(new Location
                 {
@@ -228,7 +249,7 @@ namespace ElvenCurse.Core.Model.Creatures
                     Y = DefaultLocation.Y - 20
                 });
             }
-            if (CurrentLocation.Y < DefaultLocation.Y + 20)
+            if (Location.Y < DefaultLocation.Y + 20)
             {
                 directions.Add(new Location
                 {
@@ -245,28 +266,28 @@ namespace ElvenCurse.Core.Model.Creatures
 
         protected void MoveTowardsLocation(Location location)
         {
-            if (location.X < CurrentLocation.X)
+            if (location.X < Location.X)
             {
-                CurrentLocation.X--;
-                _updateNeeded = true;
+                Location.X--;
+                UpdateNeeded = true;
             }
-            else if (location.X > CurrentLocation.X)
+            else if (location.X > Location.X)
             {
-                CurrentLocation.X++;
-                _updateNeeded = true;
+                Location.X++;
+                UpdateNeeded = true;
             }
-            else if (location.Y < CurrentLocation.Y)
+            else if (location.Y < Location.Y)
             {
-                CurrentLocation.Y--;
-                _updateNeeded = true;
+                Location.Y--;
+                UpdateNeeded = true;
             }
-            else if (location.Y > CurrentLocation.Y)
+            else if (location.Y > Location.Y)
             {
-                CurrentLocation.Y++;
-                _updateNeeded = true;
+                Location.Y++;
+                UpdateNeeded = true;
             }
 
-            if (!_updateNeeded)
+            if (!UpdateNeeded)
             {
                 Action = CreatureAction.Idle;
             }
@@ -274,7 +295,7 @@ namespace ElvenCurse.Core.Model.Creatures
 
         protected Character CollidesViewPlayer(List<Character> characters)
         {
-            return characters.FirstOrDefault(a => (a.Location.WorldsectionId == CurrentLocation.WorldsectionId) && a.IsAlive && a.Location.IsWithinReachOf(CurrentLocation, _viewDistace));
+            return characters.FirstOrDefault(a => (a.Location.WorldsectionId == Location.WorldsectionId) && a.IsAlive && a.Location.IsWithinReachOf(Location, _viewDistace));
             //return characters.FirstOrDefault(a => (a.Location.WorldsectionId == CurrentLocation.WorldsectionId) &&
             //    a.Location.X >= CurrentLocation.X - _viewDistace &&
             //    a.Location.X <= CurrentLocation.X + _viewDistace &&

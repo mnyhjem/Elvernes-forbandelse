@@ -209,17 +209,17 @@ namespace ElvenCurse.Core.Services
         {
             NpcBase npc;
 
-            switch ((Npctype)dr["type"])
+            switch ((Creaturetype)dr["type"])
             {
-                case Npctype.Hunter:
+                case Creaturetype.Hunter:
                     npc = new HunterNpc();
                     break;
 
-                case Npctype.Wolf:
+                case Creaturetype.Wolf:
                     npc = new Wolf(_rnd);
                     break;
 
-                case Npctype.Bunny:
+                case Creaturetype.Bunny:
                     npc = new Bunny(_rnd);
                     break;
 
@@ -234,7 +234,7 @@ namespace ElvenCurse.Core.Services
             npc.Level = (int)dr["Level"];
             //npc.Status = (Creaturestatus) dr["status"];
             npc.Basehealth = (int)dr["BaseHealth"];
-            npc.CurrentLocation = new Location
+            npc.Location = new Location
             {
                 WorldsectionId = (int)dr["CurrentWorldsectionId"],
                 X = (int)dr["CurrentX"],
