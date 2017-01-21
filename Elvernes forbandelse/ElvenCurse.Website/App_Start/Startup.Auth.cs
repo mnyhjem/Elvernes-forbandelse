@@ -23,7 +23,8 @@ namespace ElvenCurse.Website
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
             // Configure the sign in cookie
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
+
+            var cookie = new CookieAuthenticationOptions
             {
                 CookieName = "ElvenCurseAuthcookie",
                 //AuthenticationType = "Forms",
@@ -37,7 +38,11 @@ namespace ElvenCurse.Website
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });
+            };
+#if !DEBUG
+            cookie.CookieDomain = ".elvencurse.dk";
+#endif
+            app.UseCookieAuthentication(cookie);
 
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
             {

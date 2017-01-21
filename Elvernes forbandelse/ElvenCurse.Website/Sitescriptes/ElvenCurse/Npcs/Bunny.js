@@ -16,7 +16,7 @@ var ElvenCurse;
             this.group.add(this.nameplate.group);
         }
         Bunny.prototype.createSpriteAndAnimations = function () {
-            this.npcSprite = this.game.add.sprite(this.npc.location.x, this.npc.location.y, "bunny");
+            this.npcSprite = this.game.add.sprite(this.creature.location.x, this.creature.location.y, "bunny");
             this.npcSprite.anchor.setTo(0.5, 0.5);
             var imagesPerRow = 18;
             var offset = 6;
@@ -30,4 +30,3 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.Bunny = Bunny;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=Bunny.js.map

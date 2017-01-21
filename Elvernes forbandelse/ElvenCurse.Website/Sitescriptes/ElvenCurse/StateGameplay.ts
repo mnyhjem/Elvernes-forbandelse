@@ -24,6 +24,8 @@
         npcs: NpcBase[];
         interactiveObjects: InteractiveObject[];
 
+        selectedCreature:NpcBase;
+
         cursors: Phaser.CursorKeys;
         mapMovedInThisPosition:string = "";
         currentMap: IWorldsection;
@@ -154,6 +156,10 @@
             // this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
 
             this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
+
+            if (this.selectedCreature !== undefined) {
+                this.game.debug.text("Selected: " + this.selectedCreature.creature.name, 32, 95, "rgb(0,0,0)");
+            }
         }
 
         private createMap(): void {
@@ -278,7 +284,7 @@
 
             this.gameHub.client.updateNpc = function (npc: IPlayer): void {
                 for (var i:number = 0; i < self.npcs.length; i++) {
-                    if (self.npcs[i].npc.id === npc.id) {
+                    if (self.npcs[i].creature.id === npc.id) {
                         // self.players[i].location.x = player.location.x;
                         // self.players[i].location.y = player.location.y;
                         // self.players[i].location.worldsectionId = player.location.worldsectionId;
@@ -308,6 +314,14 @@
                 } else {
                     newnpc = new ElfHunter(self.game, npc);
                 }
+
+                newnpc.npcSprite.inputEnabled = true;
+                newnpc.npcSprite.events.onInputDown.add(function (sprite, pointer) {
+                        if (pointer.button === 0) {
+                            self.selectedCreature = this; // <-- det er den rigtige this..
+                        }
+                    },
+                    newnpc);
 
                 self.middelgroundGroup.add(newnpc.group);
                 self.npcs.push(newnpc);
@@ -498,7 +512,7 @@
             // npcs
             for (i = 0; i < this.npcs.length; i++) {
                 var npc:NpcBase = this.npcs[i];
-                if (npc.npc.location.worldsectionId !== this.player.creature.location.worldsectionId) {
+                if (npc.creature.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
 

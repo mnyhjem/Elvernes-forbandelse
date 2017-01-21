@@ -3,13 +3,13 @@
         game: Phaser.Game;
         group: Phaser.Group;
         npcSprite: Phaser.Sprite;
-        npc: IPlayer;
+        creature: IPlayer;
         nameplate: Nameplate;
         oldHealth:number;
 
         constructor(game: Phaser.Game, npc: IPlayer) {
             this.game = game;
-            this.npc = npc;
+            this.creature = npc;
         }
 
         private playAnimation(animationName: string) {
@@ -26,12 +26,12 @@
         }
 
         public updatePlayer(npc: IPlayer) {
-            this.npc = npc;
+            this.creature = npc;
 
             var self = this;
-            if (this.oldHealth > this.npc.health) {
+            if (this.oldHealth > this.creature.health) {
                 this.npcSprite.tint = 0xff0000;
-                this.oldHealth = this.npc.health;
+                this.oldHealth = this.creature.health;
                 this.game.time.events.add(Phaser.Timer.SECOND,
                     function () {
                         self.npcSprite.tint = 0xffffff;
@@ -49,8 +49,8 @@
             //this.playAnimation("walkRight");
             //return;
 
-            var x = this.npc.location.x * 32;
-            var y = this.npc.location.y * 32;
+            var x = this.creature.location.x * 32;
+            var y = this.creature.location.y * 32;
 
             if (this.npcSprite.x < x) {
                 this.playAnimation("walkRight");
@@ -70,6 +70,7 @@
 
         public destroy() {
             //this.playerGroup.removeAll(true);
+            this.npcSprite.events.onInputDown.removeAll();
             this.npcSprite.animations.destroy();
             this.group.destroy(true);
         }

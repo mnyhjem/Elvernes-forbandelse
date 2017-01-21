@@ -25,4 +25,3 @@ var Charactermodel;
     }(Phaser.State));
     Charactermodel.ShowCharacter = ShowCharacter;
 })(Charactermodel || (Charactermodel = {}));
-//# sourceMappingURL=Charactermodel.js.map

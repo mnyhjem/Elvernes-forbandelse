@@ -13,9 +13,9 @@
         }
 
         private createSpriteAndAnimations() {
-            this.npcSprite = this.game.add.sprite(this.npc.location.x, this.npc.location.y, "wolf1");
+            this.npcSprite = this.game.add.sprite(this.creature.location.x, this.creature.location.y, "wolf1");
             this.npcSprite.anchor.setTo(0.5, 0.5);
-
+            
             var imagesPerRow = 10;
 
             // walk

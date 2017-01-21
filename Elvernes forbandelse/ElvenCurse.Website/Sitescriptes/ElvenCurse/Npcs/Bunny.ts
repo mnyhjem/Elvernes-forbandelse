@@ -13,7 +13,7 @@
         }
 
         private createSpriteAndAnimations() {
-            this.npcSprite = this.game.add.sprite(this.npc.location.x, this.npc.location.y, "bunny");
+            this.npcSprite = this.game.add.sprite(this.creature.location.x, this.creature.location.y, "bunny");
             this.npcSprite.anchor.setTo(0.5, 0.5);
 
             var imagesPerRow = 18;

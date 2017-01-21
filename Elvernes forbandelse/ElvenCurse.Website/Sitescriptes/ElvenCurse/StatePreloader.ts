@@ -44,6 +44,8 @@
 
             this.game.load.spritesheet("bunny", "/content/assets/graphics/npcs/whtdragons_MVanimals_ALL/animals/bunny2.png", 32, 32);
 
+            this.game.load.spritesheet("abilities", "/content/assets/graphics/abilities-48x48.png", 48, 48);
+
             // ui
             this.game.load.image("EntityPortraitplate", "/content/assets/graphics/EntityPortraitplate.png");
             this.game.load.image("Actionbar", "/content/assets/graphics/Actionbar.png");
