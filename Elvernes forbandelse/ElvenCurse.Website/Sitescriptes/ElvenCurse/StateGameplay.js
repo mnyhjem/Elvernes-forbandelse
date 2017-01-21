@@ -46,7 +46,7 @@ var ElvenCurse;
         };
         StateGameplay.prototype.update = function () {
             this.player.checkCollisions(this.collisionLayer);
-            if (this.background == undefined) {
+            if (this.background === undefined) {
                 return;
             }
             // move
@@ -60,9 +60,9 @@ var ElvenCurse;
             if (this.player.creature.location.x !== oldX || this.player.creature.location.y !== oldY) {
                 this.gameHub.server.movePlayer(this.player.creature.location.worldsectionId, this.player.creature.location.x, this.player.creature.location.y);
             }
-            //this.placeOtherPlayersAndObjects();
+            // this.placeOtherPlayersAndObjects();
             this.worldsectionnameplate.setPlayerPosition(this.player);
-            //this.updateNightshadow();
+            // this.updateNightshadow();
         };
         StateGameplay.prototype.updateNightshadow = function () {
             if (this.initializing) {
@@ -76,31 +76,31 @@ var ElvenCurse;
                 lightSprite.smoothed = true;
                 this.uiGroup.add(lightSprite);
             }
-            // Draw shadow
-            this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+            // draw shadow
+            this.shadowTexture.context.fillStyle = "rgb(50, 50, 50)";
             this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
-            // Draw circle of light
+            // draw circle of light
             this.shadowTexture.context.beginPath();
-            this.shadowTexture.context.fillStyle = 'rgb(255, 255, 255)';
+            this.shadowTexture.context.fillStyle = "rgb(255, 255, 255)";
             this.shadowTexture.context.arc(this.player.playerSprite.worldTransform.tx, this.player.playerSprite.worldTransform.ty, 100, 0, Math.PI * 2);
             this.shadowTexture.context.fill();
-            // This just tells the engine it should update the texture cache
+            // this just tells the engine it should update the texture cache
             this.shadowTexture.dirty = true;
         };
         StateGameplay.prototype.render = function () {
             if (this.initializing) {
                 return;
             }
-            //this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
-            //this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
-            //this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
+            // this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
+            // this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
+            // this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
             this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
         };
         StateGameplay.prototype.createMap = function () {
             this.log("CreateMap");
             this.game.load.onLoadComplete.remove(this.createMap, this);
             this.backgroundMusic = this.game.add.audio("medieval");
-            //this.backgroundMusic.play();
+            // this.backgroundMusic.play();
             this.map = this.game.add.tilemap("world");
             var collisionTileId = -1;
             var i;
@@ -149,8 +149,8 @@ var ElvenCurse;
             var self = this;
             $.connection.hub.url = $("#serverpath").text() + "/signalr";
             this.gameHub = $.connection.gameHub;
-            if (this.gameHub == undefined) {
-                location.href = '/world/gameserverdown';
+            if (this.gameHub === undefined) {
+                location.href = "/world/gameserverdown";
                 return;
             }
             $.connection.hub.stateChanged(function (change) {
@@ -158,12 +158,12 @@ var ElvenCurse;
                 // vi understøtter ikke reconnect.. så bare send folk til startsiden hvis vi ryger af..
                 if (change.newState === $.connection.connectionState.disconnected ||
                     change.newState === $.connection.connectionState.reconnecting) {
-                    location.href = '/Character';
+                    location.href = "/Character";
                 }
             });
-            //this.gameHub.client.hello = function (text) {
+            // this.gameHub.client.hello = function (text) {
             //    var t = 0;
-            //}
+            // }
             this.gameHub.client.onlinecount = function (cnt) {
                 self.log("onlinecount callback");
                 self.onlineCount = cnt;
@@ -171,9 +171,9 @@ var ElvenCurse;
             this.gameHub.client.updatePlayer = function (player) {
                 for (var i = 0; i < self.players.length; i++) {
                     if (self.players[i].player.id === player.id) {
-                        //self.players[i].location.x = player.location.x;
-                        //self.players[i].location.y = player.location.y;
-                        //self.players[i].location.worldsectionId = player.location.worldsectionId;
+                        // self.players[i].location.x = player.location.x;
+                        // self.players[i].location.y = player.location.y;
+                        // self.players[i].location.worldsectionId = player.location.worldsectionId;
                         if (player.connectionstatus === 0) {
                             self.players[i].destroy();
                             self.players.splice(i, 1);
@@ -199,9 +199,9 @@ var ElvenCurse;
             this.gameHub.client.updateNpc = function (npc) {
                 for (var i = 0; i < self.npcs.length; i++) {
                     if (self.npcs[i].npc.id === npc.id) {
-                        //self.players[i].location.x = player.location.x;
-                        //self.players[i].location.y = player.location.y;
-                        //self.players[i].location.worldsectionId = player.location.worldsectionId;
+                        // self.players[i].location.x = player.location.x;
+                        // self.players[i].location.y = player.location.y;
+                        // self.players[i].location.worldsectionId = player.location.worldsectionId;
                         if (npc.connectionstatus === 0) {
                             self.npcs[i].destroy();
                             self.npcs.splice(i, 1);
@@ -256,13 +256,17 @@ var ElvenCurse;
                 var x = player.location.x;
                 var y = player.location.y;
                 if (!y || y < 0) {
-                    y = self.background == undefined ? self.player.playerSprite.position.y / 32 : self.background.getTileY(self.player.playerSprite.position.y);
+                    y = self.background === undefined
+                        ? self.player.playerSprite.position.y / 32
+                        : self.background.getTileY(self.player.playerSprite.position.y);
                 }
                 if (!x || x < 0) {
-                    x = self.background == undefined ? self.player.playerSprite.position.x / 32 : self.background.getTileX(self.player.playerSprite.position.x);
+                    x = self.background === undefined
+                        ? self.player.playerSprite.position.x / 32
+                        : self.background.getTileX(self.player.playerSprite.position.x);
                 }
-                var height = self.map == undefined ? 32 : self.map.tileHeight;
-                var width = self.map == undefined ? 32 : self.map.tileWidth;
+                var height = self.map === undefined ? 32 : self.map.tileHeight;
+                var width = self.map === undefined ? 32 : self.map.tileWidth;
                 self.player.playerSprite.position.x = x * width;
                 self.player.playerSprite.position.y = y * height;
                 self.player.updatePlayer(player);
@@ -285,9 +289,9 @@ var ElvenCurse;
                 self.destroySounds();
                 self.currentMap = mapToLoad;
                 self.worldsectionnameplate.updateMap(mapToLoad);
-                // Load json
+                // load json
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
-                // Load images
+                // load images
                 for (var i = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
                     if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
                         self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image.source);
@@ -299,7 +303,7 @@ var ElvenCurse;
             $.connection.hub.start()
                 .done(function () {
                 // map sende events up
-                //self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
+                // self.characterHub.server.enterWorldsection(self.player.location.worldsectionId, self.player.location.x, self.player.location.y);
                 self.gameHub.server.test();
                 self.gameHub.server.enterWorldsection(self.player.creature.location.worldsectionId, self.player.creature.location.x, self.player.creature.location.y);
                 self.signalRInitializing = false;
@@ -308,8 +312,8 @@ var ElvenCurse;
         };
         StateGameplay.prototype.setBackgroundimage = function () {
             this.backgroundimage = this.add.image(0, 0, "loadingbackground");
-            //this.backgroundimage.height = this.game.height;
-            //this.backgroundimage.width = this.game.width;
+            // this.backgroundimage.height = this.game.height;
+            // this.backgroundimage.width = this.game.width;
             this.backgroundimage.smoothed = true;
         };
         StateGameplay.prototype.destroyMap = function () {
@@ -332,10 +336,10 @@ var ElvenCurse;
             }
             this.background.destroy();
             this.map.destroy();
-            //this.backgroundGroup.destroy(true);
-            //this.middelgroundGroup.destroy(true);
-            //this.aboveMiddelgroup.destroy(true);
-            //this.uiGroup.destroy(true);
+            // this.backgroundGroup.destroy(true);
+            // this.middelgroundGroup.destroy(true);
+            // this.aboveMiddelgroup.destroy(true);
+            // this.uiGroup.destroy(true);
         };
         StateGameplay.prototype.destroySounds = function () {
             if (this.backgroundMusic) {
@@ -396,3 +400,4 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=StateGameplay.js.map

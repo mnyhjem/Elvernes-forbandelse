@@ -6,7 +6,7 @@ AS
 
 
 begin
-	if not exists (select * from Terrains where Id = @Id)
+	if not exists (select * from Terrains where Id = @id)
 		begin
 			insert into Terrains (Filename, Data) 
 			values(@filename, @data);
@@ -14,6 +14,6 @@ begin
 		end
 	else
 		begin
-			update Terrains set Data=@data, Filename=@filename where id = @id
+			update Terrains set Data=@data, Filename=@filename where Id = @id
 		end
 end

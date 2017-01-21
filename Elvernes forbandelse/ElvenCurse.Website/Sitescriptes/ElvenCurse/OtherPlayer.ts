@@ -24,7 +24,7 @@
             this.group.add(this.nameplate.group);
         }
 
-        private loadPlayersprite() {
+        private loadPlayersprite():void {
             if (!this.game.cache.checkImageKey("playersprite_" + this.player.id)) {
                 this.game.load.spritesheet("playersprite_" + this.player.id, "/charactersprite/?id=" + this.player.id + "&isnpc=false&t=" + new Date().getTime(), 64, 64);
             }
@@ -32,7 +32,7 @@
             this.game.load.start();
         }
 
-        private spriteLoaded() {
+        private spriteLoaded():void {
             this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
 
             this.playerSprite.loadTexture("playersprite_" + this.player.id);
@@ -40,8 +40,8 @@
 
             this.createPlayerspriteAndAnimations();
         }
-        
-        public updatePlayer(player: IPlayer) {
+
+        public updatePlayer(player: IPlayer):void {
             if (this.shownAsDead && player.isAlive) {
                 this.shownAsDead = false;
                 this.playAnimation("spellcastFront");
@@ -49,35 +49,35 @@
             this.player = player;
             this.nameplate.update(this.player);
 
-            var self = this;
+            var self:OtherPlayer = this;
             if (this.oldHealth > this.player.health) {
                 this.playerSprite.tint = 0xff0000;
                 this.oldHealth = this.player.health;
                 this.game.time.events.add(Phaser.Timer.SECOND,
-                    function () {
+                    function ():void {
                         self.playerSprite.tint = 0xffffff;
                     },
                     this);
             }
         }
 
-        public placeGroup() {
-            var x = this.player.location.x * 32;
-            var y = this.player.location.y * 32;
+        public placeGroup():void {
+            var x:number = this.player.location.x * 32;
+            var y: number = this.player.location.y * 32;
 
             if (this.playerSprite.x < x) {
                 this.playAnimation("walkRight");
             }
             if (this.playerSprite.x > x) {
                 this.playAnimation("walkLeft");
-            } 
+            }
             if (this.playerSprite.y > y) {
                 this.playAnimation("walkBack");
             }
             if (this.playerSprite.y < y) {
                 this.playAnimation("walkFront");
             }
-            
+
             if (this.playerSprite.x === 0 || this.playerSprite.y === 0) {
                 this.playerSprite.x = x;
                 this.playerSprite.y = y;
@@ -89,28 +89,28 @@
             this.checkDead();
         }
 
-        public checkDead() {
+        public checkDead():void {
             if (!this.shownAsDead && !this.player.isAlive) {
                 this.playAnimation("hurtBack");
                 this.shownAsDead = true;
             }
         }
 
-        public destroy() {
+        public destroy():void {
             this.playerSprite.animations.destroy();
             this.group.destroy(true);
         }
 
-        private createPlayerspriteAndAnimations() {
-            //this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");
-            //this.playerSprite.anchor.setTo(0.5, 0.5);
+        private createPlayerspriteAndAnimations():void {
+            // this.playerSprite = this.game.add.sprite(this.player.location.x, this.player.location.y, "playertest");
+            // this.playerSprite.anchor.setTo(0.5, 0.5);
 
-            var imagesPerRow = 13;
+            var imagesPerRow: number = 13;
             // spellcast
-            this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6));//0,6
-            this.playerSprite.animations.add("spellcastLeft", Phaser.ArrayUtils.numberArray(1 * imagesPerRow, 1 * imagesPerRow + 6));//13,19
-            this.playerSprite.animations.add("spellcastFront", Phaser.ArrayUtils.numberArray(2 * imagesPerRow, 2 * imagesPerRow + 6));//26,32
-            this.playerSprite.animations.add("spellcastRight", Phaser.ArrayUtils.numberArray(3 * imagesPerRow, 3 * imagesPerRow + 6));//39,45
+            this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6));// 0,6
+            this.playerSprite.animations.add("spellcastLeft", Phaser.ArrayUtils.numberArray(1 * imagesPerRow, 1 * imagesPerRow + 6));// 13,19
+            this.playerSprite.animations.add("spellcastFront", Phaser.ArrayUtils.numberArray(2 * imagesPerRow, 2 * imagesPerRow + 6));// 26,32
+            this.playerSprite.animations.add("spellcastRight", Phaser.ArrayUtils.numberArray(3 * imagesPerRow, 3 * imagesPerRow + 6));// 39,45
 
             // thrust
             this.playerSprite.animations.add("thrustBack", Phaser.ArrayUtils.numberArray(4 * imagesPerRow, 4 * imagesPerRow + 6));
@@ -142,10 +142,10 @@
             this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
             this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
 
-            //this.playerSprite.animations.play("shootRight", 10, false);
+            // this.playerSprite.animations.play("shootRight", 10, false);
         }
 
-        private playAnimation(animationName: string) {
+        private playAnimation(animationName: string):void {
             if (this.playerSprite.animations.getAnimation(animationName) == null) {
                 return;
             }

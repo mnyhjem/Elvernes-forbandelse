@@ -2,5 +2,5 @@
 	@characterId int,
 	@isAlive bit
 AS
-	update Characters set IsAlive = @isalive where Id = @characterId
+	update Characters set IsAlive = @isAlive where Id = @characterId
 RETURN 0

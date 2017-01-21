@@ -14,10 +14,11 @@ var ElvenCurse;
             this.actionbarSprite = this.game.add.sprite(x, y, "Actionbar");
         };
         Actionbar.prototype.destroy = function () {
-            //this.playerGroup.removeAll(true);
+            // this.playerGroup.removeAll(true);
             this.group.destroy(true);
         };
         return Actionbar;
     }());
     ElvenCurse.Actionbar = Actionbar;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Actionbar.js.map

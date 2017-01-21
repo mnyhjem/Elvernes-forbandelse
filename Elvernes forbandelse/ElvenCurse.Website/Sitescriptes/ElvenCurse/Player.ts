@@ -2,16 +2,16 @@
     export class Player {
         creature: IPlayer;
 
-        //maxHealth: number;
-        //health: number;
-        //isAlive: boolean;
-        //rotationSpeed = 50;
+        // maxHealth: number;
+        // health: number;
+        // isAlive: boolean;
+        // rotationSpeed = 50;
         moveSpeed = 80;
 
         game: Phaser.Game;
-        //name: string;
-        //location: ILocation;
-        //id: number;
+        // name: string;
+        // location: ILocation;
+        // id: number;
 
         playerSprite: Phaser.Sprite;
         nameplate: Nameplate;
@@ -21,7 +21,7 @@
         type: number;
 
         oldHealth: number;
-        
+
         constructor(game:Phaser.Game) {
             this.game = game;
 
@@ -38,12 +38,10 @@
             this.playerGroup = this.game.add.group();
             this.playerGroup.add(this.playerSprite);
             this.playerGroup.add(this.nameplate.group);
-
-            
         }
 
-        public updatePlayer(player: IPlayer) {
-            var revieve = this.creature.isAlive === false && player.isAlive === true;
+        public updatePlayer(player: IPlayer):void {
+            var revieve:boolean = this.creature.isAlive === false && player.isAlive === true;
 
             this.creature = player;
 
@@ -54,29 +52,23 @@
             if (revieve) {
                 this.playAnimation("spellcastFront");
             }
-            var self = this;
+            var self:Player = this;
             if (this.oldHealth > this.creature.health) {
                 this.playerSprite.tint = 0xff0000;
                 this.oldHealth = this.creature.health;
                 this.game.time.events.add(Phaser.Timer.SECOND,
-                    function() {
+                    function():void {
                         self.playerSprite.tint = 0xffffff;
                     },
                     this);
             }
 
-            //this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);
+            // this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);
             this.nameplate.setPosition(this.playerSprite.x, this.playerSprite.y);
             this.nameplate.update(this.creature);
         }
 
-        //public bringToTop() {
-        //    //this.playerSprite.bringToTop();
-
-        //    this.game.world.bringToTop(this.playerGroup);
-        //}
-
-        public move(cursors: Phaser.CursorKeys) {
+        public move(cursors: Phaser.CursorKeys):void {
             this.playerSprite.body.velocity.x = 0;
             this.playerSprite.body.velocity.y = 0;
             this.playerSprite.body.angularVelocity = 0;
@@ -84,38 +76,31 @@
             if (this.creature.isAlive === false) {
                 return;
             }
-            
-            var angleToMove = -1;
-            
+
+            var angleToMove: number = -1;
+
             if ((cursors.right.isDown && cursors.down.isDown) || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
                 angleToMove = 45;
                 this.playAnimation("walkRight");
-            }
-            else if (cursors.left.isDown && cursors.down.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.A) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
+            } else if (cursors.left.isDown && cursors.down.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.A) && this.game.input.keyboard.isDown(Phaser.KeyCode.S))) {
                 angleToMove = 135;
                 this.playAnimation("walkLeft");
-            }
-            else if (cursors.right.isDown && cursors.up.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.W))) {
+            } else if (cursors.right.isDown && cursors.up.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.D) && this.game.input.keyboard.isDown(Phaser.KeyCode.W))) {
                 angleToMove = 315;
                 this.playAnimation("walkRight");
-            }
-            else if (cursors.left.isDown && cursors.up.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.A) && this.game.input.keyboard.isDown(Phaser.KeyCode.W))) {
+            } else if (cursors.left.isDown && cursors.up.isDown || (this.game.input.keyboard.isDown(Phaser.KeyCode.A) && this.game.input.keyboard.isDown(Phaser.KeyCode.W))) {
                 angleToMove = 225;
                 this.playAnimation("walkLeft");
-            }
-            else if (cursors.left.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.A)) {
+            } else if (cursors.left.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.A)) {
                 this.playAnimation("walkLeft");
                 angleToMove = 180;
-            }
-            else if (cursors.right.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.D)) {
+            } else if (cursors.right.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.D)) {
                 angleToMove = 0;
                 this.playAnimation("walkRight");
-            }
-            else if (cursors.up.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.W)) {
+            } else if (cursors.up.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.W)) {
                 angleToMove = 270;
                 this.playAnimation("walkBack");
-            }
-            else if (cursors.down.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.S)) {
+            } else if (cursors.down.isDown || this.game.input.keyboard.isDown(Phaser.KeyCode.S)) {
                 angleToMove = 90;
                 this.playAnimation("walkFront");
             }
@@ -126,25 +111,25 @@
             }
         }
 
-        public checkCollisions(layer: Phaser.TilemapLayer) {
+        public checkCollisions(layer: Phaser.TilemapLayer):void {
             this.game.physics.arcade.collide(this.playerSprite, layer);
         }
 
-        private loadPlayer() {
-            var self = this;
+        private loadPlayer():void {
+            var self:Player = this;
             $.ajax({
                 url: "/api/character/getactive",
-                success(result :IPlayer) {
-                    //var hej = "vi skal sætte vores data her";
-                    //self.creature.name = result.name;
-                    //self.creature.location = result.location;
+                success(result: IPlayer): void {
+                    // var hej = "vi skal sætte vores data her";
+                    // self.creature.name = result.name;
+                    // self.creature.location = result.location;
                     self.creature = result;
                 },
                 async: false // <-- vi er ikke async.. er med vilje...
             });
         }
 
-        private loadPlayersprite() {
+        private loadPlayersprite(): void {
             if (!this.game.cache.checkImageKey("playersprite_" + this.creature.id)) {
                 this.game.load.spritesheet("playersprite_" + this.creature.id, "/charactersprite/?id=" + this.creature.id + "&isnpc=false&t=" + new Date().getTime(), 64, 64);
             }
@@ -152,7 +137,7 @@
             this.game.load.start();
         }
 
-        private spriteLoaded() {
+        private spriteLoaded(): void {
             this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
 
             this.playerSprite.loadTexture("playersprite_" + this.creature.id);
@@ -161,17 +146,17 @@
             this.createPlayerspriteAndAnimations();
         }
 
-        private createPlayerspriteAndAnimations() {
-            //this.playerSprite = this.game.add.sprite(0, 0, "playertest");
-            //this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
-            //this.playerSprite.anchor.setTo(0.5, 0.5);
+        private createPlayerspriteAndAnimations(): void {
+            // this.playerSprite = this.game.add.sprite(0, 0, "playertest");
+            // this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
+            // this.playerSprite.anchor.setTo(0.5, 0.5);
 
-            var imagesPerRow = 13;
+            var imagesPerRow:number = 13;
             // spellcast
-            this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6));//0,6
-            this.playerSprite.animations.add("spellcastLeft", Phaser.ArrayUtils.numberArray(1 * imagesPerRow, 1 * imagesPerRow + 6));//13,19
-            this.playerSprite.animations.add("spellcastFront", Phaser.ArrayUtils.numberArray(2 * imagesPerRow, 2 * imagesPerRow + 6));//26,32
-            this.playerSprite.animations.add("spellcastRight", Phaser.ArrayUtils.numberArray(3 * imagesPerRow, 3 * imagesPerRow + 6));//39,45
+            this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6));// 0,6
+            this.playerSprite.animations.add("spellcastLeft", Phaser.ArrayUtils.numberArray(1 * imagesPerRow, 1 * imagesPerRow + 6));// 13,19
+            this.playerSprite.animations.add("spellcastFront", Phaser.ArrayUtils.numberArray(2 * imagesPerRow, 2 * imagesPerRow + 6));// 26,32
+            this.playerSprite.animations.add("spellcastRight", Phaser.ArrayUtils.numberArray(3 * imagesPerRow, 3 * imagesPerRow + 6));// 39,45
 
             // thrust
             this.playerSprite.animations.add("thrustBack", Phaser.ArrayUtils.numberArray(4 * imagesPerRow, 4 * imagesPerRow + 6));
@@ -202,20 +187,14 @@
             this.playerSprite.animations.add("hurtLeft", Phaser.ArrayUtils.numberArray(21 * imagesPerRow, 21 * imagesPerRow + 5));
             this.playerSprite.animations.add("hurtFront", Phaser.ArrayUtils.numberArray(22 * imagesPerRow, 22 * imagesPerRow + 5));
             this.playerSprite.animations.add("hurtRight", Phaser.ArrayUtils.numberArray(23 * imagesPerRow, 23 * imagesPerRow + 5));
-
-            
         }
 
-        private playAnimation(animationName: string) {
+        private playAnimation(animationName: string): void {
             if (!this.playerSprite.animations.getAnimation(animationName).isPlaying) {
                 try {
                     this.playerSprite.animations.play(animationName, 10, false);
-                    
                 } catch (e){ }
-                
             }
         }
-
-        
     }
 }

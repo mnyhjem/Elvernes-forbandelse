@@ -18,6 +18,6 @@ Characters c
 left outer join Characterlocations loc on c.Id = loc.characterId 
 left outer join Worldsections ws on ws.Id = loc.WorldsectionId
 where 
-c.userid = @userId and 
-c.id = @characterId;
+c.UserId = @userId and 
+c.Id = @characterId;
 

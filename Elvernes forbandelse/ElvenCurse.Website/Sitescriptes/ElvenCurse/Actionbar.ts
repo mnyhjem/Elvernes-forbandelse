@@ -13,17 +13,16 @@
 
             this.group = this.game.add.group();
             this.group.add(this.actionbarSprite);
-            
         }
 
-        createPlatesprite() {
-            var x = (this.game.width / 2) - 234;
-            var y = this.game.height - 100;
+        createPlatesprite():void {
+            var x:number = (this.game.width / 2) - 234;
+            var y:number = this.game.height - 100;
             this.actionbarSprite = this.game.add.sprite(x, y, "Actionbar");
         }
-        
-        public destroy() {
-            //this.playerGroup.removeAll(true);
+
+        public destroy():void {
+            // this.playerGroup.removeAll(true);
             this.group.destroy(true);
         }
     }

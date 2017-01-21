@@ -13,14 +13,14 @@ begin
 	if not exists (select * from Worldsections where Id = @Id)
 		begin
 			insert into Worldsections ([Json], Mapchange_Down, Mapchange_Left, Mapchange_Right, Mapchange_Up, Name) 
-			values(@json, @Mapchange_Down, @Mapchange_Left, @Mapchange_Right, @Mapchange_Up, @Name);
+			values(@Json, @Mapchange_Down, @Mapchange_Left, @Mapchange_Right, @Mapchange_Up, @Name);
 			select SCOPE_IDENTITY();
 		end
 	else
 		begin
 			if @Json is null
-				update Worldsections set Mapchange_Down=@Mapchange_Down, Mapchange_Left=@Mapchange_Left, Mapchange_Right=@Mapchange_Right, Mapchange_Up=@Mapchange_Up, Name=@Name where id = @id
+				update Worldsections set Mapchange_Down=@Mapchange_Down, Mapchange_Left=@Mapchange_Left, Mapchange_Right=@Mapchange_Right, Mapchange_Up=@Mapchange_Up, Name=@Name where Id = @Id
 			else
-				update Worldsections set [Json]=@json, Mapchange_Down=@Mapchange_Down, Mapchange_Left=@Mapchange_Left, Mapchange_Right=@Mapchange_Right, Mapchange_Up=@Mapchange_Up, Name=@Name where id = @id
+				update Worldsections set [Json]=@json, Mapchange_Down=@Mapchange_Down, Mapchange_Left=@Mapchange_Left, Mapchange_Right=@Mapchange_Right, Mapchange_Up=@Mapchange_Up, Name=@Name where Id = @Id
 		end
 end

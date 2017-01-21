@@ -21,4 +21,4 @@ npc.Appearance
 from 
 Npcs npc 
 left outer join NpcLocations loc on npc.Id = loc.NpcId
-where npc.id = @id
+where npc.Id = @id

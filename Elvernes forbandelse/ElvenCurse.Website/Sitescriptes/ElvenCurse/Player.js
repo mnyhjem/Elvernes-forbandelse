@@ -2,10 +2,10 @@ var ElvenCurse;
 (function (ElvenCurse) {
     var Player = (function () {
         function Player(game) {
-            //maxHealth: number;
-            //health: number;
-            //isAlive: boolean;
-            //rotationSpeed = 50;
+            // maxHealth: number;
+            // health: number;
+            // isAlive: boolean;
+            // rotationSpeed = 50;
             this.moveSpeed = 80;
             this.game = game;
             this.loadPlayer();
@@ -35,14 +35,10 @@ var ElvenCurse;
                     self.playerSprite.tint = 0xffffff;
                 }, this);
             }
-            //this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);
+            // this.nameplate.setPosition(this.creature.location.x * 32, this.creature.location.y * 32);
             this.nameplate.setPosition(this.playerSprite.x, this.playerSprite.y);
             this.nameplate.update(this.creature);
         };
-        //public bringToTop() {
-        //    //this.playerSprite.bringToTop();
-        //    this.game.world.bringToTop(this.playerGroup);
-        //}
         Player.prototype.move = function (cursors) {
             this.playerSprite.body.velocity.x = 0;
             this.playerSprite.body.velocity.y = 0;
@@ -96,9 +92,9 @@ var ElvenCurse;
             $.ajax({
                 url: "/api/character/getactive",
                 success: function (result) {
-                    //var hej = "vi skal sætte vores data her";
-                    //self.creature.name = result.name;
-                    //self.creature.location = result.location;
+                    // var hej = "vi skal sætte vores data her";
+                    // self.creature.name = result.name;
+                    // self.creature.location = result.location;
                     self.creature = result;
                 },
                 async: false // <-- vi er ikke async.. er med vilje...
@@ -118,15 +114,15 @@ var ElvenCurse;
             this.createPlayerspriteAndAnimations();
         };
         Player.prototype.createPlayerspriteAndAnimations = function () {
-            //this.playerSprite = this.game.add.sprite(0, 0, "playertest");
-            //this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
-            //this.playerSprite.anchor.setTo(0.5, 0.5);
+            // this.playerSprite = this.game.add.sprite(0, 0, "playertest");
+            // this.playerSprite = this.game.add.sprite(0, 0, "playersprite_" + this.creature.id);
+            // this.playerSprite.anchor.setTo(0.5, 0.5);
             var imagesPerRow = 13;
             // spellcast
-            this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6)); //0,6
-            this.playerSprite.animations.add("spellcastLeft", Phaser.ArrayUtils.numberArray(1 * imagesPerRow, 1 * imagesPerRow + 6)); //13,19
-            this.playerSprite.animations.add("spellcastFront", Phaser.ArrayUtils.numberArray(2 * imagesPerRow, 2 * imagesPerRow + 6)); //26,32
-            this.playerSprite.animations.add("spellcastRight", Phaser.ArrayUtils.numberArray(3 * imagesPerRow, 3 * imagesPerRow + 6)); //39,45
+            this.playerSprite.animations.add("spellcastBack", Phaser.ArrayUtils.numberArray(0 * imagesPerRow, 0 * imagesPerRow + 6)); // 0,6
+            this.playerSprite.animations.add("spellcastLeft", Phaser.ArrayUtils.numberArray(1 * imagesPerRow, 1 * imagesPerRow + 6)); // 13,19
+            this.playerSprite.animations.add("spellcastFront", Phaser.ArrayUtils.numberArray(2 * imagesPerRow, 2 * imagesPerRow + 6)); // 26,32
+            this.playerSprite.animations.add("spellcastRight", Phaser.ArrayUtils.numberArray(3 * imagesPerRow, 3 * imagesPerRow + 6)); // 39,45
             // thrust
             this.playerSprite.animations.add("thrustBack", Phaser.ArrayUtils.numberArray(4 * imagesPerRow, 4 * imagesPerRow + 6));
             this.playerSprite.animations.add("thrustLeft", Phaser.ArrayUtils.numberArray(5 * imagesPerRow, 5 * imagesPerRow + 6));
@@ -165,3 +161,4 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Player.js.map

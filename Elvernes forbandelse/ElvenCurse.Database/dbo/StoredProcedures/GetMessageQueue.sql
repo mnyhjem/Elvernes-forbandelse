@@ -2,4 +2,4 @@
 	
 AS
 
-select q.Id,q.Messagetype,q.Parameters,q.Queuetime from messagequeue q where q.Processed = 0 order by queuetime
+select q.Id,q.Messagetype,q.Parameters,q.Queuetime from MessageQueue q where q.Processed = 0 order by Queuetime
