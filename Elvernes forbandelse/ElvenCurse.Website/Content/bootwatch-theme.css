@@ -4505,6 +4505,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
   color: #ffffff;
+    /* ReSharper disable once InvalidValue */
   background-color: none;
 }
 .navbar-default .navbar-text {
@@ -4601,6 +4602,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
   color: #ffffff;
+    /* ReSharper disable once InvalidValue */
   background-color: none;
 }
 .navbar-inverse .navbar-text {
@@ -7109,6 +7111,7 @@ legend {
 }
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover {
+    /* ReSharper disable once InvalidValue */
   background-color: none;
   background-image: -webkit-linear-gradient(#020202, #101112 40%, #141618);
   background-image: -o-linear-gradient(#020202, #101112 40%, #141618);

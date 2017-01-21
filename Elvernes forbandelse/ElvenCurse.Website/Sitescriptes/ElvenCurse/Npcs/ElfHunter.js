@@ -11,7 +11,7 @@ var ElvenCurse;
             //this.game = game;
             //this.player = player;
             _super.call(this, game, npc);
-            this.npcSprite = this.game.add.sprite(0, 0, "playersprite_" + this.npc.id);
+            this.npcSprite = this.game.add.sprite(0, 0, "npcplayersprite_" + this.npc.id);
             this.npcSprite.anchor.setTo(0.5, 0.5);
             this.loadPlayersprite();
             this.nameplate = new ElvenCurse.Nameplate(this.game, npc.name, npc);
@@ -20,15 +20,15 @@ var ElvenCurse;
             this.group.add(this.nameplate.group);
         }
         ElfHunter.prototype.loadPlayersprite = function () {
-            if (!this.game.cache.checkImageKey("playersprite_" + this.npc.id)) {
-                this.game.load.spritesheet("playersprite_" + this.npc.id, "/charactersprite/?id=" + this.npc.id + "&isnpc=true&t=" + new Date().getTime(), 64, 64);
+            if (!this.game.cache.checkImageKey("npcplayersprite_" + this.npc.id)) {
+                this.game.load.spritesheet("npcplayersprite_" + this.npc.id, "/charactersprite/?id=" + this.npc.id + "&isnpc=true&t=" + new Date().getTime(), 64, 64);
             }
             this.game.load.onLoadComplete.add(this.spriteLoaded, this);
             this.game.load.start();
         };
         ElfHunter.prototype.spriteLoaded = function () {
             this.game.load.onLoadComplete.remove(this.spriteLoaded, this);
-            this.npcSprite.loadTexture("playersprite_" + this.npc.id);
+            this.npcSprite.loadTexture("npcplayersprite_" + this.npc.id);
             this.npcSprite.frame = 26; // <-- kig mod kameraet til at starte med
             this.createPlayerspriteAndAnimations();
         };
@@ -72,4 +72,3 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.ElfHunter = ElfHunter;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=ElfHunter.js.map

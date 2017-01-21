@@ -427,6 +427,11 @@ namespace ElvenCurse.Core.Engines
                     // update
                     foreach (var npc in _npcs)
                     {
+                        foreach (var passiveAbility in npc.Abilities.Where(a=>a.Passive))
+                        {
+                            passiveAbility.Use(npc);
+                        }
+
                         npc.Move(_characters);
 
                         npc.ProcessAffectedby();
@@ -440,6 +445,11 @@ namespace ElvenCurse.Core.Engines
                     // kør affected by for alle characters
                     foreach (var c in _characters)
                     {
+                        foreach (var passiveAbility in c.Abilities.Where(a => a.Passive))
+                        {
+                            passiveAbility.Use(c);
+                        }
+
                         c.ProcessAffectedby();
 
                         if (c.UpdateNeeded)
@@ -449,7 +459,7 @@ namespace ElvenCurse.Core.Engines
                             var ownPlayer = _characters.FirstOrDefault(a => a.Id == c.Id);
                             if (ownPlayer != null)
                             {
-                                _clients.Client(ownPlayer.ConnectionId).updateOwnPlayer(c);
+                                _clients.Client(ownPlayer.ConnectionId).updateOwnPlayerNoRepositioning(c);
                             }
                             
                             // fortæl de andre spillere at vi er kommet

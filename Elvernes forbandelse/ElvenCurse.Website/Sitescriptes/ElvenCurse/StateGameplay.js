@@ -266,6 +266,12 @@ var ElvenCurse;
                 self.player.playerSprite.position.x = x * width;
                 self.player.playerSprite.position.y = y * height;
                 self.player.updatePlayer(player);
+                self.playerPortraitplate.update(player);
+            };
+            this.gameHub.client.updateOwnPlayerNoRepositioning = function (player) {
+                self.log("updateOwnPlayerNoRepositioning callback");
+                self.player.updatePlayer(player);
+                self.playerPortraitplate.update(player);
             };
             this.gameHub.client.changeMap = function (mapToLoad) {
                 self.log("Changemap callback");
@@ -390,4 +396,3 @@ var ElvenCurse;
     }(Phaser.State));
     ElvenCurse.StateGameplay = StateGameplay;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=StateGameplay.js.map

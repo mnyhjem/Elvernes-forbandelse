@@ -357,6 +357,14 @@
                 self.player.playerSprite.position.y = y * height;
 
                 self.player.updatePlayer(player);
+                self.playerPortraitplate.update(player);
+            }
+
+            this.gameHub.client.updateOwnPlayerNoRepositioning = function (player: IPlayer) {
+                self.log("updateOwnPlayerNoRepositioning callback");
+                
+                self.player.updatePlayer(player);
+                self.playerPortraitplate.update(player);
             }
 
             this.gameHub.client.changeMap = function (mapToLoad: IWorldsection) {

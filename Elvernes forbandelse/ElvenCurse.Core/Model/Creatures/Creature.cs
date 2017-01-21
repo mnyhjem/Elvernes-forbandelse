@@ -87,6 +87,15 @@ namespace ElvenCurse.Core.Model.Creatures
             AttackDistance = attackDistance;
             Abilities = new List<CreatureAbility>();
             AffectedByAbilities = new Stack<AffectedByAbility>();
+
+            Abilities.Add(new CreatureAbility(null)
+            {
+                BaseHeal = 5,
+                Cooldown = 2,
+                Name = "Selvhealing",
+                Passive = true,
+                IsHeal = true
+            });
         }
 
         protected int GetMaxHealth()
@@ -136,6 +145,11 @@ namespace ElvenCurse.Core.Model.Creatures
                 if (_health <= 0)
                 {
                     Trace.WriteLine(string.Format("{0} døede", Name));
+                }
+
+                if (_health > MaxHealth)
+                {
+                    _health = MaxHealth;
                 }
             }
         }

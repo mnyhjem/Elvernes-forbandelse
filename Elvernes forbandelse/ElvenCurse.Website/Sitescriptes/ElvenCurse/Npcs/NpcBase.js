@@ -69,4 +69,3 @@ var ElvenCurse;
     }());
     ElvenCurse.NpcBase = NpcBase;
 })(ElvenCurse || (ElvenCurse = {}));
-//# sourceMappingURL=NpcBase.js.map

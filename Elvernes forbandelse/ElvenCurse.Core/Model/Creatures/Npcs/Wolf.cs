@@ -50,7 +50,8 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             }
 
             // find et angrib vi vil bruge..
-            var ability = Abilities[Rnd.Next(Abilities.Count - 1)];
+            var damageAbilities = Abilities.Where(a => !a.Passive && !a.IsHeal).ToList();
+            var ability = damageAbilities[Rnd.Next(damageAbilities.Count - 1)];
             ability.Use(characterToAttack);
 
             return true;
