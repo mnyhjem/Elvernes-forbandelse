@@ -29,3 +29,4 @@ var ElvenCurse;
     }(ElvenCurse.NpcBase));
     ElvenCurse.Wolf = Wolf;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Wolf.js.map

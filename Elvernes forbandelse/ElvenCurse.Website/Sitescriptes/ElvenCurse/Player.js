@@ -165,3 +165,4 @@ var ElvenCurse;
     }());
     ElvenCurse.Player = Player;
 })(ElvenCurse || (ElvenCurse = {}));
+//# sourceMappingURL=Player.js.map

@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Optimization;
+using ElvenCurse.Website.Concrete;
 
 namespace ElvenCurse.Website
 {
@@ -48,10 +49,13 @@ namespace ElvenCurse.Website
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/bootwatch-theme.css"));
+            var styles = new StyleBundle("~/Content/css").Include(
+                "~/Content/bootstrap.css",
+                "~/Content/site.css",
+                "~/Content/bootwatch-theme.css");
+
+            styles.Orderer = new AsDefinedBundleOrderer();
+            bundles.Add(styles);
 
             
         }
