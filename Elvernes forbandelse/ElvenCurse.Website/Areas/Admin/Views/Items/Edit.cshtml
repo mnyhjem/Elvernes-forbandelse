@@ -1,0 +1,50 @@
+﻿@using ElvenCurse.Core.Model.Items
+@using ElvenCurse.Website.Concrete
+@model ElvenCurse.Website.Areas.Admin.Controllers.EditItemViewmodel
+
+@{
+    ViewBag.Title = "title";
+    //Layout = "_Layout";
+}
+
+<h2>Rediger ting</h2>
+<div class="row" style="font-family: verdana;">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Edit", "Items", FormMethod.Post))
+        {
+            @Html.HiddenFor(a=>a.Item.Id)
+
+            <div class="form-group">
+                @Html.LabelFor(a => a.Item.Name)
+                @Html.TextBoxFor(a=>a.Item.Name, new {@class="form-control"})
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(a => a.Item.Description)
+                @Html.TextBoxFor(a => a.Item.Description, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(a => a.Item.Category)<br />
+                @Html.EditorFor(a => a.Item.Category, "EnumDropDown", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(a => a.Item.Type)<br />
+                @if (Model.Item.Category == Itemcategory.Wearable)
+                {
+                    @Html.DropDownListFor(a=>a.Item.Type, Extensions.GetEnumSelectList<WearableType>(), Model.Item.Type)
+                }
+                else
+                {
+                    @Html.EditorFor(a => a.Item.Type, new { @class = "form-control" })
+                }
+                
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(a => a.Item.Imagepath)
+                @Html.TextBoxFor(a => a.Item.Imagepath, new { @class = "form-control" })
+            </div>
+
+            <input type="submit" value="Gem" class="btn btn-primary"/>
+            @Html.ActionLink("Tilbage", "Index", null, new { @class = "btn btn-default" })
+        }
+    </div>
+</div>

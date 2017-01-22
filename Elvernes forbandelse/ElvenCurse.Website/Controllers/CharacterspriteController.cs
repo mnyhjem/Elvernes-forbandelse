@@ -43,7 +43,15 @@ namespace ElvenCurse.Website.Controllers
             }
 
             var sprite = GetBody(creature.CharacterAppearance);
-            sprite = Merge(sprite, GetImage("torso/dress_female/tightdress_black"));
+            if (creature.CharacterAppearance.Sex == Sex.Female)
+            {
+                sprite = Merge(sprite, GetImage("torso/dress_female/tightdress_black"));
+            }
+            else
+            {
+                sprite = Merge(sprite, GetImage("torso/leather/chest_male"));
+            }
+            
 
             sprite = Merge(sprite, GetImage("weapons/right hand/either/bow"));
 

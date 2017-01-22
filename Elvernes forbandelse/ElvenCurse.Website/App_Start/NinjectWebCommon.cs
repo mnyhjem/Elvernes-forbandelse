@@ -76,6 +76,8 @@ namespace ElvenCurse.Website.App_Start
             kernel.Bind<IGameEngine>().To<GameEngine>().InSingletonScope();
 
             kernel.Bind<IMessagequeueService>().To<MessagequeueService>();
+
+            kernel.Bind<IItemsService>().To<ItemsService>();
         }        
     }
 }

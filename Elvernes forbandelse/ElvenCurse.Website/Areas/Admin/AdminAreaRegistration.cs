@@ -25,6 +25,12 @@ namespace ElvenCurse.Website.Areas.Admin
                 "Admin/Messagequeue/{action}/{id}",
                 new { action = "Index", controller = "Messagequeue", id = UrlParameter.Optional }
             );
+
+            context.MapRoute(
+                "AdminItems_default",
+                "Admin/Items/{action}/{id}",
+                new { action = "Index", controller = "Items", id = UrlParameter.Optional }
+            );
         }
     }
 }

@@ -1,0 +1,53 @@
+﻿@using ElvenCurse.Core.Model.Items
+@model List<ElvenCurse.Core.Model.Items.Item>
+
+@{
+    ViewBag.Title = "title";
+//    Layout = "_Layout";
+}
+
+<h2>Ting</h2>
+
+<div class="row" style="font-family: verdana;">
+    <div class="col-md-12">
+        @Html.ActionLink("Opret ny", "Edit", null, new { @class = "btn btn-default" })
+        <br/>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Kategori</th>
+                    <th>Type</th>
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Billede</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Category</td>
+                        <td>
+                            @if (item.Category == Itemcategory.Wearable)
+                            {
+                                <span>@((WearableType)item.Type)</span>
+                            }
+                            else
+                            {
+                                @item.Type
+                            }
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@item.Imagepath</td>
+                        <td>@Html.ActionLink("Rediger", "Edit", new {id=item.Id}, new {@class="btn btn-default"})</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
