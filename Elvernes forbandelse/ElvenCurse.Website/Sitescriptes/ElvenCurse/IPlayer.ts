@@ -27,5 +27,6 @@
         isAlive: boolean;
         maxHealth: number;
         abilities : Array<IAbility>;
+        isPlayer: boolean;
     }
 }

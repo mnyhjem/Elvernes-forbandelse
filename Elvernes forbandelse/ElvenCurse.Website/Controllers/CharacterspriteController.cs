@@ -45,6 +45,8 @@ namespace ElvenCurse.Website.Controllers
             var sprite = GetBody(creature.CharacterAppearance);
             sprite = Merge(sprite, GetImage("torso/dress_female/tightdress_black"));
 
+            sprite = Merge(sprite, GetImage("weapons/right hand/either/bow"));
+
             return File(sprite, "image/png");
         }
 

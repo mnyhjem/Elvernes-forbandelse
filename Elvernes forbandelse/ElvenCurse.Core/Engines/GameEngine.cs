@@ -370,6 +370,17 @@ namespace ElvenCurse.Core.Engines
             }
             else
             {
+                dynamic target;
+                if (npc == null)
+                {
+                    target = c;
+                }
+                else
+                {
+                    target = npc.ToIPlayer();
+                }
+                // shoot når der er våben, spellcast når det er magi
+                AllInWorldSection(c.Location.WorldsectionId).playAnimation(c, target, "shoot");
                 Trace.WriteLine($"Angreb ok");
             }
         }
@@ -444,50 +455,61 @@ namespace ElvenCurse.Core.Engines
                 {
                     _updatingTimer = true;
 
-                    // update
-                    foreach (var npc in _npcs)
+                    try
                     {
-                        foreach (var passiveAbility in npc.Abilities.Where(a=>a.Passive))
+                        // update
+                        foreach (var npc in _npcs)
                         {
-                            passiveAbility.Use(npc);
-                        }
-
-                        npc.Move(_characters);
-
-                        npc.ProcessAffectedby();
-
-                        if (npc.UpdateNeeded)
-                        {
-                            AllInWorldSection(npc.Location.WorldsectionId).updateNpc(npc.ToIPlayer());
-                            npc.UpdateNeeded = false;
-                        }
-                    }
-
-                    // kør affected by for alle characters
-                    foreach (var c in _characters)
-                    {
-                        foreach (var passiveAbility in c.Abilities.Where(a => a.Passive))
-                        {
-                            passiveAbility.Use(c);
-                        }
-
-                        c.ProcessAffectedby();
-
-                        if (c.UpdateNeeded)
-                        {
-                            //AllInWorldSection(c.Location.WorldsectionId).updatePlayer(c);
-                            // opdater vores egen spiller på kortet
-                            var ownPlayer = _characters.FirstOrDefault(a => a.Id == c.Id);
-                            if (ownPlayer != null)
+                            foreach (var passiveAbility in npc.Abilities.Where(a => a.Passive))
                             {
-                                _clients.Client(ownPlayer.ConnectionId).updateOwnPlayerNoRepositioning(c);
+                                passiveAbility.Use(npc);
                             }
-                            
-                            // fortæl de andre spillere at vi er kommet
-                            AllInWorldSectionExceptCurrent(c).updatePlayer(c);
+
+                            npc.Move(_characters);
+
+                            npc.ProcessAffectedby();
+
+                            npc.CheckForDestroyAndRespawn();
+
+                            if (npc.UpdateNeeded)
+                            {
+                                AllInWorldSection(npc.Location.WorldsectionId).updateNpc(npc.ToIPlayer());
+                                npc.UpdateNeeded = false;
+                            }
+                        }
+
+                        // kør affected by for alle characters
+                        foreach (var c in _characters)
+                        {
+                            foreach (var passiveAbility in c.Abilities.Where(a => a.Passive))
+                            {
+                                passiveAbility.Use(c);
+                            }
+
+                            c.ProcessAffectedby();
+
+                            if (c.UpdateNeeded)
+                            {
+                                c.UpdateNeeded = false;
+
+                                //AllInWorldSection(c.Location.WorldsectionId).updatePlayer(c);
+                                // opdater vores egen spiller på kortet
+                                var ownPlayer = _characters.FirstOrDefault(a => a.Id == c.Id);
+                                if (ownPlayer != null)
+                                {
+                                    _clients.Client(ownPlayer.ConnectionId).updateOwnPlayerNoRepositioning(c);
+                                }
+
+                                // fortæl de andre spillere at vi er kommet
+                                AllInWorldSectionExceptCurrent(c).updatePlayer(c);
+                            }
                         }
                     }
-
+                    catch (InvalidOperationException)
+                    {
+                        
+                    }
+                    
                     _updatingTimer = false;
                 }
             }

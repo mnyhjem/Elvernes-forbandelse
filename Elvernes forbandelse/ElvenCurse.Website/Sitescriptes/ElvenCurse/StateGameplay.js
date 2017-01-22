@@ -70,6 +70,9 @@ var ElvenCurse;
                 }
                 this.gameHub.server.activateAbility(activatedAbility, creatureId);
             }
+            if (this.game.input.keyboard.isDown(Phaser.KeyCode.ESC)) {
+                this.selectedCreature = undefined;
+            }
             // this.placeOtherPlayersAndObjects();
             this.worldsectionnameplate.setPlayerPosition(this.player);
             // this.updateNightshadow();
@@ -181,6 +184,37 @@ var ElvenCurse;
             this.gameHub.client.onlinecount = function (cnt) {
                 self.log("onlinecount callback");
                 self.onlineCount = cnt;
+            };
+            this.gameHub.client.playAnimation = function (creatureWithAnimation, targetCreature, animation) {
+                //self.player.playerSprite.rotation = self.game.physics.arcade.angleToXY(self.player.playerSprite, 100, 100);
+                var direction = "Right";
+                if (creatureWithAnimation.location.x > targetCreature.location.x) {
+                    direction = "Left";
+                }
+                if (creatureWithAnimation.location.y > targetCreature.location.y) {
+                    direction = "Back";
+                }
+                if (creatureWithAnimation.location.y < targetCreature.location.y) {
+                    direction = "Front";
+                }
+                if (creatureWithAnimation.isPlayer) {
+                    if (creatureWithAnimation.id === self.player.creature.id) {
+                        self.player.playAnimation(animation + direction);
+                        return;
+                    }
+                    for (var i = 0; i < self.players.length; i++) {
+                        if (self.players[i].player.id === creatureWithAnimation.id) {
+                            self.players[i].playAnimation(animation + direction);
+                            return;
+                        }
+                    }
+                }
+                for (var i = 0; i < self.npcs.length; i++) {
+                    if (self.npcs[i].creature.id === creatureWithAnimation.id) {
+                        self.npcs[i].playAnimation(animation + direction);
+                        return;
+                    }
+                }
             };
             this.gameHub.client.updatePlayer = function (player) {
                 for (var i = 0; i < self.players.length; i++) {

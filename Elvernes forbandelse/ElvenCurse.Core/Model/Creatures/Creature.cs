@@ -22,6 +22,8 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public Creaturetype Type { get; private set; }
 
+        public Boolean IsPlayer { get; protected set; }
+
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public bool IsAlive
         {
@@ -76,6 +78,8 @@ namespace ElvenCurse.Core.Model.Creatures
         public Creature LastCreatureAttacked { get; set; }
         public CharacterAppearance CharacterAppearance { get; set; }
 
+        public DateTime TimeofDeath { get; private set; }
+
         protected Creature(Creaturetype type, int viewDistance, int attackDistance)
         {
             _viewDistace = viewDistance;
@@ -115,7 +119,8 @@ namespace ElvenCurse.Core.Model.Creatures
 
         protected int GetMaxHealth()
         {
-            return _baseHealth + (15 * Level) - 15;
+            return _baseHealth * Level;
+            //return _baseHealth + (15 * Level) - 15;
         }
 
         public void ResetHealth()
@@ -160,6 +165,7 @@ namespace ElvenCurse.Core.Model.Creatures
 
                 if (_health <= 0)
                 {
+                    SetTimeofDeath();
                     Trace.WriteLine(string.Format("{0} døede", Name));
                 }
 
@@ -167,7 +173,18 @@ namespace ElvenCurse.Core.Model.Creatures
                 {
                     _health = MaxHealth;
                 }
+
+                if (!IsPlayer && a.Healtheffect < 1 && Action != CreatureAction.Attacking)
+                {
+                    Action = CreatureAction.Attacking;
+                    Attack(a.DoneBy, -1);
+                }
             }
+        }
+
+        private void SetTimeofDeath()
+        {
+            TimeofDeath = DateTime.Now;
         }
 
         public virtual void CalculateNextMove(List<Character> characters, CreatureMovetype movetype)
@@ -180,6 +197,11 @@ namespace ElvenCurse.Core.Model.Creatures
             // Se om vi er for langt væk fra vores "hjem"
             if (Action == CreatureAction.ReturnToDefaultLocation || !Location.IsWithinReachOf(DefaultLocation, _maxDistanceFromDefault))
             {
+                if (Action != CreatureAction.ReturnToDefaultLocation)
+                {
+                    Trace.WriteLine($"{Name} er for langt væk og løber tilbage");
+                }
+                
                 Action = CreatureAction.ReturnToDefaultLocation;
                 MoveTowardsLocation(DefaultLocation);
                 return;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using ElvenCurse.Core.Utilities;
 
@@ -27,10 +28,11 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             {
                 LastCreatureAttacked = characterToAttack;
             }
-
+            
             // hvis vi er længere væk ens angrebsafstanden, skal vi gå tættere på
             if (!Location.IsWithinReachOf(LastCreatureAttacked.Location, AttackDistance))
             {
+                Trace.WriteLine($"{Name} løber efter {LastCreatureAttacked.Name}");
                 MoveTowardsLocation(LastCreatureAttacked.Location);
                 return true;
             }
@@ -38,6 +40,7 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             // angrib.
             if (!Abilities.Any())
             {
+                Trace.WriteLine($"{Name} har ingen våben");
                 return false;
             }
 
@@ -49,6 +52,8 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
             }
 
             // find et angrib vi vil bruge..
+            Trace.WriteLine($"{Name} angriber {LastCreatureAttacked.Name}");
+
             var damageAbilities = Abilities.Where(a => !a.Passive && !a.IsHeal).ToList();
             var ability = damageAbilities[Rnd.Next(damageAbilities.Count - 1)];
             ability.Use(characterToAttack);

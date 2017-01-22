@@ -13,7 +13,7 @@
             this.oldHealth = this.creature.health;
         }
 
-        protected playAnimation(animationName: string) {
+        playAnimation(animationName: string) {
             var animation = this.npcSprite.animations.getAnimation(animationName);
 
             //this.nameplate.nametext.text = animation.frameTotal.toString();

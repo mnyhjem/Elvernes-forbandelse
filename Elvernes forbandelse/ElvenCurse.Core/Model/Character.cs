@@ -8,6 +8,7 @@ namespace ElvenCurse.Core.Model
     {
         public Character(Creaturetype type) : base(type, 0, 0)
         {
+            IsPlayer = true;
         }
 
         public string LastAttackerror { get; private set; }
@@ -28,6 +29,12 @@ namespace ElvenCurse.Core.Model
             if (characterToAttack == null)
             {
                 characterToAttack = this;
+            }
+
+            if (!IsAlive)
+            {
+                LastAttackerror = "Du er død...";
+                return false;
             }
 
             if (!characterToAttack.IsAlive)

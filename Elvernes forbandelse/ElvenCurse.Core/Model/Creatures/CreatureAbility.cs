@@ -24,18 +24,23 @@ namespace ElvenCurse.Core.Model.Creatures
         {
             Owner = owner;
         }
-
+        
         private int DamageCalculation(int characterLevel, int ownerLevel)
         {
-            //var damage = Owner.Level - characterLevel + 1 * BaseDamage * Owner.Level;
-            var damage = ownerLevel * BaseDamage + ((ownerLevel - characterLevel) * BaseDamage) * 2;
-            
-            // hvis damage er negativ, ville vi heale.. og det skal vi ikke. i stedet giver vi ingen skade..
-            if (damage < 0)
-            {
-                damage = 0;
-            }
-            return damage;
+            var factor = (Math.Pow((ownerLevel - characterLevel), 3) / 300) + 1;
+
+            var damage = BaseDamage * ownerLevel * factor;
+            return (int)damage;
+
+            ////var damage = Owner.Level - characterLevel + 1 * BaseDamage * Owner.Level;
+            //var damage = ownerLevel * BaseDamage + ((ownerLevel - characterLevel) * BaseDamage) * 2;
+
+            //// hvis damage er negativ, ville vi heale.. og det skal vi ikke. i stedet giver vi ingen skade..
+            //if (damage < 0)
+            //{
+            //    damage = 0;
+            //}
+            //return damage;
         }
 
         private int HealCalculation(int characterLevel, int ownerLevel)
