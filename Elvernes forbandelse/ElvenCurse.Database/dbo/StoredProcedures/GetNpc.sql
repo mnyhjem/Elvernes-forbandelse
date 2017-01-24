@@ -17,7 +17,8 @@ loc.CurrentX,
 loc.CurrentY,
 npc.Level,
 npc.Basehealth,
-npc.Appearance
+npc.Appearance,
+npc.Equipment
 from 
 Npcs npc 
 left outer join NpcLocations loc on npc.Id = loc.NpcId

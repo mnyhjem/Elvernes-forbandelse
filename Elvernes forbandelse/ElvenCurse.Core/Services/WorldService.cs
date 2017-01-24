@@ -10,6 +10,7 @@ using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.Creatures;
 using ElvenCurse.Core.Model.Creatures.Npcs;
 using ElvenCurse.Core.Model.InteractiveObjects;
+using ElvenCurse.Core.Model.Items;
 using ElvenCurse.Core.Model.Tilemap;
 using ElvenCurse.Core.Utilities;
 
@@ -17,10 +18,16 @@ namespace ElvenCurse.Core.Services
 {
     public class WorldService:IWorldService
     {
+        private readonly IItemsService _itemsService;
         private Random _rnd = new Random();
 
         private readonly string _connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        
+
+        public WorldService(IItemsService itemsService)
+        {
+            _itemsService = itemsService;
+        }
+
         public void EnterWorld(string getUserId)
         {
             throw new NotImplementedException();
@@ -248,7 +255,45 @@ namespace ElvenCurse.Core.Services
             };
             npc.CharacterAppearance = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterAppearance>((string) dr["appearance"]);
 
+            if (dr["Equipment"] == DBNull.Value)
+            {
+                npc.Equipment = GetDefaultEquipment(npc);
+            }
+            else
+            {
+                var equipment = _itemsService.ReloadCharacterEquipment(Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterEquipment>((string)dr["Equipment"]));
+                npc.Equipment = equipment;
+            }
+
             return npc;
+        }
+
+        private CharacterEquipment GetDefaultEquipment(Creature creature)
+        {
+            var e = new CharacterEquipment();
+            if (creature.CharacterAppearance == null || creature.CharacterAppearance.Sex == Sex.Female)
+            {
+                e.Chest = new Item
+                {
+                    Category = Itemcategory.Wearable,
+                    Type = 6,
+                    Name = "Trist gammel kjole",
+                    Description = "Denne kjole bør udskiftes hurtigst muligt",
+                    Imagepath = "torso/dress_female/tightdress_black"
+                };
+            }
+            else
+            {
+                e.Chest = new Item
+                {
+                    Category = Itemcategory.Wearable,
+                    Type = 6,
+                    Name = "Slidt lædervest",
+                    Description = "Denne lædervest ville være bedre tjent med at fungere som taske",
+                    Imagepath = "torso/leather/chest_male"
+                };
+            }
+            return e;
         }
 
         public List<InteractiveObject> GetAllInteractiveObjects()

@@ -107,6 +107,8 @@
     <Build Include="dbo\StoredProcedures\GetItems.sql" />
     <Build Include="dbo\StoredProcedures\GetItem.sql" />
     <Build Include="dbo\StoredProcedures\SaveItem.sql" />
+    <Build Include="dbo\StoredProcedures\SaveCharacterEquipment.sql" />
+    <Build Include="dbo\StoredProcedures\GetItemsIn.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SchemaCompare\SchemaCompare_NoUsersOrPermissions.scmp" />

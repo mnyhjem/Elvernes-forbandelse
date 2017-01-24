@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ElvenCurse.Core.Model.Creatures.Npcs;
 using ElvenCurse.Core.Utilities;
 
 namespace ElvenCurse.Core.Model.Creatures
@@ -77,6 +78,7 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public Creature LastCreatureAttacked { get; set; }
         public CharacterAppearance CharacterAppearance { get; set; }
+        public CharacterEquipment Equipment { get; set; }
 
         public DateTime TimeofDeath { get; private set; }
 

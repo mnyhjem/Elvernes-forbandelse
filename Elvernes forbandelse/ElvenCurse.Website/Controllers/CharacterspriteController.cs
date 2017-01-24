@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.Creatures;
+using ElvenCurse.Core.Model.Creatures.Npcs;
 
 namespace ElvenCurse.Website.Controllers
 {
@@ -42,22 +43,27 @@ namespace ElvenCurse.Website.Controllers
                 return HttpNotFound();
             }
 
+
+            //if (creature.CharacterAppearance.Sex == Sex.Female)
+            //{
+            //    sprite = Merge(sprite, GetImage("torso/dress_female/tightdress_black"));
+            //}
+            //else
+            //{
+            //    sprite = Merge(sprite, GetImage("torso/leather/chest_male"));
+            //}
+            
             var sprite = GetBody(creature.CharacterAppearance);
-            if (creature.CharacterAppearance.Sex == Sex.Female)
-            {
-                sprite = Merge(sprite, GetImage("torso/dress_female/tightdress_black"));
-            }
-            else
-            {
-                sprite = Merge(sprite, GetImage("torso/leather/chest_male"));
-            }
+            sprite = GetEquipment(creature.Equipment, sprite);
             
 
             sprite = Merge(sprite, GetImage("weapons/right hand/either/bow"));
+            sprite = Merge(sprite, GetImage("weapons/left hand/either/arrow"));
+
 
             return File(sprite, "image/png");
         }
-
+        
         // GET: Charactersprite
         private Creature GetTestAppearance()
         {
@@ -113,6 +119,92 @@ namespace ElvenCurse.Website.Controllers
             }
 
             return image;
+        }
+
+        private byte[] GetEquipment(CharacterEquipment ce, byte[] sprite)
+        {
+            if (ce == null)
+            {
+                return sprite;
+            }
+
+            if (ce.Head != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Head.Imagepath));
+            }
+
+            if (ce.Chest != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Chest.Imagepath));
+            }
+
+            if (ce.Arms != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Arms.Imagepath));
+            }
+
+            if (ce.Shoulders != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Shoulders.Imagepath));
+            }
+
+            if (ce.Bracers != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Bracers.Imagepath));
+            }
+            
+            if (ce.Hands != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Hands.Imagepath));
+            }
+            
+            if (ce.Legs != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Legs.Imagepath));
+            }
+
+            if (ce.Feet != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Feet.Imagepath));
+            }
+
+            if (ce.Belt != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Belt.Imagepath));
+            }
+
+            if (ce.Weapon != null)
+            {
+                sprite = Merge(sprite, GetImage(ce.Weapon.Imagepath));
+                // if bow, sæt også weapons\left hand\either\arrow på, så der er en pil på buen..
+                //sprite = Merge(sprite, GetImage(ce.Torso.Imagepath));
+            }
+
+            return sprite;
+            //var image = GetImage($"body/{ca.Sex}/{ca.Body}");
+            //image = Merge(image, GetImage($"body/{ca.Sex}/eyes/{ca.Eyecolor}"));
+
+            //if (ca.Nose != Nose.Default)
+            //{
+            //    image = Merge(image, GetImage($"body/{ca.Sex}/nose/{ca.Nose}_{ca.Body}"));
+            //}
+
+            //if (ca.Ears != Ears.Default)
+            //{
+            //    image = Merge(image, GetImage($"body/{ca.Sex}/Ears/{ca.Ears}_{ca.Body}"));
+            //}
+
+            //if (ca.Hair.Type != Hair.HairType.None)
+            //{
+            //    image = Merge(image, GetImage($"hair/{ca.Sex}/{ca.Hair.Type}/{ca.Hair.Color.ToString().Replace("_", "-")}"));
+            //}
+
+            //if (ca.Facial.Type != Facial.FacialType.None)
+            //{
+            //    image = Merge(image, GetImage($"facial/{ca.Sex}/{ca.Facial.Type}/{ca.Facial.Color.ToString().Replace("_", "-")}"));
+            //}
+
+            //return image;
         }
 
         private byte[] Merge(byte[] bytearray1, byte[] bytearray2)

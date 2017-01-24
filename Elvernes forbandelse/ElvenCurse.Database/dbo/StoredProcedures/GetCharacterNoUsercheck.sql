@@ -12,7 +12,8 @@ c.Experience as AccumulatedExperience,
 c.BaseHealth,
 c.IsAlive,
 c.Appearance,
-c.Type
+c.Type,
+c.Equipment
 from 
 Characters c 
 left outer join Characterlocations loc on c.Id = loc.characterId 

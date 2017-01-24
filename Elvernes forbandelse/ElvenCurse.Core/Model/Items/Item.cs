@@ -25,7 +25,10 @@
         Hands = 3,
         Head = 4,
         Legs = 5,
-        Torso = 6,
-        Weapon = 7
+        Chest = 6,
+        Weapon = 7,
+        Arms = 8,
+        Shoulders = 9,
+        Bracers = 10
     }
 }

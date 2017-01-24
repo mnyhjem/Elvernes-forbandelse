@@ -2,8 +2,10 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.Creatures.Npcs;
 using ElvenCurse.Core.Model.Items;
 
 namespace ElvenCurse.Core.Services
@@ -110,5 +112,75 @@ namespace ElvenCurse.Core.Services
             return item;
         }
 
+        public CharacterEquipment ReloadCharacterEquipment(CharacterEquipment equipment)
+        {
+            var items = new List<Item>();
+            using (var con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "GetItemsIn";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("ids", string.Join(",", items.Select(a => a.Id))));
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            items.Add(MapItem(dr));
+                        }
+                    }
+                }
+            }
+
+            if (items.FirstOrDefault(a => a.Id == equipment.Neck.Id) != null)
+            {
+                equipment.Neck = items.FirstOrDefault(a => a.Id == equipment.Neck.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Belt.Id) != null)
+            {
+                equipment.Belt = items.FirstOrDefault(a => a.Id == equipment.Belt.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Feet.Id) != null)
+            {
+                equipment.Feet = items.FirstOrDefault(a => a.Id == equipment.Feet.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Hands.Id) != null)
+            {
+                equipment.Hands = items.FirstOrDefault(a => a.Id == equipment.Hands.Id);
+            }
+
+            if (items.FirstOrDefault(a => a.Id == equipment.Arms.Id) != null)
+            {
+                equipment.Arms = items.FirstOrDefault(a => a.Id == equipment.Arms.Id);
+            }
+
+            if (items.FirstOrDefault(a => a.Id == equipment.Head.Id) != null)
+            {
+                equipment.Head = items.FirstOrDefault(a => a.Id == equipment.Head.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Legs.Id) != null)
+            {
+                equipment.Legs = items.FirstOrDefault(a => a.Id == equipment.Legs.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Chest.Id) != null)
+            {
+                equipment.Chest = items.FirstOrDefault(a => a.Id == equipment.Chest.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Weapon.Id) != null)
+            {
+                equipment.Weapon = items.FirstOrDefault(a => a.Id == equipment.Weapon.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Shoulders.Id) != null)
+            {
+                equipment.Shoulders = items.FirstOrDefault(a => a.Id == equipment.Shoulders.Id);
+            }
+            if (items.FirstOrDefault(a => a.Id == equipment.Bracers.Id) != null)
+            {
+                equipment.Bracers = items.FirstOrDefault(a => a.Id == equipment.Bracers.Id);
+            }
+            
+            return equipment;
+        }
     }
 }

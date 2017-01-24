@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ElvenCurse.Core.Model.Creatures;
+using ElvenCurse.Core.Model.Creatures.Npcs;
 using ElvenCurse.Core.Utilities;
 
 namespace ElvenCurse.Core.Model

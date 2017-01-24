@@ -6,12 +6,20 @@ using System.Configuration;
 using System.Data;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.Creatures;
+using ElvenCurse.Core.Model.Creatures.Npcs;
+using ElvenCurse.Core.Model.Items;
 
 namespace ElvenCurse.Core.Services
 {
     public class CharacterService:ICharacterService
     {
+        private readonly IItemsService _itemsService;
         private readonly string _connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+        public CharacterService(IItemsService itemsService)
+        {
+            _itemsService = itemsService;
+        }
 
         public List<Character> GetCharactersForUser(string userId)
         {
@@ -196,13 +204,21 @@ namespace ElvenCurse.Core.Services
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("characterId", character.Id));
                     cmd.Parameters.Add(new SqlParameter("isAlive", character.IsAlive));
+                    
+                    cmd.ExecuteNonQuery();
+                }
 
+                // Save inventory and so on...
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SaveCharacterEquipment";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("id", character.Id));
+                    cmd.Parameters.Add(new SqlParameter("Equipment", Newtonsoft.Json.JsonConvert.SerializeObject(character.Equipment)));
 
                     cmd.ExecuteNonQuery();
                 }
             }
-
-            // Save inventory and so on...
         }
 
         private Character MapCharacter(IDataRecord dr)
@@ -238,7 +254,45 @@ namespace ElvenCurse.Core.Services
             }
             character.CharacterAppearance = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterAppearance>((string)dr["appearance"]);
 
+            if (dr["Equipment"] == DBNull.Value)
+            {
+                character.Equipment = GetDefaultEquipment(character);
+            }
+            else
+            {
+                var equipment = _itemsService.ReloadCharacterEquipment(Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterEquipment>((string) dr["Equipment"]));
+                character.Equipment = equipment;
+            }
+
             return character;
+        }
+
+        private CharacterEquipment GetDefaultEquipment(Character character)
+        {
+            var e = new CharacterEquipment();
+            if (character.CharacterAppearance.Sex == Sex.Female)
+            {
+                e.Chest = new Item
+                {
+                    Category = Itemcategory.Wearable,
+                    Type = 6,
+                    Name = "Trist gammel kjole",
+                    Description = "Denne kjole bør udskiftes hurtigst muligt",
+                    Imagepath = "torso/dress_female/tightdress_black"                    
+                };
+            }
+            else
+            {
+                e.Chest = new Item
+                {
+                    Category = Itemcategory.Wearable,
+                    Type = 6,
+                    Name = "Slidt lædervest",
+                    Description = "Denne lædervest ville være bedre tjent med at fungere som taske",
+                    Imagepath = "torso/leather/chest_male"
+                };
+            }
+            return e;
         }
 
         private Location GetDefaultLocation(Character character)
