@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using ElvenCurse.Core.Interfaces;
 using Microsoft.AspNet.SignalR;
@@ -22,6 +23,8 @@ namespace ElvenCurse.Server.Hubs
             
             _gameEngine.EnterWorld(userId, Context.ConnectionId);
             Clients.All.onlinecount(_gameEngine.Onlinecount);
+
+            Trace.WriteLine(string.Format("{0} bruger {1}", userId, Context.QueryString["transport"]));
 
             return base.OnConnected();
         }
