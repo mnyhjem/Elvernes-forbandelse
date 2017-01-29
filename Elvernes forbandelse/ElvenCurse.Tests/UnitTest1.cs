@@ -6,7 +6,10 @@ using System.Xml;
 using System.Xml.Serialization;
 using ElvenCurse.Core.Model.Tilemap;
 using ElvenCurse.Core.Utilities;
+using Microsoft.Owin.Security.DataProtection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Owin.Security.AesDataProtectorProvider.CrypticProviders;
+using AppBuilderExtensions = Owin.Security.AesDataProtectorProvider.AppBuilderExtensions;
 
 namespace ElvenCurse.Tests
 {
@@ -62,6 +65,48 @@ namespace ElvenCurse.Tests
         // public void MyTestCleanup() { }
         //
         #endregion
+
+
+        private IDataProtector GetProvider(string key)
+        {
+            var p = new Owin.Security.AesDataProtectorProvider.AesDataProtectorProvider(
+                AppBuilderExtensions.Sha512Factory,
+                AppBuilderExtensions.Sha256Factory,
+                AppBuilderExtensions.AesFactory,
+                key);
+            var provider = p.Create();
+
+            return provider;
+        }
+
+        [TestMethod]
+        public void Unprotect_Cookie()
+        {
+            var provider1 = GetProvider("");//892B80BF193761F28EF65D2CF7FCE39EBA88CF5ADFC96C80
+            var provider2 = GetProvider("");
+
+
+
+
+            var cookieValue = "eYuGeXmpHrZLtz50apYvOd6Uc4I9HL5OiqKjmP6kggoSUqqZgPJyg9MOiFcDkG_4oMDZA13dkFNamLfUORkJV_BfM343mTOlT_5oWnHIWr28_8QobMftUf3TolnrLFBOMEdxbw8wx9NCRYYl7iBFS1pj-Dk2VhSnQkq4tqvwdGyjqXOtNJCIYFyv1yiMoeKBpmv7Wc4j-GdsU6K8naEaoeDGIWpxab_zy3iIK7g89jq_eJ-gPapaxGi2cvGsryDUFMYvzWsI7QI-_145zSFHh9vumG9czjHb6xQC_OdE0ukGiOQgXiHmSn5-ecJ2OV1k-b1hUD8pRuoJOqJkaNGBNtPWdLbXwaltUY7NNuhJXr6qlDYGxmsRP9SOtUG949Z2QJN9R4kcSUyAKfOBn-rKG7PDT4-CP4dXJNAfaHWnOBIR9blKyDGgXC-ZZTK2LDyfg09SOJy44wfXdEgJ1krsaJYKA-8uglowoYGkeIGJgW75uQ6gPJalLFzaQ52O1LOu";
+            cookieValue = cookieValue.Replace('-', '+').Replace('_', '/');
+            var padding = 3 - ((cookieValue.Length + 3) % 4);
+            if (padding != 0)
+            {
+                cookieValue = cookieValue + new string('=', padding);
+            }
+                
+            var bytesStr = Convert.FromBase64String(cookieValue);
+
+            var testString = "Hej med dig";
+            var protectedBytes = provider1.Protect(Encoding.ASCII.GetBytes(testString));
+            var unprotectedBytes = provider2.Unprotect(protectedBytes);
+            var testStringResult = Encoding.ASCII.GetString(unprotectedBytes);
+
+
+            var bytes = provider1.Unprotect(bytesStr);
+        }
+
 
         [TestMethod]
         public void Will_Create_Correct_Json()

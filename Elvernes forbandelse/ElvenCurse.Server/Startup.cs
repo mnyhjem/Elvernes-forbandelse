@@ -1,13 +1,20 @@
-﻿using ElvenCurse.Core.Interfaces;
+﻿using System;
+using System.Configuration;
+using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Server.App_Start;
 using ElvenCurse.Server.Hubs;
 using ElvenCurse.Server.Infrastructure;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.Owin;
 using Microsoft.Owin.Cors;
+using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
+using Owin.Security.AesDataProtectorProvider;
 
 namespace ElvenCurse.Server
 {
@@ -24,9 +31,15 @@ namespace ElvenCurse.Server
             //    LoginPath = new PathString("/Account/Login"),
             //    Provider = new CookieAuthenticationProvider
             //    {
-                  
+
             //    }
             //});
+
+            var cookie = new CookieAuthenticationOptions
+            {
+                CookieName = "ElvenCurseAuthcookie",
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+            };
 
             NinjectWebCommon.Start();
 
@@ -37,9 +50,13 @@ namespace ElvenCurse.Server
 
             app.Map("/signalr", map =>
             {
+                map.UseCookieAuthentication(cookie);
+                map.UseAesDataProtectorProvider(ConfigurationManager.AppSettings["cryptokey"]);
+
                 map.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
                 {
-                    Provider = new CustomCookieAuthenticationProvider()
+                    Provider = new ApplicationOAuthBearerAuthenticationProvider("ElvenCurseAuthcookie")
+                    //Provider = new CustomCookieAuthenticationProvider()
                 });
 
                 map.UseCors(CorsOptions.AllowAll);

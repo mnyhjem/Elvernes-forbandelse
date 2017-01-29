@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -7,6 +8,7 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using ElvenCurse.Website.Models;
 using Microsoft.Owin.Security.OAuth;
+using Owin.Security.AesDataProtectorProvider;
 
 namespace ElvenCurse.Website
 {
@@ -43,6 +45,7 @@ namespace ElvenCurse.Website
             cookie.CookieDomain = ".elvencurse.dk";
 #endif
             app.UseCookieAuthentication(cookie);
+            app.UseAesDataProtectorProvider(ConfigurationManager.AppSettings["cryptokey"]);
 
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
             {
