@@ -28,10 +28,5 @@ namespace ElvenCurse.Server.Infrastructure
 
             return base.RequestToken(context);
         }
-
-        public override Task ValidateIdentity(OAuthValidateIdentityContext context)
-        {
-            return base.ValidateIdentity(context);
-        }
     }
 }

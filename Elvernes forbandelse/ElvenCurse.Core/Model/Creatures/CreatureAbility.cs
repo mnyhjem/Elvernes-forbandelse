@@ -48,7 +48,7 @@ namespace ElvenCurse.Core.Model.Creatures
             return BaseHeal;
         }
 
-        public void Use(Creature characterToAffect)
+        public bool Use(Creature characterToAffect, out string msg)
         {
             string ownerName;
             int ownerLevel;
@@ -65,7 +65,8 @@ namespace ElvenCurse.Core.Model.Creatures
 
             if ((DateTime.Now - _lastUsed).TotalSeconds < Cooldown)
             {
-                return;
+                msg = "Ikke klar endnu";
+                return false;
             }
 
             _lastUsed = DateTime.Now;
@@ -74,7 +75,8 @@ namespace ElvenCurse.Core.Model.Creatures
             {
                 if (characterToAffect.Health == characterToAffect.MaxHealth || !characterToAffect.IsAlive)
                 {
-                    return;
+                    msg = "";
+                    return false;
                 }
                 healthEffect = HealCalculation(characterToAffect.Level, ownerLevel);
                 Trace.WriteLine(string.Format("{0} bruger {1} på {2} for {3} healing [liv {4}/{5}]", ownerName, Name, characterToAffect.Name, healthEffect, characterToAffect.Health, characterToAffect.MaxHealth));
@@ -91,6 +93,9 @@ namespace ElvenCurse.Core.Model.Creatures
                 Name = Name,
                 Healtheffect = healthEffect
             });
+
+            msg = "";
+            return true;
         }
     }
 }

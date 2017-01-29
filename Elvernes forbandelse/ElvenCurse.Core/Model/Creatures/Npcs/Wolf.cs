@@ -56,7 +56,8 @@ namespace ElvenCurse.Core.Model.Creatures.Npcs
 
             var damageAbilities = Abilities.Where(a => !a.Passive && !a.IsHeal).ToList();
             var ability = damageAbilities[Rnd.Next(damageAbilities.Count - 1)];
-            ability.Use(characterToAttack);
+            string msg;
+            ability.Use(characterToAttack, out msg);
 
             return true;
         }

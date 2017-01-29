@@ -57,10 +57,14 @@ namespace ElvenCurse.Core.Model
                 LastAttackerror = "Du er for langt væk";
                 return false;
             }
-            
-            abilityToUse.Use(characterToAttack);
 
-            return true;
+            string msg;
+            var result = abilityToUse.Use(characterToAttack, out msg);
+            if (!result)
+            {
+                LastAttackerror = msg;
+            }
+            return result;
         }
     }
 

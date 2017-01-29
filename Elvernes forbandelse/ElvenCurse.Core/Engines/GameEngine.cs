@@ -381,7 +381,7 @@ namespace ElvenCurse.Core.Engines
                 }
                 // shoot når der er våben, spellcast når det er magi
                 AllInWorldSection(c.Location.WorldsectionId).playAnimation(c, target, "shoot");
-                Trace.WriteLine($"Angreb ok");
+                //Trace.WriteLine($"Angreb ok");
             }
         }
 
@@ -458,11 +458,12 @@ namespace ElvenCurse.Core.Engines
                     try
                     {
                         // update
+                        string msg;
                         foreach (var npc in _npcs)
                         {
                             foreach (var passiveAbility in npc.Abilities.Where(a => a.Passive))
                             {
-                                passiveAbility.Use(npc);
+                                passiveAbility.Use(npc, out msg);
                             }
 
                             npc.Move(_characters);
@@ -483,7 +484,7 @@ namespace ElvenCurse.Core.Engines
                         {
                             foreach (var passiveAbility in c.Abilities.Where(a => a.Passive))
                             {
-                                passiveAbility.Use(c);
+                                passiveAbility.Use(c, out msg);
                             }
 
                             c.ProcessAffectedby();
