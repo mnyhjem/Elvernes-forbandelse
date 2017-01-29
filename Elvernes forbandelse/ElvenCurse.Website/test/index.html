@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="/Sitescriptes/Phaser2.6.1/phaser.js"></script>
+    <script src="/Sitescriptes/Phaser2.6.1/phaser-tiled.js"></script>
+    
+    <script>
+        var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create });
+
+        function preload() {
+            game.add.plugin(Phaser.Plugin.Tiled);
+            var cacheKey = Phaser.Plugin.Tiled.utils.cacheKey;
+
+            game.load.tiledmap(cacheKey("mitkort", "tiledmap"),
+                "/content/assets/01.json",
+                null,
+                Phaser.Tilemap.TILED_JSON);
+
+            game.load.image(cacheKey("mitkort", "tileset", "water"), "/content/assets/graphics/graphics-tiles-waterflow.png");
+            game.load.image(cacheKey("mitkort", "tileset", "ground"), "/content/assets/graphics/ground_tiles.png");
+
+            //game.load.tilemap('tilemap', '/content/assets/01.json', null, Phaser.Tilemap.TILED_JSON);
+
+            //this.game.load.image("water", "/content/assets/graphics/graphics-tiles-waterflow.png");
+            //this.game.load.image("ground", "/content/assets/graphics/ground_tiles.png");
+            //this.game.load.image("player", "/content/assets/graphics/player.png");
+            //this.game.load.image("Collision", "/content/assets/graphics/Collision.png");
+        }
+
+        var map;
+        var layer;
+
+        function create() {
+            game.stage.backgroundColor = '#787878';
+            
+            var map = game.add.tiledmap("mitkort");
+            
+
+            //map = game.add.tilemap('tilemap');
+            //map.addTilesetImage('water', 'water');
+            //map.addTilesetImage('ground', 'ground');
+            //map.addTilesetImage('player', 'player');
+            //map.addTilesetImage('Collision', 'Collision');
+
+            //layer = map.createLayer('blocking');
+            //layer = map.createLayer('background');
+
+            //layer.resizeWorld();
+        }
+    </script>
+</head>
+<body>
+    
+    <div id="game"></div>
+
+</body>
+</html>

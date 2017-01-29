@@ -47,7 +47,6 @@ var ElvenCurse;
             this.cursors = this.game.input.keyboard.createCursorKeys();
         };
         StateGameplay.prototype.update = function () {
-            this.player.checkCollisions(this.collisionLayer);
             if (this.background === undefined) {
                 return;
             }
@@ -55,6 +54,7 @@ var ElvenCurse;
             if (this.signalRInitializing) {
                 return;
             }
+            this.player.checkCollisions(this.collisionLayer);
             var oldX = this.player.creature.location.x, oldY = this.player.creature.location.y;
             this.player.move(this.cursors);
             this.player.creature.location.x = this.background.getTileX(this.player.playerSprite.x);
@@ -341,7 +341,12 @@ var ElvenCurse;
                 self.player.updatePlayer(player);
                 self.playerPortraitplate.update(player);
             };
-            this.gameHub.client.changeMap = function (mapToLoad) {
+            this.gameHub.client.changeMap = function (mapToLoad, reload) {
+                //if (reload) {
+                //    self.log("Restart state");
+                //    location.href = "/world";
+                //    return;
+                //}
                 self.log("Changemap callback");
                 self.setBackgroundimage();
                 if (mapToLoad === null || mapToLoad === undefined) {
@@ -354,10 +359,12 @@ var ElvenCurse;
                 self.currentMap = mapToLoad;
                 self.worldsectionnameplate.updateMap(mapToLoad);
                 // load json
+                self.game.cache.removeTilemap("world");
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
                 // load images
                 for (var i = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
                     if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
+                        //self.log("Henter " + mapToLoad.tilemap.tilesets[i].name);
                         self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image.source);
                     }
                 }

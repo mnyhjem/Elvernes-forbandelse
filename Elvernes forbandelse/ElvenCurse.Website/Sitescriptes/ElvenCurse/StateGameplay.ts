@@ -93,8 +93,6 @@
         }
 
         update(): void {
-            this.player.checkCollisions(this.collisionLayer);
-
             if (this.background === undefined) {
                 return;
             }
@@ -103,6 +101,8 @@
             if (this.signalRInitializing) {
                 return;
             }
+
+            this.player.checkCollisions(this.collisionLayer);
 
             var oldX:number = this.player.creature.location.x, oldY:number = this.player.creature.location.y;
             this.player.move(this.cursors);
@@ -202,7 +202,7 @@
             for (i = 0; i < this.map.layers.length; i++) {
                 var layer:Phaser.TilemapLayer = this.map.layers[i];
 
-                var l:Phaser.TilemapLayer = this.map.createLayer(layer.name);
+                var l: Phaser.TilemapLayer = this.map.createLayer(layer.name);
 
                 if (layer.properties.displayGroup !== undefined) {
                     switch (layer.properties.displayGroup.toLowerCase()) {
@@ -448,7 +448,14 @@
                 self.playerPortraitplate.update(player);
             };
 
-            this.gameHub.client.changeMap = function(mapToLoad: IWorldsection): void {
+            this.gameHub.client.changeMap = function (mapToLoad: IWorldsection, reload: boolean): void {
+                //if (reload) {
+                //    self.log("Restart state");
+                //    location.href = "/world";
+                //    return;
+                //}
+                
+
                 self.log("Changemap callback");
                 self.setBackgroundimage();
 
@@ -466,15 +473,16 @@
                 self.currentMap = mapToLoad;
 
                 self.worldsectionnameplate.updateMap(mapToLoad);
-
+                
                 // load json
+                self.game.cache.removeTilemap("world");
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
 
                 // load images
                 for (var i: number = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
                     if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
-                        self.game.load.image(mapToLoad.tilemap.tilesets[i].name,
-                            "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image.source);
+                        //self.log("Henter " + mapToLoad.tilemap.tilesets[i].name);
+                        self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image.source);
                     }
                 }
 

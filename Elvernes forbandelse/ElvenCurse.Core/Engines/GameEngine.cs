@@ -329,7 +329,8 @@ namespace ElvenCurse.Core.Engines
             }
 
             // indlæs kort mm.
-            _clients.Client(character.ConnectionId).changeMap(map);
+            var reloadClient = character.Location.WorldsectionId != oldPlayerLocation.WorldsectionId;
+            _clients.Client(character.ConnectionId).changeMap(map, reloadClient);
 
             // placer vores egen spiller på kortet
             _clients.Client(character.ConnectionId).updateOwnPlayer(character);

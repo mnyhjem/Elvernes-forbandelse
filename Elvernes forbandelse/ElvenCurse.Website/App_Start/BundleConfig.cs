@@ -13,7 +13,8 @@ namespace ElvenCurse.Website
 
             bundles.Add(new ScriptBundle("~/bundles/frameworks").Include(
                 "~/Scripts/jquery.signalR-2.2.1.min.js",
-                "~/Sitescriptes/phaser2.6.1/phaser.js"
+                //"~/Sitescriptes/phaser2.6.1/phaser.js"
+                "~/Sitescriptes/phaser2.7.3/phaser.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/elvencurse").Include(

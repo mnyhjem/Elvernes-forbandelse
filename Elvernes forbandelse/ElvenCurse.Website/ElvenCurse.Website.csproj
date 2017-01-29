@@ -4214,7 +4214,9 @@
     <Content Include="Sitescriptes\Legends\graphics-tiles-waterflow.png" />
     <Content Include="Sitescriptes\Legends\ground_tiles.png" />
     <Content Include="Sitescriptes\Phaser2.6.1\phaser.js" />
+    <Content Include="Sitescriptes\Phaser2.7.3\phaser.js" />
     <Content Include="Sitescriptes\replace tiles.js" />
+    <Content Include="test\index.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -4278,6 +4280,7 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\p2.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\phaser-input.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\phaser-tiled.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\phaser.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\pixi.d.ts" />
     <TypeScriptCompile Include="Sitescriptes\Charactermodel\Charactermodel.ts" />
