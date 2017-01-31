@@ -1,36 +1,87 @@
-﻿@using ElvenCurse.Core.Model.Creatures
-@model dynamic
+﻿@using ElvenCurse.Core.Model
+@using ElvenCurse.Core.Model.Creatures
+@using ElvenCurse.Core.Model.Creatures.Npcs
+@using ElvenCurse.Core.Model.Items
+@model ElvenCurse.Website.Controllers.DressingroomViewmodel
 
 @{
     ViewBag.Title = "title";
     //Layout = "_Layout";
-
-    var c = new CharacterAppearance
-    {
-        Sex = Sex.Female,
-        Body = Body.Light,
-        Ears = Ears.Elvenears,
-        Eyecolor = Eyecolor.Blue,
-        Nose = Nose.Default,
-    };
-    //c.Facial.Type = Facial.FacialType.Beard;
-    //c.Facial.Color = Facial.FacialColor.Brown;
-    c.Hair.Type = Hair.HairType.Ponytail;
-    c.Hair.Color = HairColor.Brunette;
-    var standardGirl = Newtonsoft.Json.JsonConvert.SerializeObject(c);
 }
 
-<div id="characterpreview" data-url="/charactersprite?t=@DateTime.Now.Ticks" style="display: none;"></div>
+<div id="characterpreview" data-url="/charactersprite?dressingroom=true&t=@DateTime.Now.Ticks" style="display: none;"></div>
 
-<h2>title</h2>
-<input type="text" value="@standardGirl"/>
+<h2>Påklædningsværelset</h2>
+<div class="row" style="font-family: verdana;">
+    <div class="col-md-12">
+        Udseende
+        <input type="text" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Character.CharacterAppearance)" class="form-control" style="max-width: none;" />
+
+        Udstyr
+        <input type="text" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Character.Equipment)" class="form-control" style="max-width: none;" />
+    </div>
+</div>
 
 <div class="row" style="font-family: verdana;">
-    <div class="col-md-3">
+    <div class="col-md-6">
+        <div id="targetid"></div>
+        @using (Ajax.BeginForm("Update", "Dressingroom", new AjaxOptions
+        {
+            AllowCache = false,
+            OnSuccess = "gentegn",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "targetid",
+        }))
+        {
+            <div class="form-group">
+                Ansigts hår<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Facial.Type)
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Facial.Color)
+            </div>
+
+            <div class="form-group">
+                Krop<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Body)
+            </div>
+
+            <div class="form-group">
+                Øre<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Ears)
+            </div>
+
+            <div class="form-group">
+                Øjenfarve<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Eyecolor)
+            </div>
+
+            <div class="form-group">
+                Hår<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Hair.Type)
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Hair.Color)
+            </div>
+
+            <div class="form-group">
+                Næse<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Nose)
+            </div>
+
+            <div class="form-group">
+                Køn<br />
+                @Html.EnumDropDownListFor(a => a.Character.CharacterAppearance.Sex)
+            </div>
+
+            <input type="submit" value="Opdater"/>
+        }
+    </div>
+    
+    <div class="col-md-6">
         <div id="game"></div>
     </div>
-    <div class="col-md-9">
-        <img src="/charactersprite?t=@DateTime.Now.Ticks" width="5000" />
+</div>
+
+<div class="row" style="font-family: verdana;">
+    <div class="col-md-12">
+        <img id="spritesheet" src="/charactersprite?dressingroom=true&t=@DateTime.Now.Ticks" width="5000" />
     </div>
 </div>
 
@@ -38,18 +89,30 @@
 
 @section scripts
 {
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Sitescriptes/Phaser2.6.1/phaser.js"></script>
     <script src="~/Sitescriptes/Charactermodel/Charactermodel.js"></script>
 
     <script>
-        var imgPath = '/charactersprite?t=@DateTime.Now.Ticks';
+        var game;
 
-        $(function(){
-            var game = new Phaser.Game(300, 300, Phaser.CANVAS, "game");
+        $(function() {
+            startRotatingThing();
+        });
+
+        function startRotatingThing() {
+            game = new Phaser.Game(300, 300, Phaser.CANVAS, "game");
             game.state.add("ShowCharacter", Charactermodel.ShowCharacter);
             game.state.start("ShowCharacter");
-        });
+        }
         
 
+        function gentegn() {
+            game.destroy();
+            $("#spritesheet").attr("src", $("#spritesheet").attr("src") + "&" + new Date().getTime());
+            $("#characterpreview").attr("data-url", $("#characterpreview").attr("data-url") + "&" + new Date().getTime());
+
+            startRotatingThing();
+        }
     </script>}
 }

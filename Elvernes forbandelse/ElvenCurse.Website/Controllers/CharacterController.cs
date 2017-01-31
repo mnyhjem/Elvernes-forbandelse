@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Web.Mvc;
 using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
+using ElvenCurse.Core.Model.Creatures;
+using ElvenCurse.Core.Model.Creatures.Npcs;
+using ElvenCurse.Core.Model.Items;
 using Microsoft.AspNet.Identity;
 
 namespace ElvenCurse.Website.Controllers
@@ -31,7 +35,28 @@ namespace ElvenCurse.Website.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View("Edit");
+            var model = new Character(Creaturetype.Hunter);
+
+            model.CharacterAppearance = new CharacterAppearance
+            {
+                Sex = Sex.Female,
+                Hair = new Hair {Color = HairColor.Blonde, Type=Hair.HairType.Long},
+                Body = Body.Light,
+                Ears = Ears.Elvenears,
+                Eyecolor = Eyecolor.Blue,
+                Nose = Nose.Default,
+            };
+            
+            Session["dressingroomCharacter"] = model;
+
+            return View("Edit", model);
+        }
+
+        public ActionResult UpdateModelAppearence(Character model)
+        {
+            Session["dressingroomCharacter"] = model;
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -42,8 +67,18 @@ namespace ElvenCurse.Website.Controllers
             //    return View("Edit");
             //}
 
-            if (!_characterService.CreateNewCharacter(User.Identity.GetUserId(), model))
+            var character = Session["dressingroomCharacter"] as Character;
+            if (character == null)
             {
+                // fail
+                return View("Edit");
+            }
+
+            character.Name = model.Name;
+
+            if (!_characterService.CreateNewCharacter(User.Identity.GetUserId(), character))
+            {
+                // fail
                 return View("Edit");
             }
 

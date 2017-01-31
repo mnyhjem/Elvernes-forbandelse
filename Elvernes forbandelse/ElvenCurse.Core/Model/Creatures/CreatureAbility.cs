@@ -50,6 +50,12 @@ namespace ElvenCurse.Core.Model.Creatures
 
         public bool Use(Creature characterToAffect, out string msg)
         {
+            if (characterToAffect == null)
+            {
+                msg = "";
+                return true;
+            }
+
             string ownerName;
             int ownerLevel;
             if (Passive)

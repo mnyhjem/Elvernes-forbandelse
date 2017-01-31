@@ -259,6 +259,7 @@
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\DressingroomController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemimageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\WorldController.cs" />
     <Compile Include="Global.asax.cs">
@@ -4199,6 +4200,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.signalR-2.2.1.js" />
     <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -4213,6 +4216,7 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Sitescriptes\Legends\graphics-tiles-waterflow.png" />
     <Content Include="Sitescriptes\Legends\ground_tiles.png" />
+    <Content Include="Sitescriptes\Phaser2.5.0\phaser.js" />
     <Content Include="Sitescriptes\Phaser2.6.1\phaser.js" />
     <Content Include="Sitescriptes\Phaser2.7.3\phaser.js" />
     <Content Include="Sitescriptes\replace tiles.js" />
@@ -4266,6 +4270,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Charactersprite\" />
+    <Folder Include="Views\Itemimage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

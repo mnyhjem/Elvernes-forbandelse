@@ -7,6 +7,11 @@ namespace ElvenCurse.Core.Model
 {
     public class Character : Creature
     {
+        public Character():base(Creaturetype.Hunter, 0,0)
+        {
+            IsPlayer = true;
+        }
+
         public Character(Creaturetype type) : base(type, 0, 0)
         {
             IsPlayer = true;

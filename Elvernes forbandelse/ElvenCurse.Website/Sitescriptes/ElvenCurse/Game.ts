@@ -9,7 +9,7 @@
             //height = 600;
             //width = 800;
 
-            this.game = new Phaser.Game(width, height, Phaser.WEBGL, "game");
+            this.game = new Phaser.Game(width, height, Phaser.CANVAS, "game");
 
             this.game.state.add("Booter", Booter);
             this.game.state.add("Preloader", StatePreloader);

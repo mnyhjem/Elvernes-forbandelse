@@ -3,8 +3,9 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Opret figur</h2>
 
+<div id="characterpreview" data-url="/charactersprite?dressingroom=true&t=@DateTime.Now.Ticks" style="display: none;"></div>
 
 <div class="row" style="font-family: verdana;">
     <div class="col-md-12">
@@ -12,11 +13,100 @@
         @using (Html.BeginForm("Create", "Character", FormMethod.Post))
         {
             @Html.ValidationSummary()
-            <div class="form-control">
-                @Html.EditorFor(a => a.Name)
+            <div class="form-group">
+                Navn<br/>
+                @Html.TextBoxFor(a => a.Name,new {@class= "form-control" })
             </div>
 
-            <input type="submit" value="Save" class="btn btn-primary"/>
+            <input type="submit" value="Gem" class="btn btn-primary"/>
         }
     </div>
 </div>
+
+
+<div class="row" style="font-family: verdana;">
+    <div class="col-md-6">
+        <div id="targetid"></div>
+        @using (Ajax.BeginForm("UpdateModelAppearence", "Character", new AjaxOptions
+        {
+            AllowCache = false,
+            OnSuccess = "gentegn",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "targetid",
+        }))
+        {
+            <div class="form-group">
+                Ansigts hår<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Facial.Type, new { onchange = "$(this.form).submit()" })
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Facial.Color, new { onchange = "$(this.form).submit()" })
+            </div>
+
+            <div class="form-group">
+                Krop<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Body, new { onchange = "$(this.form).submit()" })
+            </div>
+
+            <div class="form-group">
+                Øre<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Ears, new { onchange = "$(this.form).submit()" })
+            </div>
+
+            <div class="form-group">
+                Øjenfarve<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Eyecolor, new { onchange = "$(this.form).submit()" })
+            </div>
+
+            <div class="form-group">
+                Hår<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Hair.Type, new { onchange = "$(this.form).submit()" })
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Hair.Color, new { onchange = "$(this.form).submit()" })
+            </div>
+
+            <div class="form-group">
+                Næse<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Nose, new { onchange = "$(this.form).submit()" })
+            </div>
+
+            <div class="form-group">
+                Køn<br />
+                @Html.EnumDropDownListFor(a => a.CharacterAppearance.Sex, new { onchange = "$(this.form).submit()" })
+            </div>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <div id="game"></div>
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Sitescriptes/Phaser2.6.1/phaser.js"></script>
+    <script src="~/Sitescriptes/Charactermodel/Charactermodel.js"></script>
+
+    <script>
+        var game;
+
+        $(function() {
+            startRotatingThing();
+        });
+
+        function startRotatingThing() {
+            game = new Phaser.Game(300, 300, Phaser.CANVAS, "game");
+            game.state.add("ShowCharacter", Charactermodel.ShowCharacter);
+            game.state.start("ShowCharacter");
+        }
+
+
+        function gentegn() {
+            game.destroy();
+            $("#spritesheet").attr("src", $("#spritesheet").attr("src") + "&" + new Date().getTime());
+            $("#characterpreview").attr("data-url", $("#characterpreview").attr("data-url") + "&" + new Date().getTime());
+
+            startRotatingThing();
+        }
+    </script>}
+}

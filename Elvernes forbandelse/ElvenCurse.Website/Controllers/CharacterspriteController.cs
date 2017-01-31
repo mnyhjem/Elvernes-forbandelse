@@ -7,6 +7,7 @@ using ElvenCurse.Core.Interfaces;
 using ElvenCurse.Core.Model;
 using ElvenCurse.Core.Model.Creatures;
 using ElvenCurse.Core.Model.Creatures.Npcs;
+using ElvenCurse.Core.Model.Items;
 
 namespace ElvenCurse.Website.Controllers
 {
@@ -21,7 +22,7 @@ namespace ElvenCurse.Website.Controllers
             _characterService = characterService;
         }
 
-        public ActionResult Index(int id = 0, bool isNpc = false)
+        public ActionResult Index(int id = 0, bool isNpc = false, bool dressingroom = false)
         {
             Creature creature;
             if (isNpc)
@@ -32,10 +33,16 @@ namespace ElvenCurse.Website.Controllers
             {
                 creature = _characterService.GetCharacterNoUsercheck(id);
             }
-
-            if (id == 0)
+            
+            if (id == 0 && !dressingroom)
             {
                 creature = GetTestAppearance();
+            }
+
+            if (dressingroom)
+            {
+                creature = (Character)Session["dressingroomCharacter"];
+                creature.Equipment = GetDefaultEquipment(creature);
             }
 
             if (creature == null)
@@ -63,7 +70,35 @@ namespace ElvenCurse.Website.Controllers
 
             return File(sprite, "image/png");
         }
-        
+
+        private CharacterEquipment GetDefaultEquipment(Creature character)
+        {
+            var e = new CharacterEquipment();
+            if (character.CharacterAppearance.Sex == Sex.Female)
+            {
+                e.Chest = new Item
+                {
+                    Category = Itemcategory.Wearable,
+                    Type = 6,
+                    Name = "Trist gammel kjole",
+                    Description = "Denne kjole bør udskiftes hurtigst muligt",
+                    Imagepath = "torso/dress_female/tightdress_black"
+                };
+            }
+            else
+            {
+                e.Chest = new Item
+                {
+                    Category = Itemcategory.Wearable,
+                    Type = 6,
+                    Name = "Slidt lædervest",
+                    Description = "Denne lædervest ville være bedre tjent med at fungere som taske",
+                    Imagepath = "torso/leather/chest_male"
+                };
+            }
+            return e;
+        }
+
         // GET: Charactersprite
         private Creature GetTestAppearance()
         {
@@ -256,8 +291,4 @@ namespace ElvenCurse.Website.Controllers
             return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
     }
-
-    
-
-    
 }

@@ -203,6 +203,7 @@
                 var layer:Phaser.TilemapLayer = this.map.layers[i];
 
                 var l: Phaser.TilemapLayer = this.map.createLayer(layer.name);
+                l.renderSettings.enableScrollDelta = false;
 
                 if (layer.properties.displayGroup !== undefined) {
                     switch (layer.properties.displayGroup.toLowerCase()) {

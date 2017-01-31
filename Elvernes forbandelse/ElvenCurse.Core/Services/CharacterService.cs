@@ -83,11 +83,28 @@ namespace ElvenCurse.Core.Services
                     cmd.Parameters.Add(new SqlParameter("userId", userId));
                     cmd.Parameters.Add(new SqlParameter("name", model.Name));
 
-                    var r = cmd.ExecuteScalar();
+                    var obj = cmd.ExecuteScalar();
+                    
+                    if (obj == null)
+                    {
+                        return false;
+                    }
 
-                    return r != null && (decimal) r > 0;
+                    model.Id = (int)(decimal)obj;
+                }
+
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = "SaveCharacterAppearence";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("id", model.Id));
+                    cmd.Parameters.Add(new SqlParameter("appearance", Newtonsoft.Json.JsonConvert.SerializeObject(model.CharacterAppearance)));
+
+                    cmd.ExecuteNonQuery();
                 }
             }
+
+            return true;
         }
 
         public Character GetCharacterNoUsercheck(int characterId)

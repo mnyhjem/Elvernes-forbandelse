@@ -131,6 +131,7 @@ var ElvenCurse;
             for (i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
                 var l = this.map.createLayer(layer.name);
+                l.renderSettings.enableScrollDelta = false;
                 if (layer.properties.displayGroup !== undefined) {
                     switch (layer.properties.displayGroup.toLowerCase()) {
                         case "abovemiddelgroup":

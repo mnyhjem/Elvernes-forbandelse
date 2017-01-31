@@ -43,7 +43,9 @@
                         </td>
                         <td>@item.Name</td>
                         <td>@item.Description</td>
-                        <td>@item.Imagepath</td>
+                        <td>
+                            <img src="/Itemimage/index/@item.Id" class="itemimage"/>
+                        </td>
                         <td>@Html.ActionLink("Rediger", "Edit", new {id=item.Id}, new {@class="btn btn-default"})</td>
                     </tr>
                 }
@@ -51,3 +53,10 @@
         </table>
     </div>
 </div>
+
+@section header
+{
+    <style>
+        
+    </style>
+}
