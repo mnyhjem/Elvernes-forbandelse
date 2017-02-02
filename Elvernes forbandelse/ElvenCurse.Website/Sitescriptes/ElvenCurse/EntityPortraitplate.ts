@@ -7,12 +7,12 @@
         healthBarBackground: Phaser.Graphics;
         healthBar: Phaser.Graphics;
 
-        constructor(game: Phaser.Game, creature: IPlayer) {
+        constructor(game: Phaser.Game, creature: IPlayer, leftMargin: number = 0) {
             this.game = game;
             this.creature = creature;
 
             this.group = this.game.add.group();
-            
+
             this.healthBarBackground = game.add.graphics(0, 0);
             this.healthBarBackground.beginFill(0x660000, 1);
             this.healthBarBackground.drawRect(0, 0, 128, 24);
@@ -27,28 +27,32 @@
             this.healthBar.endFill();
             this.group.add(this.healthBar);
 
-            this.healthBarBackground.x = 58;
+            this.healthBarBackground.x = 58 + leftMargin;
             this.healthBarBackground.y = 20;
-            this.healthBar.x = 58;
+            this.healthBar.x = 58 + leftMargin;
             this.healthBar.y = 20;
 
-            this.createPlatesprite();
-            
+            this.createPlatesprite(leftMargin);
+
             this.group.add(this.plateSprite);
 
             this.update(this.creature);
         }
 
-        createPlatesprite() {
-            this.plateSprite = this.game.add.sprite(10, 10, "EntityPortraitplate");
+        createPlatesprite(leftMargin: number) {
+            this.plateSprite = this.game.add.sprite(10 + leftMargin, 10, "EntityPortraitplate");
         }
-        
+
         public destroy() {
             //this.playerGroup.removeAll(true);
             this.group.destroy(true);
         }
 
         public update(creature: IPlayer) {
+            if (creature == null) {
+                return;
+            }
+
             this.creature = creature;
 
             //this.healthBar.scale.set(0.25, 1);

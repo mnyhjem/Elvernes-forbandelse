@@ -325,7 +325,15 @@ namespace ElvenCurse.Core.Engines
             }
             else
             {
-                character.Location = oldPlayerLocation;
+                if (oldPlayerLocation.X > 0 && oldPlayerLocation.Y > 0)
+                {
+                    character.Location = oldPlayerLocation;
+                }
+                else
+                {
+                    character.Location.X = 1;
+                    character.Location.Y = 1;
+                }
             }
 
             // indlæs kort mm.

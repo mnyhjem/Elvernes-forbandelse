@@ -5057,6 +5057,7 @@ declare module Phaser {
         shuffle(x: number, y: number, width: number, height: number, layer: any): void;
         swap(tileA: number, tileB: number, x: number, y: number, width: number, height: number, layer?: any): void;
 
+        enableDebug: boolean;
     }
 
     class TilemapLayer extends Phaser.Sprite {

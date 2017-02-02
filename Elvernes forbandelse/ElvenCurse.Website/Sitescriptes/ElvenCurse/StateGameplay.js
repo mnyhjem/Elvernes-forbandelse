@@ -32,6 +32,8 @@ var ElvenCurse;
             // ui
             this.playerPortraitplate = new ElvenCurse.EntityPortraitplate(this.game, this.player.creature);
             this.uiGroup.add(this.playerPortraitplate.group);
+            this.selectedCreaturePortraitplate = new ElvenCurse.EntityPortraitplate(this.game, null, 230);
+            this.uiGroup.add(this.selectedCreaturePortraitplate.group);
             this.actionbar = new ElvenCurse.Actionbar(this.game, this.player.creature);
             this.uiGroup.add(this.actionbar.group);
             this.worldsectionnameplate = new ElvenCurse.Worldsectionnameplate(this.game, this.currentMap);
@@ -72,6 +74,7 @@ var ElvenCurse;
             }
             if (this.game.input.keyboard.isDown(Phaser.KeyCode.ESC)) {
                 this.selectedCreature = undefined;
+                this.selectedCreaturePortraitplate.update(null);
             }
             // this.placeOtherPlayersAndObjects();
             this.worldsectionnameplate.setPlayerPosition(this.player);
@@ -107,10 +110,10 @@ var ElvenCurse;
             // this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
             // this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
             // this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
-            this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
-            if (this.selectedCreature !== undefined) {
-                this.game.debug.text("Selected: " + this.selectedCreature.creature.name, 32, 95, "rgb(0,0,0)");
-            }
+            //this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
+            //if (this.selectedCreature !== undefined) {
+            //    this.game.debug.text("Selected: " + this.selectedCreature.creature.name, 32, 95, "rgb(0,0,0)");
+            //}
             //this.game.debug.text("Activated ability: " + this.actionbar.getActivatedAbility(), 32, 110, "rgb(0,0,0)");
         };
         StateGameplay.prototype.createMap = function () {
@@ -119,6 +122,9 @@ var ElvenCurse;
             this.backgroundMusic = this.game.add.audio("medieval");
             // this.backgroundMusic.play();
             this.map = this.game.add.tilemap("world");
+            //this.map.enableDebug = true; 
+            this.log("aboveMiddelgroup" + this.aboveMiddelgroup.children.length);
+            this.log("backgroundGroup" + this.backgroundGroup.children.length);
             var collisionTileId = -1;
             var i;
             for (i = 0; i < this.map.tilesets.length; i++) {
@@ -131,7 +137,7 @@ var ElvenCurse;
             for (i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
                 var l = this.map.createLayer(layer.name);
-                l.renderSettings.enableScrollDelta = false;
+                //l.renderSettings.enableScrollDelta = false;
                 if (layer.properties.displayGroup !== undefined) {
                     switch (layer.properties.displayGroup.toLowerCase()) {
                         case "abovemiddelgroup":
@@ -272,6 +278,9 @@ var ElvenCurse;
                             return;
                         }
                         self.npcs[i].updatePlayer(npc);
+                        if (self.selectedCreature != undefined && npc.id === self.selectedCreature.creature.id) {
+                            self.selectedCreaturePortraitplate.update(npc);
+                        }
                         self.npcs[i].placeGroup();
                         //self.placeOtherPlayersAndObjects();
                         return;
@@ -291,6 +300,7 @@ var ElvenCurse;
                 newnpc.npcSprite.events.onInputDown.add(function (sprite, pointer) {
                     if (pointer.button === 0) {
                         self.selectedCreature = this; // <-- det er den rigtige this..
+                        self.selectedCreaturePortraitplate.update(self.selectedCreature.creature);
                     }
                 }, newnpc);
                 self.middelgroundGroup.add(newnpc.group);
@@ -406,6 +416,9 @@ var ElvenCurse;
             if (this.collisionLayer !== undefined) {
                 this.collisionLayer.destroy();
             }
+            this.backgroundGroup.removeAll(true, false, true);
+            //this.middelgroundGroup.removeAll(true, false, true);// <-- spilleren er i den der, så den sletter vi ikke..
+            this.aboveMiddelgroup.removeAll(true, false, true);
             this.background.destroy();
             this.map.destroy();
             // this.backgroundGroup.destroy(true);

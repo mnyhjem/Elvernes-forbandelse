@@ -4216,7 +4216,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Sitescriptes\Legends\graphics-tiles-waterflow.png" />
     <Content Include="Sitescriptes\Legends\ground_tiles.png" />
-    <Content Include="Sitescriptes\Phaser2.5.0\phaser.js" />
     <Content Include="Sitescriptes\Phaser2.6.1\phaser.js" />
     <Content Include="Sitescriptes\Phaser2.7.3\phaser.js" />
     <Content Include="Sitescriptes\replace tiles.js" />

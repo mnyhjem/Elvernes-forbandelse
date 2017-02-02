@@ -1,10 +1,10 @@
 ﻿module ElvenCurse {
     export class StateGameplay extends Phaser.State {
         // debug
-        onlineCount:number;
+        onlineCount: number;
         // debug
 
-        backgroundimage:Phaser.Image;
+        backgroundimage: Phaser.Image;
 
         gameHub: IGameHub;
 
@@ -24,17 +24,18 @@
         npcs: NpcBase[];
         interactiveObjects: InteractiveObject[];
 
-        selectedCreature:NpcBase;
+        selectedCreature: NpcBase;
 
         cursors: Phaser.CursorKeys;
-        mapMovedInThisPosition:string = "";
+        mapMovedInThisPosition: string = "";
         currentMap: IWorldsection;
 
         // ui stuff
         playerPortraitplate: EntityPortraitplate;
+        selectedCreaturePortraitplate: EntityPortraitplate;
         actionbar: Actionbar;
         worldsectionnameplate: Worldsectionnameplate;
-        messageText:Phaser.Text;
+        messageText: Phaser.Text;
 
         // music
         backgroundMusic: Phaser.Sound;
@@ -74,10 +75,16 @@
             // ui
             this.playerPortraitplate = new EntityPortraitplate(this.game, this.player.creature);
             this.uiGroup.add(this.playerPortraitplate.group);
+
+            this.selectedCreaturePortraitplate = new EntityPortraitplate(this.game, null, 230);
+            this.uiGroup.add(this.selectedCreaturePortraitplate.group);
+
             this.actionbar = new Actionbar(this.game, this.player.creature);
             this.uiGroup.add(this.actionbar.group);
+
             this.worldsectionnameplate = new Worldsectionnameplate(this.game, this.currentMap);
             this.uiGroup.add(this.worldsectionnameplate.group);
+
             this.messageText = this.game.add.text((this.game.width / 2) - 200, 200, "", { font: "32px Arial", fill: "#669966" }); // , backgroundColor: "#ffffff"
             this.uiGroup.add(this.messageText);
 
@@ -104,7 +111,7 @@
 
             this.player.checkCollisions(this.collisionLayer);
 
-            var oldX:number = this.player.creature.location.x, oldY:number = this.player.creature.location.y;
+            var oldX: number = this.player.creature.location.x, oldY: number = this.player.creature.location.y;
             this.player.move(this.cursors);
             this.player.creature.location.x = this.background.getTileX(this.player.playerSprite.x);
             this.player.creature.location.y = this.background.getTileX(this.player.playerSprite.y);
@@ -123,6 +130,7 @@
 
             if (this.game.input.keyboard.isDown(Phaser.KeyCode.ESC)) {
                 this.selectedCreature = undefined;
+                this.selectedCreaturePortraitplate.update(null);
             }
 
             // this.placeOtherPlayersAndObjects();
@@ -140,7 +148,7 @@
             // sæt vejr.. test
             if (this.shadowTexture === undefined) {
                 this.shadowTexture = this.game.add.bitmapData(this.game.width, this.game.height);
-                var lightSprite:Phaser.Image = this.game.add.image(0, 0, this.shadowTexture);
+                var lightSprite: Phaser.Image = this.game.add.image(0, 0, this.shadowTexture);
                 lightSprite.blendMode = PIXI.blendModes.MULTIPLY;
                 lightSprite.smoothed = true;
 
@@ -165,16 +173,17 @@
             if (this.initializing) {
                 return;
             }
+            
 
             // this.game.debug.text(this.currentMap.name, 32, 32+50, "rgb(0,0,0)");
             // this.game.debug.text("Tile X: " + this.background.getTileX(this.player.playerSprite.x) + " position.x: " + this.player.playerSprite.position.x, 32, 48 + 50, "rgb(0,0,0)");
             // this.game.debug.text("Tile Y: " + this.background.getTileY(this.player.playerSprite.y) + " position.y: " + this.player.playerSprite.position.y, 32, 64 + 50, "rgb(0,0,0)");
 
-            this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
+            //this.game.debug.text("Online: " + this.onlineCount, 32, 80, "rgb(0,0,0)");
 
-            if (this.selectedCreature !== undefined) {
-                this.game.debug.text("Selected: " + this.selectedCreature.creature.name, 32, 95, "rgb(0,0,0)");
-            }
+            //if (this.selectedCreature !== undefined) {
+            //    this.game.debug.text("Selected: " + this.selectedCreature.creature.name, 32, 95, "rgb(0,0,0)");
+            //}
 
             //this.game.debug.text("Activated ability: " + this.actionbar.getActivatedAbility(), 32, 110, "rgb(0,0,0)");
         }
@@ -187,11 +196,15 @@
             // this.backgroundMusic.play();
 
             this.map = this.game.add.tilemap("world");
+            //this.map.enableDebug = true; 
+            this.log("aboveMiddelgroup" + this.aboveMiddelgroup.children.length);
+            this.log("backgroundGroup" + this.backgroundGroup.children.length);
 
-            var collisionTileId:number = -1;
+
+            var collisionTileId: number = -1;
             var i: number;
             for (i = 0; i < this.map.tilesets.length; i++) {
-                var tileset:Phaser.Tileset = this.map.tilesets[i];
+                var tileset: Phaser.Tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
 
                 if (tileset.name.toLowerCase() === "collision") {
@@ -200,10 +213,10 @@
             }
 
             for (i = 0; i < this.map.layers.length; i++) {
-                var layer:Phaser.TilemapLayer = this.map.layers[i];
+                var layer: Phaser.TilemapLayer = this.map.layers[i];
 
                 var l: Phaser.TilemapLayer = this.map.createLayer(layer.name);
-                l.renderSettings.enableScrollDelta = false;
+                //l.renderSettings.enableScrollDelta = false;
 
                 if (layer.properties.displayGroup !== undefined) {
                     switch (layer.properties.displayGroup.toLowerCase()) {
@@ -241,7 +254,7 @@
         }
 
         private wireupSignalR(): void {
-            var self:StateGameplay = this;
+            var self: StateGameplay = this;
 
             $.connection.hub.url = $("#serverpath").text() + "/signalr";
             this.gameHub = $.connection.gameHub;
@@ -251,7 +264,7 @@
                 return;
             }
 
-            $.connection.hub.stateChanged(function (change:any): void {
+            $.connection.hub.stateChanged(function (change: any): void {
                 console.log(change);
                 // vi understøtter ikke reconnect.. så bare send folk til startsiden hvis vi ryger af..
                 if (change.newState === $.connection.connectionState.disconnected ||
@@ -264,7 +277,7 @@
             //    var t = 0;
             // }
 
-            this.gameHub.client.onlinecount = function (cnt:number): void {
+            this.gameHub.client.onlinecount = function (cnt: number): void {
                 self.log("onlinecount callback");
 
                 self.onlineCount = cnt;
@@ -307,7 +320,7 @@
             };
 
             this.gameHub.client.updatePlayer = function (player: IPlayer): void {
-                for (var i:number = 0; i < self.players.length; i++) {
+                for (var i: number = 0; i < self.players.length; i++) {
                     if (self.players[i].player.id === player.id) {
                         // self.players[i].location.x = player.location.x;
                         // self.players[i].location.y = player.location.y;
@@ -330,24 +343,24 @@
                     }
                 }
 
-                var newplayer:OtherPlayer = new OtherPlayer(self.game, player);
+                var newplayer: OtherPlayer = new OtherPlayer(self.game, player);
                 self.middelgroundGroup.add(newplayer.group);
                 self.players.push(newplayer);
                 self.placeOtherPlayersAndObjects();
             };
 
-            this.gameHub.client.message = function(message: string): void {
+            this.gameHub.client.message = function (message: string): void {
                 self.log(message);
                 self.messageText.text = message;
                 self.messageText.visible = true;
-                setTimeout(function() {
-                        self.messageText.visible = false;
-                    },
+                setTimeout(function () {
+                    self.messageText.visible = false;
+                },
                     500);
             }
 
             this.gameHub.client.updateNpc = function (npc: IPlayer): void {
-                for (var i:number = 0; i < self.npcs.length; i++) {
+                for (var i: number = 0; i < self.npcs.length; i++) {
                     if (self.npcs[i].creature.id === npc.id) {
                         // self.players[i].location.x = player.location.x;
                         // self.players[i].location.y = player.location.y;
@@ -365,13 +378,16 @@
                             return;
                         }
                         self.npcs[i].updatePlayer(npc);
+                        if (self.selectedCreature != undefined && npc.id === self.selectedCreature.creature.id) {
+                            self.selectedCreaturePortraitplate.update(npc);
+                        }
                         self.npcs[i].placeGroup();
                         //self.placeOtherPlayersAndObjects();
                         return;
                     }
                 }
 
-                var newnpc:NpcBase;
+                var newnpc: NpcBase;
                 if (npc.type === 1) {
                     newnpc = new Wolf(self.game, npc);
                 } else if (npc.type === 2) {
@@ -382,10 +398,11 @@
 
                 newnpc.npcSprite.inputEnabled = true;
                 newnpc.npcSprite.events.onInputDown.add(function (sprite, pointer) {
-                        if (pointer.button === 0) {
-                            self.selectedCreature = this; // <-- det er den rigtige this..
-                        }
-                    },
+                    if (pointer.button === 0) {
+                        self.selectedCreature = this; // <-- det er den rigtige this..
+                        self.selectedCreaturePortraitplate.update(self.selectedCreature.creature);
+                    }
+                },
                     newnpc);
 
                 self.middelgroundGroup.add(newnpc.group);
@@ -395,9 +412,9 @@
             };
 
             this.gameHub.client.updateInteractiveObjects = function (ios: IInteractiveObject[]): void {
-                for (var i:number = 0; i < ios.length; i++) {
-                    var exists:boolean = false;
-                    for (var j:number = 0; j < self.interactiveObjects.length; j++) {
+                for (var i: number = 0; i < ios.length; i++) {
+                    var exists: boolean = false;
+                    for (var j: number = 0; j < self.interactiveObjects.length; j++) {
                         if (self.interactiveObjects[j].interactiveObject.id === ios[i].id) {
                             exists = true;
                             self.interactiveObjects[j].interactiveObject = ios[i];
@@ -406,7 +423,7 @@
                     }
 
                     if (!exists) {
-                        var newio:InteractiveObject = new InteractiveObject(self.game, ios[i], self.gameHub);
+                        var newio: InteractiveObject = new InteractiveObject(self.game, ios[i], self.gameHub);
                         self.middelgroundGroup.add(newio.group);
                         self.interactiveObjects.push(newio);
                     }
@@ -415,7 +432,7 @@
                 self.placeOtherPlayersAndObjects();
             };
 
-            this.gameHub.client.updateOwnPlayer = function(player: IPlayer): void {
+            this.gameHub.client.updateOwnPlayer = function (player: IPlayer): void {
                 self.log("updateOwnPlayer callback");
 
                 var x: number = player.location.x;
@@ -442,7 +459,7 @@
                 self.playerPortraitplate.update(player);
             };
 
-            this.gameHub.client.updateOwnPlayerNoRepositioning = function(player: IPlayer): void {
+            this.gameHub.client.updateOwnPlayerNoRepositioning = function (player: IPlayer): void {
                 self.log("updateOwnPlayerNoRepositioning callback");
 
                 self.player.updatePlayer(player);
@@ -455,7 +472,7 @@
                 //    location.href = "/world";
                 //    return;
                 //}
-                
+
 
                 self.log("Changemap callback");
                 self.setBackgroundimage();
@@ -474,7 +491,7 @@
                 self.currentMap = mapToLoad;
 
                 self.worldsectionnameplate.updateMap(mapToLoad);
-                
+
                 // load json
                 self.game.cache.removeTilemap("world");
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
@@ -516,13 +533,13 @@
                 return;
             }
 
-            for (var i:number = 0; i < this.map.tilesets.length; i++) {
+            for (var i: number = 0; i < this.map.tilesets.length; i++) {
                 this.map.tilesets[i] = null;
             }
 
-            for (var layerindex:number = 0; layerindex < this.map.layers.length; layerindex++) {
-                for (var tileindex:number = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
-                    for (var j:number = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
+            for (var layerindex: number = 0; layerindex < this.map.layers.length; layerindex++) {
+                for (var tileindex: number = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
+                    for (var j: number = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
                         this.map.layers[layerindex].data[tileindex][j].destroy();
                         this.map.layers[layerindex].data[tileindex][j] = null;
                     }
@@ -532,6 +549,10 @@
             if (this.collisionLayer !== undefined) {
                 this.collisionLayer.destroy();
             }
+
+            this.backgroundGroup.removeAll(true, false, true);
+            //this.middelgroundGroup.removeAll(true, false, true);// <-- spilleren er i den der, så den sletter vi ikke..
+            this.aboveMiddelgroup.removeAll(true, false, true);
 
             this.background.destroy();
             this.map.destroy();
@@ -553,19 +574,19 @@
         private destroyAllPlayersAndObjects(): void {
             var i: number;
             for (i = 0; i < this.players.length; i++) {
-                var p:OtherPlayer = this.players[i];
+                var p: OtherPlayer = this.players[i];
                 p.destroy();
             }
             this.players = new Array<OtherPlayer>();
 
             for (i = 0; i < this.npcs.length; i++) {
-                var npc:NpcBase = this.npcs[i];
+                var npc: NpcBase = this.npcs[i];
                 npc.destroy();
             }
             this.npcs = new Array<NpcBase>();
 
             for (i = 0; i < this.interactiveObjects.length; i++) {
-                var io:InteractiveObject = this.interactiveObjects[i];
+                var io: InteractiveObject = this.interactiveObjects[i];
                 io.destroy();
             }
             this.interactiveObjects = new Array<InteractiveObject>();
@@ -575,7 +596,7 @@
             // players
             var i: number;
             for (i = 0; i < this.players.length; i++) {
-                var p:OtherPlayer = this.players[i];
+                var p: OtherPlayer = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
@@ -585,7 +606,7 @@
 
             // npcs
             for (i = 0; i < this.npcs.length; i++) {
-                var npc:NpcBase = this.npcs[i];
+                var npc: NpcBase = this.npcs[i];
                 if (npc.creature.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
@@ -595,7 +616,7 @@
 
             // objects
             for (i = 0; i < this.interactiveObjects.length; i++) {
-                var io:InteractiveObject = this.interactiveObjects[i];
+                var io: InteractiveObject = this.interactiveObjects[i];
                 if (io.interactiveObject.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
