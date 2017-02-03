@@ -126,15 +126,14 @@ var ElvenCurse;
             this.log("aboveMiddelgroup" + this.aboveMiddelgroup.children.length);
             this.log("backgroundGroup" + this.backgroundGroup.children.length);
             var collisionTileId = -1;
-            var i;
-            for (i = 0; i < this.map.tilesets.length; i++) {
+            for (var i = 0; i < this.map.tilesets.length; i++) {
                 var tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
                 if (tileset.name.toLowerCase() === "collision") {
                     collisionTileId = tileset.firstgid;
                 }
             }
-            for (i = 0; i < this.map.layers.length; i++) {
+            for (var i = 0; i < this.map.layers.length; i++) {
                 var layer = this.map.layers[i];
                 var l = this.map.createLayer(layer.name);
                 //l.renderSettings.enableScrollDelta = false;
@@ -299,6 +298,7 @@ var ElvenCurse;
                 newnpc.npcSprite.inputEnabled = true;
                 newnpc.npcSprite.events.onInputDown.add(function (sprite, pointer) {
                     if (pointer.button === 0) {
+                        // ReSharper disable once SuspiciousThisUsage
                         self.selectedCreature = this; // <-- det er den rigtige this..
                         self.selectedCreaturePortraitplate.update(self.selectedCreature.creature);
                     }
@@ -352,12 +352,7 @@ var ElvenCurse;
                 self.player.updatePlayer(player);
                 self.playerPortraitplate.update(player);
             };
-            this.gameHub.client.changeMap = function (mapToLoad, reload) {
-                //if (reload) {
-                //    self.log("Restart state");
-                //    location.href = "/world";
-                //    return;
-                //}
+            this.gameHub.client.changeMap = function (mapToLoad) {
                 self.log("Changemap callback");
                 self.setBackgroundimage();
                 if (mapToLoad === null || mapToLoad === undefined) {
@@ -434,18 +429,17 @@ var ElvenCurse;
             }
         };
         StateGameplay.prototype.destroyAllPlayersAndObjects = function () {
-            var i;
-            for (i = 0; i < this.players.length; i++) {
+            for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array();
-            for (i = 0; i < this.npcs.length; i++) {
+            for (var i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
                 npc.destroy();
             }
             this.npcs = new Array();
-            for (i = 0; i < this.interactiveObjects.length; i++) {
+            for (var i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
                 io.destroy();
             }
@@ -453,8 +447,7 @@ var ElvenCurse;
         };
         StateGameplay.prototype.placeOtherPlayersAndObjects = function () {
             // players
-            var i;
-            for (i = 0; i < this.players.length; i++) {
+            for (var i = 0; i < this.players.length; i++) {
                 var p = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
@@ -462,7 +455,7 @@ var ElvenCurse;
                 p.placeGroup();
             }
             // npcs
-            for (i = 0; i < this.npcs.length; i++) {
+            for (var i = 0; i < this.npcs.length; i++) {
                 var npc = this.npcs[i];
                 if (npc.creature.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
@@ -470,7 +463,7 @@ var ElvenCurse;
                 npc.placeGroup();
             }
             // objects
-            for (i = 0; i < this.interactiveObjects.length; i++) {
+            for (var i = 0; i < this.interactiveObjects.length; i++) {
                 var io = this.interactiveObjects[i];
                 if (io.interactiveObject.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;

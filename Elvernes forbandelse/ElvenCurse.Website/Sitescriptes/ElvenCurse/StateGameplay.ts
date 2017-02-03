@@ -202,8 +202,7 @@
 
 
             var collisionTileId: number = -1;
-            var i: number;
-            for (i = 0; i < this.map.tilesets.length; i++) {
+            for (let i = 0; i < this.map.tilesets.length; i++) {
                 var tileset: Phaser.Tileset = this.map.tilesets[i];
                 this.map.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight);
 
@@ -212,7 +211,7 @@
                 }
             }
 
-            for (i = 0; i < this.map.layers.length; i++) {
+            for (let i = 0; i < this.map.layers.length; i++) {
                 var layer: Phaser.TilemapLayer = this.map.layers[i];
 
                 var l: Phaser.TilemapLayer = this.map.createLayer(layer.name);
@@ -295,15 +294,14 @@
                 if (creatureWithAnimation.location.y < targetCreature.location.y) {
                     direction = "Front";
                 }
-
-
+                
                 if (creatureWithAnimation.isPlayer) {
                     if (creatureWithAnimation.id === self.player.creature.id) {
                         self.player.playAnimation(animation + direction);
                         return;
                     }
 
-                    for (var i: number = 0; i < self.players.length; i++) {
+                    for (let i = 0; i < self.players.length; i++) {
                         if (self.players[i].player.id === creatureWithAnimation.id) {
                             self.players[i].playAnimation(animation + direction);
                             return;
@@ -311,7 +309,7 @@
                     }
                 }
 
-                for (var i: number = 0; i < self.npcs.length; i++) {
+                for (let i = 0; i < self.npcs.length; i++) {
                     if (self.npcs[i].creature.id === creatureWithAnimation.id) {
                         self.npcs[i].playAnimation(animation + direction);
                         return;
@@ -320,7 +318,7 @@
             };
 
             this.gameHub.client.updatePlayer = function (player: IPlayer): void {
-                for (var i: number = 0; i < self.players.length; i++) {
+                for (let i = 0; i < self.players.length; i++) {
                     if (self.players[i].player.id === player.id) {
                         // self.players[i].location.x = player.location.x;
                         // self.players[i].location.y = player.location.y;
@@ -343,7 +341,7 @@
                     }
                 }
 
-                var newplayer: OtherPlayer = new OtherPlayer(self.game, player);
+                var newplayer = new OtherPlayer(self.game, player);
                 self.middelgroundGroup.add(newplayer.group);
                 self.players.push(newplayer);
                 self.placeOtherPlayersAndObjects();
@@ -360,7 +358,7 @@
             }
 
             this.gameHub.client.updateNpc = function (npc: IPlayer): void {
-                for (var i: number = 0; i < self.npcs.length; i++) {
+                for (let i = 0; i < self.npcs.length; i++) {
                     if (self.npcs[i].creature.id === npc.id) {
                         // self.players[i].location.x = player.location.x;
                         // self.players[i].location.y = player.location.y;
@@ -399,6 +397,7 @@
                 newnpc.npcSprite.inputEnabled = true;
                 newnpc.npcSprite.events.onInputDown.add(function (sprite, pointer) {
                     if (pointer.button === 0) {
+// ReSharper disable once SuspiciousThisUsage
                         self.selectedCreature = this; // <-- det er den rigtige this..
                         self.selectedCreaturePortraitplate.update(self.selectedCreature.creature);
                     }
@@ -412,9 +411,9 @@
             };
 
             this.gameHub.client.updateInteractiveObjects = function (ios: IInteractiveObject[]): void {
-                for (var i: number = 0; i < ios.length; i++) {
+                for (let i = 0; i < ios.length; i++) {
                     var exists: boolean = false;
-                    for (var j: number = 0; j < self.interactiveObjects.length; j++) {
+                    for (let j = 0; j < self.interactiveObjects.length; j++) {
                         if (self.interactiveObjects[j].interactiveObject.id === ios[i].id) {
                             exists = true;
                             self.interactiveObjects[j].interactiveObject = ios[i];
@@ -466,14 +465,7 @@
                 self.playerPortraitplate.update(player);
             };
 
-            this.gameHub.client.changeMap = function (mapToLoad: IWorldsection, reload: boolean): void {
-                //if (reload) {
-                //    self.log("Restart state");
-                //    location.href = "/world";
-                //    return;
-                //}
-
-
+            this.gameHub.client.changeMap = function (mapToLoad: IWorldsection): void {
                 self.log("Changemap callback");
                 self.setBackgroundimage();
 
@@ -497,7 +489,7 @@
                 self.game.load.tilemap("world", "/api/map/getmap/" + mapToLoad.id, null, Phaser.Tilemap.TILED_JSON);
 
                 // load images
-                for (var i: number = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
+                for (let i = 0; i < mapToLoad.tilemap.tilesets.length; i++) {
                     if (!self.game.cache.checkImageKey(mapToLoad.tilemap.tilesets[i].name)) {
                         //self.log("Henter " + mapToLoad.tilemap.tilesets[i].name);
                         self.game.load.image(mapToLoad.tilemap.tilesets[i].name, "/content/assets/graphics/" + mapToLoad.tilemap.tilesets[i].image.source);
@@ -533,13 +525,13 @@
                 return;
             }
 
-            for (var i: number = 0; i < this.map.tilesets.length; i++) {
+            for (let i = 0; i < this.map.tilesets.length; i++) {
                 this.map.tilesets[i] = null;
             }
 
-            for (var layerindex: number = 0; layerindex < this.map.layers.length; layerindex++) {
-                for (var tileindex: number = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
-                    for (var j: number = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
+            for (let layerindex = 0; layerindex < this.map.layers.length; layerindex++) {
+                for (let tileindex = 0; tileindex < this.map.layers[layerindex].data.length; tileindex++) {
+                    for (let j = 0; j < this.map.layers[layerindex].data[tileindex].length; j++) {
                         this.map.layers[layerindex].data[tileindex][j].destroy();
                         this.map.layers[layerindex].data[tileindex][j] = null;
                     }
@@ -572,20 +564,19 @@
         }
 
         private destroyAllPlayersAndObjects(): void {
-            var i: number;
-            for (i = 0; i < this.players.length; i++) {
-                var p: OtherPlayer = this.players[i];
+            for (let i = 0; i < this.players.length; i++) {
+                var p = this.players[i];
                 p.destroy();
             }
             this.players = new Array<OtherPlayer>();
 
-            for (i = 0; i < this.npcs.length; i++) {
+            for (let i = 0; i < this.npcs.length; i++) {
                 var npc: NpcBase = this.npcs[i];
                 npc.destroy();
             }
             this.npcs = new Array<NpcBase>();
 
-            for (i = 0; i < this.interactiveObjects.length; i++) {
+            for (let i = 0; i < this.interactiveObjects.length; i++) {
                 var io: InteractiveObject = this.interactiveObjects[i];
                 io.destroy();
             }
@@ -594,9 +585,8 @@
 
         private placeOtherPlayersAndObjects(): void {
             // players
-            var i: number;
-            for (i = 0; i < this.players.length; i++) {
-                var p: OtherPlayer = this.players[i];
+            for (let i = 0; i < this.players.length; i++) {
+                var p = this.players[i];
                 if (p.player.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
@@ -605,8 +595,8 @@
             }
 
             // npcs
-            for (i = 0; i < this.npcs.length; i++) {
-                var npc: NpcBase = this.npcs[i];
+            for (let i = 0; i < this.npcs.length; i++) {
+                var npc = this.npcs[i];
                 if (npc.creature.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
@@ -615,8 +605,8 @@
             }
 
             // objects
-            for (i = 0; i < this.interactiveObjects.length; i++) {
-                var io: InteractiveObject = this.interactiveObjects[i];
+            for (let i = 0; i < this.interactiveObjects.length; i++) {
+                var io = this.interactiveObjects[i];
                 if (io.interactiveObject.location.worldsectionId !== this.player.creature.location.worldsectionId) {
                     continue;
                 }
