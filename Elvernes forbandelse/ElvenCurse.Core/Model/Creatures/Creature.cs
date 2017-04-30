@@ -115,6 +115,26 @@ namespace ElvenCurse.Core.Model.Creatures
                         AbilityIcon = 72,
                         AttackDistance = 10
                     });
+
+                    Abilities.Add(new CreatureAbility(this)
+                    {
+                        Cooldown = 20,
+                        Name = "Ild pil",
+                        BaseDamage = 65,
+                        AbilityIcon = 49,
+                        AttackDistance = 10
+                    });
+
+                    Abilities.Add(new CreatureAbility(this)
+                    {
+                        Cooldown = 180,
+                        Name = "Heal",
+                        BaseDamage = 0,
+                        AbilityIcon = 1,
+                        AttackDistance = 10,
+                        IsHeal = true,
+                        BaseHeal = 500
+                    });
                     break;
             }
         }

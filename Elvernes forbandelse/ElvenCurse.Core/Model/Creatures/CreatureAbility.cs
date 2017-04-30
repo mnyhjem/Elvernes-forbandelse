@@ -30,6 +30,12 @@ namespace ElvenCurse.Core.Model.Creatures
             var factor = (Math.Pow((ownerLevel - characterLevel), 3) / 300) + 1;
 
             var damage = BaseDamage * ownerLevel * factor;
+
+            // hvis damage er negativ, ville vi heale.. og det skal vi ikke. i stedet giver vi ingen skade..
+            if (damage < 0)
+            {
+                damage = 0;
+            }
             return (int)damage;
 
             ////var damage = Owner.Level - characterLevel + 1 * BaseDamage * Owner.Level;
